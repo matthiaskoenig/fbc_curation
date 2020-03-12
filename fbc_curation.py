@@ -1,3 +1,4 @@
+#!/bin/sh
 """
 Module for creating FBC curation files via cobrapy.
 
