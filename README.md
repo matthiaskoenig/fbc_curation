@@ -1,7 +1,7 @@
 [![PyPI version](https://badge.fury.io/py/fbc_curation.svg)](https://badge.fury.io/py/fbc_curation)
 [![GitHub version](https://badge.fury.io/gh/matthiaskoenig%2Ffbc_curation.svg)](https://badge.fury.io/gh/matthiaskoenig%2Ffbc_curation)
-[![Build Status](https://travis-ci.org/matthiaskoenig/fbc_curation.svg?branch=master)](https://travis-ci.org/matthiaskoenig/fbc_curation)
-[![codecov](https://codecov.io/gh/matthiaskoenig/fbc_curation/branch/master/graph/badge.svg)](https://codecov.io/gh/matthiaskoenig/fbc_curation)
+[![Build Status](https://travis-ci.org/matthiaskoenig/fbc_curation.svg?branch=develop)](https://travis-ci.org/matthiaskoenig/fbc_curation)
+[![codecov](https://codecov.io/gh/matthiaskoenig/fbc_curation/branch/develop/graph/badge.svg)](https://codecov.io/gh/matthiaskoenig/fbc_curation)
 [![License (LGPL version 3)](https://img.shields.io/badge/license-LGPLv3.0-blue.svg?style=flat-square)](http://opensource.org/licenses/LGPL-3.0)
 
 # fbc_curation
