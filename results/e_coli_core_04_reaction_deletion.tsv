@@ -13,10 +13,10 @@ ATPM	0.9166474638	optimal
 ATPS4r	0.3742298749	optimal
 BIOMASS_Ecoli_core_w_GAM	0.0	optimal
 CO2t	0.4616696142	optimal
-CS	-0.0	optimal
+CS	0.0	optimal
 CYTBD	0.2116629497	optimal
 D_LACt2	0.873921507	optimal
-ENO	-0.0	optimal
+ENO	0.0	optimal
 ETOHt2r	0.873921507	optimal
 EX_ac_e	0.873921507	optimal
 EX_acald_e	0.873921507	optimal
@@ -47,9 +47,9 @@ FRUpts2	0.873921507	optimal
 FUM	0.8142975075	optimal
 FUMt2_2	0.873921507	optimal
 G6PDH2r	0.8638133095	optimal
-GAPD	-0.0	optimal
+GAPD	0.0	optimal
 GLCpts		infeasible
-GLNS	-0.0	optimal
+GLNS	0.0	optimal
 GLNabc	0.873921507	optimal
 GLUDy	0.8513885233	optimal
 GLUN	0.873921507	optimal
@@ -73,7 +73,7 @@ PDH	0.7966959254	optimal
 PFK	0.7040369479	optimal
 PFL	0.873921507	optimal
 PGI	0.8631595522	optimal
-PGK	-0.0	optimal
+PGK	0.0	optimal
 PGL	0.8638133095	optimal
 PGM	0.0	optimal
 PIt2r	0.0	optimal
@@ -84,7 +84,7 @@ PTAr	0.873921507	optimal
 PYK	0.8649260179	optimal
 PYRt2	0.873921507	optimal
 RPE	0.8657155609	optimal
-RPI	-0.0	optimal
+RPI	0.0	optimal
 SUCCt2_2	0.873921507	optimal
 SUCCt3	0.873921507	optimal
 SUCDi	0.8142975075	optimal

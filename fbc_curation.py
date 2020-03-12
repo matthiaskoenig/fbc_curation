@@ -129,7 +129,7 @@ def create_gene_deletion_file(model: cobra.Model, path: Path,
          })
     df_out.index = range(len(df_out))
     for key in ["value"]:
-        df_out[key] = df_out[key].apply(lambda x: round(x, decimals))
+        df_out[key] = df_out[key].apply(lambda x: round(x, decimals)).abs()  # abs fixes the -0.0 | +0.0 diffs
     df_out.sort_values(by=['gene'], inplace=True)
     print(df_out.head(10))
     print('...')
@@ -159,7 +159,7 @@ def create_reaction_deletion_file(model: cobra.Model, path: Path,
          })
     df_out.sort_values(by=['reaction'], inplace=True)
     for key in ["value"]:
-        df_out[key] = df_out[key].apply(lambda x: round(x, decimals))
+        df_out[key] = df_out[key].apply(lambda x: round(x, decimals)).abs()  # abs fixes the -0.0 | +0.0 diffs
     df_out.index = range(len(df_out))
     print(df_out.head(10))
     print('...')
