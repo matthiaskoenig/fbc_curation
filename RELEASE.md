@@ -13,6 +13,7 @@ Steps for release are
 ```
 git branch master
 git pull
+rm -rf dist
 python setup.py sdist
 twine upload dist/*
 ```
