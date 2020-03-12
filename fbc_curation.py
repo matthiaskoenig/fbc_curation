@@ -88,6 +88,7 @@ def create_fva_file(model: cobra.Model, path: Path) -> pd.DataFrame:
          "minimum": df.minimum,
          "maximum": df.maximum
          })
+    df_out.sort_values(by=['reaction'], inplace=True)
     df_out.index = range(len(df_out))
     print(df_out.head(10))
     print('...')
@@ -115,6 +116,7 @@ def create_gene_deletion_file(model: cobra.Model, path: Path) -> pd.DataFrame:
          "status": df.status
          })
     df_out.index = range(len(df_out))
+    df_out.sort_values(by=['gene'], inplace=True)
     print(df_out.head(10))
     print('...')
 
@@ -140,6 +142,7 @@ def create_reaction_deletion_file(model, path) -> pd.DataFrame:
          "value": df.growth,
          "status": df.status
          })
+    df_out.sort_values(by=['reaction'], inplace=True)
     df_out.index = range(len(df_out))
     print(df_out.head(10))
     print('...')
