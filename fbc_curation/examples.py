@@ -17,6 +17,7 @@ def example_iJR904(results_dir):
     model_path = EXAMPLE_PATH / "models" / "iJR904.xml.gz"
     create_fbc_files(results_dir=results_dir, model_path=model_path)
 
+
 def run_examples():
     results_dir = EXAMPLE_PATH / "results"
     example_ecoli_core(results_dir)
