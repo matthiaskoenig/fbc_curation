@@ -68,6 +68,7 @@ setup(
         "pandas",
         "cobra",
         "pytest",
+        "pytest-cov"
     ],
     extras_require={},
     **setup_kwargs)
