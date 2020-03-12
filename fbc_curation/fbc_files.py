@@ -168,11 +168,11 @@ def create_reaction_deletion_file(model: cobra.Model, path: Path,
     return df_out
 
 
-if __name__ == "__main__":
+def main():
     """
-    Example: 
-        python fbc_curation.py --model ./models/e_coli_core.xml --out ./results
-    """
+     Example:
+         python fbc_curation.py --model ./models/e_coli_core.xml --out ./results
+     """
     import sys
     import optparse
     parser = optparse.OptionParser()
@@ -197,3 +197,6 @@ if __name__ == "__main__":
     model_path = Path(options.model_path)
     output_path = Path(options.output_path)
     create_fbc_files(results_dir=output_path, model_path=model_path)
+
+if __name__ == "__main__":
+    main()

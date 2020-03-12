@@ -70,5 +70,12 @@ setup(
         "pytest",
         "pytest-cov"
     ],
+    entry_points={
+        'console_scripts':
+            [
+                'fbc_curation_examples=fbc_curation.examples:run_examples',
+                'fbc_curation=fbc_curation.fbc_files:main',
+            ],
+    },
     extras_require={},
     **setup_kwargs)
