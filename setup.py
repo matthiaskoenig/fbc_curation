@@ -55,9 +55,10 @@ setup(
     packages=find_packages(),
     # package_dir={'': ''},
     package_data={
-      '': [
+      'fbc_curation': [
               '../requirements.txt',
-               '../examples',
+               'examples/models',
+               'examples/results',
           ],
     },
     include_package_data=True,

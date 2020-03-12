@@ -2,4 +2,5 @@ include requirements.txt
 include LICENSE
 include README.md
 
-recursive-include examples *
+recursive-include fbc_curation/examples/models *
+recursive-include fbc_curation/examples/results *
