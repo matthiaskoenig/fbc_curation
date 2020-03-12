@@ -17,9 +17,7 @@ The objective value file contains the objective value if the model is optimized 
 ```
 0.873921507
 ```
-See for instance: [`e_coli_core_01_objective.tsv`](./examples/results/e_coli_core_01_objective.tsv)
-
-For more information: https://cobrapy.readthedocs.io/en/latest/simulating.html
+See for instance: [`e_coli_core_01_objective.tsv`](./examples/results/e_coli_core_01_objective.tsv). For more information: https://cobrapy.readthedocs.io/en/latest/simulating.html
 
 ### 02 Flux variability analysis (FVA)
 The flux variability analysis results contain the SBML reaction identifiers and the minimum and maximum values of the FVA. The file is a tab separated file (TSV) with the three columns `reaction`, `minimum` and `maximum`.
@@ -35,8 +33,7 @@ ADK1	0.0	0.0
 AKGDH	5.0643756615	5.0643756615
 ...
 ```
-See for instance: [`e_coli_core_02_fva.tsv`](./examples/results/e_coli_core_02_fva.tsv)
-For more information: https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA
+See for instance: [`e_coli_core_02_fva.tsv`](./examples/results/e_coli_core_02_fva.tsv). For more information: https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA
 
 ### 03 Gene deletions 
 The gene deletions results contain the SBML reaction identifiers, the optimal value under the given gene deletion and the status of the optimization. The file is a tab separated file (TSV) with the three columns `gene`, `value` and `status`. The status can be either `optimal` or `infeasible`. In case of an `infeasible` status no solution could be found and no optimal value is provided.
@@ -54,9 +51,7 @@ b2417	0.873921507	optimal
 b2458	0.873921507	optimal
 ...
 ```
-See for instance: [`e_coli_core_03_gene_deletion.tsv`](./examples/results/e_coli_core_03_gene_deletion.tsv)
-
-For more information: https://cobrapy.readthedocs.io/en/latest/deletions.html
+See for instance: [`e_coli_core_03_gene_deletion.tsv`](./examples/results/e_coli_core_03_gene_deletion.tsv). For more information: https://cobrapy.readthedocs.io/en/latest/deletions.html
 
 ### 04 Reaction deletions 
 The gene deletions results contain the SBML reaction identifiers, the optimal value under the given gene deletion and the status of the optimization. The file is a tab separated file (TSV) with the three columns `reaction`, `value` and `status`. In case of an `infeasible` status no solution could be found and no optimal value is provided.
@@ -72,9 +67,7 @@ ADK1	0.873921507	optimal
 AKGDH	0.858307408	optimal
 ...
 ```
-See for instance: [`e_coli_core_04_reaction_deletion.tsv`](./examples/e_coli_core_04_reaction_deletion.tsv)
-
-For more information: https://cobrapy.readthedocs.io/en/latest/deletions.html
+See for instance: [`e_coli_core_04_reaction_deletion.tsv`](./examples/results/e_coli_core_04_reaction_deletion.tsv). For more information: https://cobrapy.readthedocs.io/en/latest/deletions.html
 
 ## Installation
 
