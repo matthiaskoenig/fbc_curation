@@ -1,18 +1,16 @@
 from pathlib import Path
-import pytest
-import pandas as pd
 import fbc_curation
-import examples
-from fbc_curation import read_sbml_model
+from cobra.io import read_sbml_model
+from fbc_curation import examples, fbc_files
+from fbc_curation import EXAMPLE_PATH
 
-base_dir = Path(__file__).parent
-model_path = base_dir / "models" / "e_coli_core.xml"
+model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
 
 
 def test_objective_value(tmp_path):
     model = read_sbml_model(str(model_path))
     results_path = tmp_path / "test.tsv"
-    obj_value = fbc_curation.create_objective_file(model, results_path)
+    obj_value = fbc_files.create_objective_file(model, results_path)
     assert isinstance(obj_value, float)
     assert obj_value > 0
     assert Path.exists(results_path)
@@ -21,7 +19,7 @@ def test_objective_value(tmp_path):
 def test_fva(tmp_path):
     model = read_sbml_model(str(model_path))
     results_path = tmp_path / "test.tsv"
-    df = fbc_curation.create_fva_file(model, results_path)
+    df = fbc_files.create_fva_file(model, results_path)
     assert not df.empty
     assert Path.exists(results_path)
 
@@ -34,7 +32,7 @@ def test_fva(tmp_path):
 def test_gene_deletion(tmp_path):
     model = read_sbml_model(str(model_path))
     results_path = tmp_path / "test.tsv"
-    df = fbc_curation.create_gene_deletion_file(model, results_path)
+    df = fbc_files.create_gene_deletion_file(model, results_path)
     assert not df.empty
     assert Path.exists(results_path)
 
@@ -47,7 +45,7 @@ def test_gene_deletion(tmp_path):
 def test_reaction_deletion(tmp_path):
     model = read_sbml_model(str(model_path))
     results_path = tmp_path / "test.tsv"
-    df = fbc_curation.create_reaction_deletion_file(model, results_path)
+    df = fbc_files.create_reaction_deletion_file(model, results_path)
     assert not df.empty
     assert Path.exists(results_path)
 
