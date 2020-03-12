@@ -51,7 +51,7 @@ b2417	0.873921507	optimal
 b2458	0.873921507	optimal
 ...
 ```
-See for instance: [`e_coli_core_03_gene_deletion.tsv`](./examples/results/03_gene_deletion.tsv)
+See for instance: [`e_coli_core_03_gene_deletion.tsv`](./examples/results/e_coli_core_03_gene_deletion.tsv)
 
 ### 04 Reaction deletions 
 The gene deletions results contain the SBML reaction identifiers, the optimal value under the given gene deletion and the status of the optimization. The file is a tab separated file (TSV) with the three columns `reaction`, `value` and `status`. In case of an `infeasible` status no solution could be found and no optimal value is provided.
@@ -67,7 +67,7 @@ ADK1	0.873921507	optimal
 AKGDH	0.858307408	optimal
 ...
 ```
-See for instance: [`e_coli_core_04_reaction_deletion.tsv`](./examples/04_reaction_deletion.tsv)
+See for instance: [`e_coli_core_04_reaction_deletion.tsv`](./examples/e_coli_core_04_reaction_deletion.tsv)
 
 ## Installation
 
