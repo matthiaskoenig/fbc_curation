@@ -98,7 +98,7 @@ Options:
 ```
 For instance for the `e_coli_core.xml` example use
 ```
-fbc_curation --model ./examples/models/e_coli_core.xml --out ./examples/results 
+fbc_curation --model ./fbc_curation/examples/models/e_coli_core.xml --out ./fbc_curation/examples/results 
 ```
 This creates the FBC curation files for the model in the output folder.
 
