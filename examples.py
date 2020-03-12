@@ -17,4 +17,4 @@ def example_iJR904(results_dir):
 if __name__ == "__main__":
     results_dir = Path(__file__).parent / "results"
     example_ecoli_core(results_dir)
-    example_iJR904(results_dir)
+    # example_iJR904(results_dir)
