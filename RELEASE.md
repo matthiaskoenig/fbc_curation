@@ -14,6 +14,8 @@ Steps for release are
 git branch master
 git pull
 rm -rf dist
+# cleanup pycache
+find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
 python setup.py sdist
 twine upload dist/*
 ```
