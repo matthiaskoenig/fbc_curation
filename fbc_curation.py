@@ -11,6 +11,11 @@ from pathlib import Path
 from cobra.flux_analysis import flux_variability_analysis
 from cobra.flux_analysis import single_gene_deletion, single_reaction_deletion
 
+def print_header(title):
+    print()
+    print("-" * 80)
+    print(title)
+    print("-" * 80)
 
 def create_fbc_files(model_path: Path, results_dir) -> pd.DataFrame:
     """ Creates all FBC curation files
@@ -53,7 +58,7 @@ def create_objective_file(model: cobra.Model, path: Path) -> float:
     :param path:
     :return:
     """
-    print(f"Objective: {path}")
+    print_header(f"Objective: {path}")
     # create data frame and store
     solution = model.optimize()
     print(solution)
@@ -72,7 +77,7 @@ def create_fva_file(model: cobra.Model, path: Path) -> pd.DataFrame:
     :param path:
     :return:
     """
-    print(f"FVA: {path}")
+    print_header(f"FVA: {path}")
     # create data frame and store
     df = flux_variability_analysis(model, model.reactions)
 
@@ -84,6 +89,7 @@ def create_fva_file(model: cobra.Model, path: Path) -> pd.DataFrame:
          })
     df_out.index = range(len(df_out))
     print(df_out.head(10))
+    print('...')
 
     df_out.to_csv(path, sep="\t", index=False)
     return df_out
@@ -97,7 +103,7 @@ def create_gene_deletion_file(model: cobra.Model, path: Path) -> pd.DataFrame:
     :param path:
     :return:
     """
-    print(f"Gene deletions: {path}")
+    print_header(f"Gene deletions: {path}")
     # create data frame and store
     df = single_gene_deletion(model, model.genes)
 
@@ -109,6 +115,7 @@ def create_gene_deletion_file(model: cobra.Model, path: Path) -> pd.DataFrame:
          })
     df_out.index = range(len(df_out))
     print(df_out.head(10))
+    print('...')
 
     df_out.to_csv(path, sep="\t", index=False)
     return df_out
@@ -122,7 +129,7 @@ def create_reaction_deletion_file(model, path) -> pd.DataFrame:
     :param path:
     :return:
     """
-    print(f"Reaction deletions: {path}")
+    print_header(f"Reaction deletions: {path}")
     # create data frame and store
     df = single_reaction_deletion(model, model.reactions)
 
@@ -134,26 +141,38 @@ def create_reaction_deletion_file(model, path) -> pd.DataFrame:
          })
     df_out.index = range(len(df_out))
     print(df_out.head(10))
+    print('...')
 
     df_out.to_csv(path, sep="\t", index=False)
     return df_out
 
 
-def example_ecoli_core(results_dir):
-    """Create example files for ecoli core."""
-    model_path = Path(__file__).parent / "models" / "e_coli_core.xml"
-    create_fbc_files(results_dir=results_dir, model_path=model_path)
-
-
-def example_iJR904(results_dir):
-    """Create example files for ecoli core."""
-    model_path = Path(__file__).parent / "models" / "iJR904.xml.gz"
-    create_fbc_files(results_dir=results_dir, model_path=model_path)
-
-
 if __name__ == "__main__":
-    results_dir = Path(__file__).parent / "results"
-    example_ecoli_core(results_dir)
-    example_iJR904(results_dir)
+    """
+    Example: 
+        python fbc_curation.py --model ./models/e_coli_core.xml --out ./results
+    """
+    import sys
+    import optparse
+    parser = optparse.OptionParser()
+    parser.add_option('-m', '--model',
+                      action="store", dest="model_path",
+                      help="path to SBML model with fbc information")
+    parser.add_option('-o', '--out',
+                      action="store", dest="output_path",
+                      help="path to write the output to")
 
+    options, args = parser.parse_args()
 
+    if not options.model_path:
+        print("Required argument '--model' missing")
+        parser.print_help()
+        sys.exit(1)
+    if not options.output_path:
+        print("Required argument '--out' missing")
+        parser.print_help()
+        sys.exit(1)
+
+    model_path = Path(options.model_path)
+    output_path = Path(options.output_path)
+    create_fbc_files(results_dir=output_path, model_path=model_path)

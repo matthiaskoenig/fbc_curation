@@ -2,6 +2,7 @@ from pathlib import Path
 import pytest
 import pandas as pd
 import fbc_curation
+import examples
 from fbc_curation import read_sbml_model
 
 base_dir = Path(__file__).parent
@@ -57,7 +58,7 @@ def test_reaction_deletion(tmp_path):
 
 
 def test_e_coli_core(tmp_path):
-    fbc_curation.example_ecoli_core(tmp_path)
+    examples.example_ecoli_core(tmp_path)
     assert Path.exists(tmp_path / "e_coli_core_01_objective.tsv")
     assert Path.exists(tmp_path / "e_coli_core_02_fva.tsv")
     assert Path.exists(tmp_path / "e_coli_core_03_gene_deletion.tsv")
@@ -65,7 +66,7 @@ def test_e_coli_core(tmp_path):
 
 
 def test_iJR904(tmp_path):
-    fbc_curation.example_iJR904(tmp_path)
+    examples.example_iJR904(tmp_path)
     assert Path.exists(tmp_path / "iJR904_01_objective.tsv")
     assert Path.exists(tmp_path / "iJR904_02_fva.tsv")
     assert Path.exists(tmp_path / "iJR904_03_gene_deletion.tsv")

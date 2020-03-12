@@ -19,10 +19,17 @@ To run the tests use
 pytest
 ```
 
+## Examples
+To run the examples use
+```
+python examples.py
+```
+
 ## Curation files
-To create the example FBC curation files use:
-```
-python fbc_curation.py 
-```
 To create FBC curation for a new model use:
+```
+python fbc_curation.py --model ./models/e_coli_core.xml --out ./results 
+```
+This creates the FBC curation files for the model in the output folder.
+
 
