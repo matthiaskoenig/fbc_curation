@@ -12,7 +12,7 @@ from pathlib import Path
 from cobra.flux_analysis import flux_variability_analysis
 from cobra.flux_analysis import single_gene_deletion, single_reaction_deletion
 
-NUM_DECIMALS = 10  # decimals to write in the solution
+NUM_DECIMALS = 8  # decimals to write in the solution
 
 
 def print_header(title):
