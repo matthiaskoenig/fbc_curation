@@ -18,10 +18,17 @@ def example_iJR904(results_dir):
     create_fbc_files(results_dir=results_dir, model_path=model_path)
 
 
+def example_MODEL1709260000(results_dir):
+    """Create example files for MODEL1709260000."""
+    model_path = EXAMPLE_PATH / "models" / "MODEL1709260000.xml.gz"
+    create_fbc_files(results_dir=results_dir, model_path=model_path)
+
+
 def run_examples():
     results_dir = EXAMPLE_PATH / "results"
-    example_ecoli_core(results_dir)
-    example_iJR904(results_dir)
+    # example_ecoli_core(results_dir)
+    # example_iJR904(results_dir)
+    example_MODEL1709260000(results_dir)
 
 
 if __name__ == "__main__":

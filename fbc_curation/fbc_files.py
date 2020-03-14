@@ -4,13 +4,18 @@ Module for creating FBC curation files via cobrapy.
 
 Uses GLPK as default solver.
 """
+import logging
 import pandas as pd
 import cobra
 from cobra.io import read_sbml_model
 from pathlib import Path
+import libsbml
 
 from cobra.flux_analysis import flux_variability_analysis
 from cobra.flux_analysis import single_gene_deletion, single_reaction_deletion
+
+logging.getLogger(__file__)
+
 
 NUM_DECIMALS = 8  # decimals to write in the solution
 
@@ -72,6 +77,17 @@ def create_objective_file(model: cobra.Model, path: Path, decimals: int=NUM_DECI
     solution = model.optimize()
     print(solution)
     obj_value = round(solution.objective_value, NUM_DECIMALS)
+
+    doc = libsbml.readSBMLFromFile()  # type: libsbml.SBMLDocument
+    model = doc.getModel()  # type: libsbml.Model
+    fbc_model = model.getPlugin("fbc")  # type: libsbml.FbcModelPlugin
+    active_objective = fbc_model.getActiveObjective()  # type: libsbml.Objective
+    objectives = []
+    for objective in fbc_model.getListOfObjectives():  # type: libsbml.Objective
+        objectives.append(objective.getId())
+
+    if len(objectives) > 1:
+        logger
 
     with open(path, "w") as f_out:
         f_out.write(str(obj_value))
