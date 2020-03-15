@@ -26,11 +26,11 @@ def example_MODEL1709260000(results_path):
     creator.create_fbc_files()
 
 
-def run_examples(results_path):
+def run_examples(results_path=EXAMPLE_PATH / "results"):
     example_ecoli_core(results_path / "e_coli_core")
     example_iJR904(results_path / "iJR904")
     example_MODEL1709260000(results_path / "MODEL1709260000")
 
 
 if __name__ == "__main__":
-    run_examples(EXAMPLE_PATH / "results")
+    run_examples()

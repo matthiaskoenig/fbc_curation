@@ -21,7 +21,7 @@ logger = logging.getLogger(__file__)
 
 class FBCFileCreator(object):
     """Class for creating refernce files for SBML curation."""
-    NUM_DECIMALS = 8  # decimals to write in the solution
+    NUM_DECIMALS = 6  # decimals to write in the solution
 
     # default output filenames
     FILENAME_OBJECTIVE_FILE = "01_objective.tsv"
