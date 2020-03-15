@@ -94,7 +94,7 @@ class FBCFileCreator(object):
             'objective_ids': objective_ids
         }
 
-    def load_cobra_model(self) -> cobra.Model:
+    def read_cobra_model(self) -> cobra.Model:
         """Loads and returns cobra model.
 
         :param model_path:
@@ -113,20 +113,17 @@ class FBCFileCreator(object):
         """
         path = self.results_dir / FBCFileCreator.NAME_OBJECTIVE_FILE
         self._print_header(f"Objective: {path}")
-        model = self.re  # type: cobra.Model
+        model = self.read_cobra_model()  # type: cobra.Model
 
         # fbc optimization
         solution = model.optimize()
         print(solution)
         obj_value = round(solution.objective_value, NUM_DECIMALS)
 
-
-
         with open(path, "w") as f_out:
             f_out.write(str(obj_value))
 
         return obj_value
-
 
     def create_fva_file(model: cobra.Model, path: Path, decimals: int=NUM_DECIMALS) -> pd.DataFrame:
         """ Creates TSV file with minimum and maximum value of Flux variability analysis.
