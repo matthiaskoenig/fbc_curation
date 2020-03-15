@@ -1,0 +1,1227 @@
+model	objective	gene	status	value
+ymn	obj	AND	optimal	0.08798023
+ymn	obj	AND YDR376W AND YPL252C AND YDL120W	optimal	0.08798018
+ymn	obj	AND YGL018C AND YOR232W	optimal	0.08798018
+ymn	obj	AND YGL018C AND YOR232W AND YJR045C	optimal	0.08798018
+ymn	obj	AND YIL128W AND YNL240C	optimal	0.08798018
+ymn	obj	AND YJL026W	optimal	0.08798018
+ymn	obj	AND YJR122W	optimal	0.08798018
+ymn	obj	OR	optimal	0.08798018
+ymn	obj	OR YDL093W OR YJR143C OR YOR321W	optimal	0.08798018
+ymn	obj	OR YDR353W	optimal	0.08798018
+ymn	obj	OR YER005W	optimal	0.08798018
+ymn	obj	OR YKL088W	optimal	0.08798018
+ymn	obj	OR YMR108W	optimal	0.08798018
+ymn	obj	Q0045	optimal	0.0183219
+ymn	obj	Q0045 AND Q0250 AND Q0275 AND YDL067C AND YEL039C AND YGL187C AND YGL191W AND YHR051W AND YIL111W AND YLR038C AND YLR395C AND YMR256C	optimal	0.08798018
+ymn	obj	Q0045 AND Q0250 AND Q0275 AND YDL067C AND YEL039C AND YGL187C AND YGL191W AND YHR051W AND YLR038C AND YLR395C AND YMR256C AND YNL052W	optimal	0.08798018
+ymn	obj	Q0045 AND Q0250 AND Q0275 AND YDL067C AND YGL187C AND YGL191W AND YHR051W AND YIL111W AND YJR048W AND YLR038C AND YLR395C AND YMR256C	optimal	0.08798018
+ymn	obj	Q0045 AND Q0250 AND Q0275 AND YDL067C AND YGL187C AND YGL191W AND YHR051W AND YJR048W AND YLR038C AND YLR395C AND YMR256C AND YNL052W	optimal	0.08798018
+ymn	obj	Q0080	optimal	0.03501306
+ymn	obj	Q0080 AND Q0085 AND Q0130 AND YBL099W AND YBR039W AND YDL004W AND YDR298C AND YDR322C-A AND YDR377W AND YJR121W AND YKL016C AND YLR295C AND YML081C-A AND YPL078C AND YPL271W	optimal	0.08798018
+ymn	obj	Q0080 AND Q0085 AND Q0130 AND YBL099W AND YBR039W AND YDL004W AND YDR298C AND YDR377W AND YJR121W AND YKL016C AND YLR295C AND YML081C-A AND YPL078C AND YPL271W AND YPR020W	optimal	0.08798018
+ymn	obj	Q0085	optimal	0.03501306
+ymn	obj	Q0105	optimal	0.0184341
+ymn	obj	Q0105 AND YBL045C AND YDR529C AND YEL024W AND YEL039C AND YFR033C AND YGR183C AND YHR001W-A AND YJL166W AND YOR065W AND YPR191W	optimal	0.08798018
+ymn	obj	Q0105 AND YBL045C AND YDR529C AND YEL024W AND YFR033C AND YGR183C AND YHR001W-A AND YJL166W AND YJR048W AND YOR065W AND YPR191W	optimal	0.08798018
+ymn	obj	Q0130	optimal	0.03501306
+ymn	obj	Q0250	optimal	0.0183219
+ymn	obj	Q0275	optimal	0.0183219
+ymn	obj	YAL012W	optimal	0.087978
+ymn	obj	YAL022C	optimal	0.08798018
+ymn	obj	YAL023C	optimal	0.08798018
+ymn	obj	YAL023C AND YDL095W	optimal	0.08798018
+ymn	obj	YAL038W	optimal	0.08798018
+ymn	obj	YAL038W OR YOR347C	optimal	0.08798018
+ymn	obj	YAL039C	optimal	0.08798018
+ymn	obj	YAL044C	optimal	0.08686795
+ymn	obj	YAL044C AND YDR019C AND YFL018C AND YMR189W	optimal	0.08798018
+ymn	obj	YAL054C	optimal	0.08798018
+ymn	obj	YAL054C OR YLR153C	optimal	0.08798018
+ymn	obj	YAL060W	optimal	0.08798018
+ymn	obj	YAL062W	optimal	0.08798018
+ymn	obj	YAL062W OR YOR375C	optimal	0.08798018
+ymn	obj	YAR015W	optimal	0.0
+ymn	obj	YAR035W	optimal	0.08798018
+ymn	obj	YAR035W OR YER024W	optimal	0.08798018
+ymn	obj	YAR071W	optimal	0.08798018
+ymn	obj	YAR071W OR YBR093C	optimal	0.08798018
+ymn	obj	YBL011W	optimal	0.08798018
+ymn	obj	YBL011W OR YKR067W	optimal	0.08798018
+ymn	obj	YBL013W	optimal	0.08798018
+ymn	obj	YBL015W	optimal	0.08798018
+ymn	obj	YBL030C	optimal	0.08798018
+ymn	obj	YBL030C OR YBR085W OR YMR056C	optimal	0.08798018
+ymn	obj	YBL033C	optimal	0.0
+ymn	obj	YBL039C	optimal	0.08798018
+ymn	obj	YBL039C OR YJR103W	optimal	0.08798018
+ymn	obj	YBL042C	optimal	0.08798018
+ymn	obj	YBL045C	optimal	0.0184341
+ymn	obj	YBL064C	optimal	0.08798018
+ymn	obj	YBL064C AND YCR083W	optimal	0.08798018
+ymn	obj	YBL068W	optimal	0.08798018
+ymn	obj	YBL068W AND YOL061W	optimal	0.08798018
+ymn	obj	YBL076C	optimal	0.0
+ymn	obj	YBL098W	optimal	0.0
+ymn	obj	YBL099W	optimal	0.03501306
+ymn	obj	YBR002C	optimal	0.08798018
+ymn	obj	YBR002C OR YMR101C	optimal	0.08798018
+ymn	obj	YBR003W	optimal	0.08798018
+ymn	obj	YBR004C	optimal	0.08798018
+ymn	obj	YBR006W	optimal	0.08798018
+ymn	obj	YBR011C	optimal	0.08798018
+ymn	obj	YBR018C	optimal	0.08798018
+ymn	obj	YBR019C	optimal	0.08798018
+ymn	obj	YBR020W	optimal	0.08798018
+ymn	obj	YBR021W	optimal	0.08798018
+ymn	obj	YBR023C	optimal	0.08798018
+ymn	obj	YBR023C OR YBR038W OR YNL192W	optimal	0.08798018
+ymn	obj	YBR026C	optimal	0.08798018
+ymn	obj	YBR029C	optimal	0.0
+ymn	obj	YBR034C	optimal	0.08798018
+ymn	obj	YBR035C	optimal	0.08798018
+ymn	obj	YBR036C	optimal	0.08797643
+ymn	obj	YBR036C AND YBR161W	optimal	0.08798018
+ymn	obj	YBR036C AND YPL057C	optimal	0.08798018
+ymn	obj	YBR038W	optimal	0.08798018
+ymn	obj	YBR039W	optimal	0.03501306
+ymn	obj	YBR041W	optimal	0.08797993
+ymn	obj	YBR042C	optimal	0.08798018
+ymn	obj	YBR058C-A	optimal	0.08798018
+ymn	obj	YBR058C-A AND YDR062W AND YMR296C	optimal	0.08798018
+ymn	obj	YBR068C	optimal	0.08798018
+ymn	obj	YBR068C OR YBR069C OR YCL025C OR YDR046C OR YDR508C OR YKR039W	optimal	0.08798018
+ymn	obj	YBR068C OR YBR069C OR YCL025C OR YDR046C OR YDR508C OR YKR039W OR YOL020W	optimal	0.08798018
+ymn	obj	YBR068C OR YBR069C OR YCL025C OR YDR046C OR YKR039W	optimal	0.08798018
+ymn	obj	YBR068C OR YBR069C OR YCL025C OR YDR046C OR YKR039W OR YOL020W	optimal	0.08798018
+ymn	obj	YBR068C OR YBR069C OR YDR046C OR YKR039W OR YOL020W	optimal	0.08798018
+ymn	obj	YBR068C OR YCL025C OR YDR046C OR YDR508C OR YGR055W OR YHL036W OR YKR039W	optimal	0.08798018
+ymn	obj	YBR068C OR YCL025C OR YDR046C OR YKR039W OR YOL020W	optimal	0.08798018
+ymn	obj	YBR068C OR YCL025C OR YDR046C OR YKR039W OR YOL020W OR YOR348C OR YPL265W	optimal	0.08798018
+ymn	obj	YBR069C	optimal	0.08798018
+ymn	obj	YBR069C OR YCL025C OR YDR046C OR YDR508C OR YKR039W	optimal	0.08798018
+ymn	obj	YBR069C OR YGR191W OR YKR039W	optimal	0.08798018
+ymn	obj	YBR084W	optimal	0.08798018
+ymn	obj	YBR085W	optimal	0.08798018
+ymn	obj	YBR092C	optimal	0.08798018
+ymn	obj	YBR093C	optimal	0.08798018
+ymn	obj	YBR097W	optimal	0.08798018
+ymn	obj	YBR097W AND YLR240W	optimal	0.08798018
+ymn	obj	YBR110W	optimal	0.08798018
+ymn	obj	YBR115C	optimal	0.0
+ymn	obj	YBR115C AND YGL154C	optimal	0.08798018
+ymn	obj	YBR117C	optimal	0.08798018
+ymn	obj	YBR117C OR YPR074C	optimal	0.08798018
+ymn	obj	YBR121C	optimal	0.08798018
+ymn	obj	YBR121C OR YPR081C	optimal	0.08798018
+ymn	obj	YBR126C	optimal	0.0
+ymn	obj	YBR126C AND YDR074W AND YML100W	optimal	0.08798018
+ymn	obj	YBR126C AND YDR074W AND YMR261C	optimal	0.08798018
+ymn	obj	YBR127C	optimal	0.08798018
+ymn	obj	YBR127C AND YDL185W AND YEL027W AND YEL051W AND YGR020C AND YHR026W AND YHR039C-A AND YKL080W AND YLR447C AND YMR054W AND YOR332W AND YPL234C AND YPR036W	optimal	0.08798018
+ymn	obj	YBR127C AND YDL185W AND YEL027W AND YEL051W AND YGR020C AND YHR026W AND YHR039C-A AND YKL080W AND YLR447C AND YOR270C AND YOR332W AND YPL234C AND YPR036W	optimal	0.08798018
+ymn	obj	YBR132C	optimal	0.08798018
+ymn	obj	YBR132C OR YHL016C OR YKR039W OR YLL028W OR YOR273C OR YPL274W	optimal	0.08798018
+ymn	obj	YBR145W	optimal	0.08798018
+ymn	obj	YBR145W OR YDL168W OR YOL086C	optimal	0.08798018
+ymn	obj	YBR145W OR YOL086C	optimal	0.08798018
+ymn	obj	YBR149W	optimal	0.08798023
+ymn	obj	YBR153W	optimal	0.0
+ymn	obj	YBR159W	optimal	0.0
+ymn	obj	YBR161W	optimal	0.08798023
+ymn	obj	YBR166C	optimal	0.0
+ymn	obj	YBR176W	optimal	0.08798018
+ymn	obj	YBR180W	optimal	0.08798018
+ymn	obj	YBR183W	optimal	0.08798018
+ymn	obj	YBR192W	optimal	0.08798018
+ymn	obj	YBR196C	optimal	0.08705799
+ymn	obj	YBR199W	optimal	0.08798018
+ymn	obj	YBR199W OR YBR205W OR YDR483W OR YJL139C OR YKR061W OR YNL029C OR YOR099W OR YPL053C	optimal	0.08798018
+ymn	obj	YBR204C	optimal	0.08798018
+ymn	obj	YBR204C OR YKR089C OR YMR313C OR YOR081C	optimal	0.08798018
+ymn	obj	YBR205W	optimal	0.08798018
+ymn	obj	YBR207W	optimal	0.08798018
+ymn	obj	YBR208C	optimal	0.08798018
+ymn	obj	YBR213W	optimal	0.08798018
+ymn	obj	YBR218C	optimal	0.08798018
+ymn	obj	YBR218C OR YGL062W	optimal	0.08798018
+ymn	obj	YBR221C	optimal	0.08718338
+ymn	obj	YBR221C AND YER178W AND YFL018C AND YGR193C AND YNL071W	optimal	0.08798025
+ymn	obj	YBR244W	optimal	0.08798023
+ymn	obj	YBR244W OR YCL035C OR YDR513W OR YIR037W OR YKL026C	optimal	0.08798018
+ymn	obj	YBR248C	optimal	0.0
+ymn	obj	YBR249C	optimal	0.08798018
+ymn	obj	YBR249C OR YDR035W	optimal	0.08798018
+ymn	obj	YBR252W	optimal	0.08798018
+ymn	obj	YBR256C	optimal	0.0
+ymn	obj	YBR263W	optimal	0.08686795
+ymn	obj	YBR265W	optimal	0.0
+ymn	obj	YBR291C	optimal	0.08794412
+ymn	obj	YBR293W	optimal	0.08798018
+ymn	obj	YBR293W OR YCL069W OR YMR088C	optimal	0.08798018
+ymn	obj	YBR293W OR YJR001W	optimal	0.08798018
+ymn	obj	YBR294W	optimal	0.08798018
+ymn	obj	YBR294W OR YLR092W	optimal	0.08798018
+ymn	obj	YBR296C	optimal	0.08798018
+ymn	obj	YBR296C OR YCR037C OR YJL198W OR YML123C OR YNR013C	optimal	0.08798023
+ymn	obj	YBR298C	optimal	0.08798018
+ymn	obj	YBR298C OR YDL247W OR YGR289C OR YJR160C	optimal	0.08798018
+ymn	obj	YBR299W	optimal	0.08798018
+ymn	obj	YBR299W OR YGR287C OR YGR292W OR YIL172C OR YJL216C OR YJL221C	optimal	0.08798018
+ymn	obj	YCL004W	optimal	0.08798018
+ymn	obj	YCL009C	optimal	0.08798018
+ymn	obj	YCL009C AND YMR108W	optimal	0.08798018
+ymn	obj	YCL017C	optimal	0.08798018
+ymn	obj	YCL017C OR YER048W-A	optimal	0.08798018
+ymn	obj	YCL018W	optimal	0.0
+ymn	obj	YCL025C	optimal	0.08798018
+ymn	obj	YCL025C OR YDR508C OR YFL055W OR YKR039W OR YPL265W	optimal	0.08798018
+ymn	obj	YCL025C OR YDR508C OR YKR039W OR YPL265W	optimal	0.08798018
+ymn	obj	YCL025C OR YFL055W OR YKR039W OR YPL265W	optimal	0.08798018
+ymn	obj	YCL025C OR YKR039W OR YOL020W OR YOR348C OR YPL265W	optimal	0.08798018
+ymn	obj	YCL030C	optimal	0.0
+ymn	obj	YCL035C	optimal	0.08798018
+ymn	obj	YCL035C AND YPL091W	optimal	0.08798018
+ymn	obj	YCL038C	optimal	0.08798018
+ymn	obj	YCL040W	optimal	0.08798018
+ymn	obj	YCL040W OR YFR053C OR YGL253W	optimal	0.08798018
+ymn	obj	YCL050C	optimal	0.08796597
+ymn	obj	YCL052C	optimal	0.08798018
+ymn	obj	YCL052C AND YJR013W	optimal	0.08798018
+ymn	obj	YCL064C	optimal	0.08798018
+ymn	obj	YCL069W	optimal	0.08798018
+ymn	obj	YCR005C	optimal	0.08798018
+ymn	obj	YCR010C	optimal	0.08798018
+ymn	obj	YCR012W	optimal	0.07908413
+ymn	obj	YCR024C	optimal	0.08798018
+ymn	obj	YCR024C-A	optimal	0.08798018
+ymn	obj	YCR024C-A AND YEL017C-A AND YGL008C	optimal	0.08798018
+ymn	obj	YCR024C-A AND YEL017C-A AND YPL036W	optimal	0.08798018
+ymn	obj	YCR028C	optimal	0.08798018
+ymn	obj	YCR034W	optimal	0.08798018
+ymn	obj	YCR034W OR YLR372W	optimal	0.08798018
+ymn	obj	YCR036W	optimal	0.08798018
+ymn	obj	YCR037C	optimal	0.08798018
+ymn	obj	YCR048W	optimal	0.08798018
+ymn	obj	YCR048W OR YNR019W	optimal	0.08798018
+ymn	obj	YCR048W OR YNR019W OR YOR245C	optimal	0.08798018
+ymn	obj	YCR053W	optimal	0.0
+ymn	obj	YCR075C	optimal	0.08798018
+ymn	obj	YCR083W	optimal	0.08798018
+ymn	obj	YCR083W AND YHR106W	optimal	0.08798018
+ymn	obj	YCR083W AND YPL091W	optimal	0.08798018
+ymn	obj	YCR098C	optimal	0.08798018
+ymn	obj	YCR105W	optimal	0.08798018
+ymn	obj	YCR105W OR YDR368W OR YMR318C	optimal	0.08798018
+ymn	obj	YCR105W OR YMR318C	optimal	0.08798018
+ymn	obj	YDL004W	optimal	0.03501306
+ymn	obj	YDL015C	optimal	0.0
+ymn	obj	YDL022W	optimal	0.08798018
+ymn	obj	YDL022W OR YOL059W	optimal	0.08798018
+ymn	obj	YDL042C	optimal	0.08798018
+ymn	obj	YDL042C OR YDR191W OR YOL068C OR YOR025W OR YPL015C	optimal	0.08798018
+ymn	obj	YDL045C	optimal	0.08798018
+ymn	obj	YDL052C	optimal	0.08798018
+ymn	obj	YDL052C OR YKR089C OR YOR081C	optimal	0.08798018
+ymn	obj	YDL052C OR YOR175C	optimal	0.08798018
+ymn	obj	YDL055C	optimal	0.0
+ymn	obj	YDL066W	optimal	0.08785083
+ymn	obj	YDL067C	optimal	0.0183219
+ymn	obj	YDL078C	optimal	0.08798018
+ymn	obj	YDL080C	optimal	0.08798018
+ymn	obj	YDL080C OR YGR087C OR YLR044C OR YLR134W	optimal	0.08798018
+ymn	obj	YDL085W	optimal	0.08798018
+ymn	obj	YDL085W OR YMR145C	optimal	0.08798018
+ymn	obj	YDL090C	optimal	0.08798018
+ymn	obj	YDL090C AND YKL019W	optimal	0.08798018
+ymn	obj	YDL093W	optimal	0.08798018
+ymn	obj	YDL095W	optimal	0.08798018
+ymn	obj	YDL100C	optimal	0.08798018
+ymn	obj	YDL103C	optimal	0.08798018
+ymn	obj	YDL120W	optimal	0.08798018
+ymn	obj	YDL131W	optimal	0.08798023
+ymn	obj	YDL131W OR YDL182W	optimal	0.08798018
+ymn	obj	YDL141W	optimal	0.0
+ymn	obj	YDL141W AND YNR016C	optimal	0.08798018
+ymn	obj	YDL142C	optimal	0.08798018
+ymn	obj	YDL168W	optimal	0.08798018
+ymn	obj	YDL171C	optimal	0.08798018
+ymn	obj	YDL174C	optimal	0.08798018
+ymn	obj	YDL174C AND YEL039C	optimal	0.08798018
+ymn	obj	YDL174C AND YJR048W	optimal	0.08798018
+ymn	obj	YDL178W	optimal	0.08798018
+ymn	obj	YDL178W AND YEL039C	optimal	0.08798018
+ymn	obj	YDL178W AND YJR048W	optimal	0.08798018
+ymn	obj	YDL182W	optimal	0.08798018
+ymn	obj	YDL185W	optimal	0.08798018
+ymn	obj	YDL198C	optimal	0.08798018
+ymn	obj	YDL205C	optimal	0.08798018
+ymn	obj	YDL210W	optimal	0.08798018
+ymn	obj	YDL210W OR YOR348C	optimal	0.08798018
+ymn	obj	YDL215C	optimal	0.08798018
+ymn	obj	YDL238C	optimal	0.08798018
+ymn	obj	YDL245C	optimal	0.08798018
+ymn	obj	YDL245C OR YDL247W OR YDR342C OR YDR343C OR YDR345C OR YDR536W OR YEL069C OR YFL011W OR YHR092C OR YHR094C OR YHR096C OR YJL214W OR YJL219W OR YJR158W OR YJR160C OR YLR081W OR YMR011W OR YNR072W OR YOL156W	optimal	0.08798018
+ymn	obj	YDL245C OR YDR342C OR YDR343C OR YDR345C OR YEL069C OR YFL011W OR YHR092C OR YHR094C OR YHR096C OR YJL214W OR YJL219W OR YJR158W OR YMR011W OR YNR072W OR YOL156W	optimal	0.08798018
+ymn	obj	YDL247W	optimal	0.08798018
+ymn	obj	YDR001C	optimal	0.08798018
+ymn	obj	YDR007W	optimal	0.0
+ymn	obj	YDR017C	optimal	0.08798018
+ymn	obj	YDR019C	optimal	0.08686795
+ymn	obj	YDR023W	optimal	0.08798018
+ymn	obj	YDR023W OR YHR011W	optimal	0.08798018
+ymn	obj	YDR035W	optimal	0.08794412
+ymn	obj	YDR037W	optimal	0.0
+ymn	obj	YDR044W	optimal	0.08798018
+ymn	obj	YDR046C	optimal	0.08798018
+ymn	obj	YDR047W	optimal	0.0
+ymn	obj	YDR050C	optimal	0.08555668
+ymn	obj	YDR058C	optimal	0.08798018
+ymn	obj	YDR062W	optimal	0.0
+ymn	obj	YDR062W AND YMR296C	optimal	0.08798018
+ymn	obj	YDR072C	optimal	0.08797845
+ymn	obj	YDR074W	optimal	0.0
+ymn	obj	YDR098C	optimal	0.08798018
+ymn	obj	YDR098C AND YPL091W	optimal	0.08798018
+ymn	obj	YDR098C OR YER174C	optimal	0.08798018
+ymn	obj	YDR127W	optimal	0.0
+ymn	obj	YDR135C	optimal	0.08798018
+ymn	obj	YDR135C OR YLL015W	optimal	0.08798018
+ymn	obj	YDR147W	optimal	0.08798018
+ymn	obj	YDR147W OR YLR133W	optimal	0.08798018
+ymn	obj	YDR148C	optimal	0.08798018
+ymn	obj	YDR148C AND YFL018C AND YIL125W	optimal	0.08798018
+ymn	obj	YDR158W	optimal	0.0
+ymn	obj	YDR173C	optimal	0.08798018
+ymn	obj	YDR178W	optimal	0.08749992
+ymn	obj	YDR178W AND YJL045W AND YKL141W AND YLL041C	optimal	0.08798018
+ymn	obj	YDR178W AND YKL141W AND YKL148C AND YLL041C	optimal	0.08798018
+ymn	obj	YDR191W	optimal	0.08798018
+ymn	obj	YDR196C	optimal	0.08798018
+ymn	obj	YDR204W	optimal	0.08798018
+ymn	obj	YDR204W AND YGL119W AND YGR255C AND YLR201C AND YML110C AND YOL096C AND YOR125C	optimal	0.08798018
+ymn	obj	YDR208W	optimal	0.08798018
+ymn	obj	YDR226W	optimal	0.0
+ymn	obj	YDR232W	optimal	0.0
+ymn	obj	YDR234W	optimal	0.0
+ymn	obj	YDR236C	optimal	0.08798018
+ymn	obj	YDR256C	optimal	0.08798018
+ymn	obj	YDR261C	optimal	0.08798018
+ymn	obj	YDR261C OR YGR282C OR YLR300W OR YNR067C OR YOR190W	optimal	0.08798018
+ymn	obj	YDR267C	optimal	0.08798018
+ymn	obj	YDR267C OR YHR122W	optimal	0.08798018
+ymn	obj	YDR268W	optimal	0.08798018
+ymn	obj	YDR270W	optimal	0.08798018
+ymn	obj	YDR272W	optimal	0.08798018
+ymn	obj	YDR284C	optimal	0.08798018
+ymn	obj	YDR287W	optimal	0.08798018
+ymn	obj	YDR287W OR YHR046C	optimal	0.08798018
+ymn	obj	YDR294C	optimal	0.08798018
+ymn	obj	YDR297W	optimal	0.08798018
+ymn	obj	YDR298C	optimal	0.03501306
+ymn	obj	YDR300C	optimal	0.08798018
+ymn	obj	YDR302W	optimal	0.08798018
+ymn	obj	YDR302W OR YLL031C	optimal	0.08798018
+ymn	obj	YDR305C	optimal	0.08798018
+ymn	obj	YDR315C	optimal	0.08798018
+ymn	obj	YDR321W	optimal	0.08798018
+ymn	obj	YDR322C-A	optimal	0.08798018
+ymn	obj	YDR335W	optimal	0.08798023
+ymn	obj	YDR341C	optimal	0.0
+ymn	obj	YDR342C	optimal	0.08798018
+ymn	obj	YDR343C	optimal	0.08798018
+ymn	obj	YDR345C	optimal	0.08798018
+ymn	obj	YDR353W	optimal	0.0
+ymn	obj	YDR353W AND YGR209C	optimal	0.08798018
+ymn	obj	YDR353W AND YLR043C	optimal	0.08798018
+ymn	obj	YDR354W	optimal	0.0
+ymn	obj	YDR367W	optimal	0.0
+ymn	obj	YDR367W AND YKL004W	optimal	0.08798018
+ymn	obj	YDR368W	optimal	0.08798018
+ymn	obj	YDR368W OR YHR104W	optimal	0.08798018
+ymn	obj	YDR373W	optimal	0.08798018
+ymn	obj	YDR373W AND YNL267W	optimal	0.08798018
+ymn	obj	YDR376W	optimal	0.08798018
+ymn	obj	YDR376W AND YPL252C	optimal	0.08798018
+ymn	obj	YDR377W	optimal	0.03501306
+ymn	obj	YDR380W	optimal	0.08798018
+ymn	obj	YDR384C	optimal	0.08798018
+ymn	obj	YDR384C OR YGR121C OR YNL142W OR YPR138C	optimal	0.08798018
+ymn	obj	YDR399W	optimal	0.08798018
+ymn	obj	YDR400W	optimal	0.08798018
+ymn	obj	YDR400W AND YLR017W AND YLR209C	optimal	0.08798018
+ymn	obj	YDR402C	optimal	0.08798018
+ymn	obj	YDR402C AND YDR403W	optimal	0.08798018
+ymn	obj	YDR403W	optimal	0.08798018
+ymn	obj	YDR408C	optimal	0.0
+ymn	obj	YDR428C	optimal	0.0
+ymn	obj	YDR453C	optimal	0.08798018
+ymn	obj	YDR453C AND YGR209C	optimal	0.08798018
+ymn	obj	YDR453C AND YLR043C	optimal	0.08798018
+ymn	obj	YDR454C	optimal	0.0
+ymn	obj	YDR481C	optimal	0.08798018
+ymn	obj	YDR483W	optimal	0.08798018
+ymn	obj	YDR487C	optimal	0.0
+ymn	obj	YDR497C	optimal	0.08798018
+ymn	obj	YDR497C OR YOL103W	optimal	0.08798018
+ymn	obj	YDR502C	optimal	0.08798018
+ymn	obj	YDR502C OR YLR180W	optimal	0.08798018
+ymn	obj	YDR503C	optimal	0.08798018
+ymn	obj	YDR508C	optimal	0.08798018
+ymn	obj	YDR513W	optimal	0.08798018
+ymn	obj	YDR513W AND YPL091W	optimal	0.08798018
+ymn	obj	YDR529C	optimal	0.0184341
+ymn	obj	YDR530C	optimal	0.08798018
+ymn	obj	YDR531W	optimal	0.08798018
+ymn	obj	YDR534C	optimal	0.08798023
+ymn	obj	YDR534C OR YOR382W OR YOR383C	optimal	0.08798018
+ymn	obj	YDR536W	optimal	0.08798018
+ymn	obj	YDR536W OR YFL011W OR YJL219W OR YLR081W OR YNL318C OR YOL156W	optimal	0.08798018
+ymn	obj	YDR536W OR YGL084C OR YPL189W	optimal	0.08798018
+ymn	obj	YEL006W	optimal	0.08798018
+ymn	obj	YEL006W OR YIL006W	optimal	0.08798018
+ymn	obj	YEL017C-A	optimal	0.08798018
+ymn	obj	YEL021W	optimal	0.0
+ymn	obj	YEL024W	optimal	0.0184341
+ymn	obj	YEL027W	optimal	0.08798018
+ymn	obj	YEL029C	optimal	0.08798018
+ymn	obj	YEL038W	optimal	0.08798018
+ymn	obj	YEL038W AND YMR009W	optimal	0.08798018
+ymn	obj	YEL039C	optimal	0.08798018
+ymn	obj	YEL039C AND YEL071W	optimal	0.08798018
+ymn	obj	YEL039C AND YKR066C	optimal	0.08798018
+ymn	obj	YEL039C AND YML054C	optimal	0.08798018
+ymn	obj	YEL041W	optimal	0.08798018
+ymn	obj	YEL041W OR YJR049C	optimal	0.08798018
+ymn	obj	YEL041W OR YJR049C OR YPL188W	optimal	0.08798018
+ymn	obj	YEL042W	optimal	0.08798018
+ymn	obj	YEL046C	optimal	0.08798018
+ymn	obj	YEL047C	optimal	0.08798018
+ymn	obj	YEL051W	optimal	0.08798018
+ymn	obj	YEL058W	optimal	0.08798018
+ymn	obj	YEL063C	optimal	0.08798018
+ymn	obj	YEL063C OR YKR039W	optimal	0.08798018
+ymn	obj	YEL063C OR YKR039W OR YNL270C	optimal	0.08798018
+ymn	obj	YEL065W	optimal	0.08798018
+ymn	obj	YEL069C	optimal	0.08798018
+ymn	obj	YEL071W	optimal	0.08798018
+ymn	obj	YEL071W AND YJR048W	optimal	0.08798018
+ymn	obj	YER003C	optimal	0.0
+ymn	obj	YER005W	optimal	0.08796567
+ymn	obj	YER014W	optimal	0.08798018
+ymn	obj	YER015W	optimal	0.08798018
+ymn	obj	YER019W	optimal	0.08798018
+ymn	obj	YER023W	optimal	0.0
+ymn	obj	YER024W	optimal	0.08798018
+ymn	obj	YER026C	optimal	0.0
+ymn	obj	YER037W	optimal	0.08798018
+ymn	obj	YER037W OR YGL224C	optimal	0.08798018
+ymn	obj	YER043C	optimal	0.0
+ymn	obj	YER048W-A	optimal	0.08798018
+ymn	obj	YER052C	optimal	0.0
+ymn	obj	YER053C	optimal	0.08798018
+ymn	obj	YER053C OR YJR077C	optimal	0.08798018
+ymn	obj	YER055C	optimal	0.0
+ymn	obj	YER056C	optimal	0.08798018
+ymn	obj	YER056C OR YER060W OR YER060W-A OR YGL186C	optimal	0.08798018
+ymn	obj	YER060W	optimal	0.08798018
+ymn	obj	YER060W-A	optimal	0.08798018
+ymn	obj	YER061C	optimal	0.08798018
+ymn	obj	YER061C AND YKL192C	optimal	0.08798018
+ymn	obj	YER062C	optimal	0.08798018
+ymn	obj	YER062C OR YIL053W	optimal	0.08798018
+ymn	obj	YER065C	optimal	0.08798018
+ymn	obj	YER069W	optimal	0.0
+ymn	obj	YER070W	optimal	0.08798018
+ymn	obj	YER070W OR YGR180C OR YIL066C	optimal	0.08798018
+ymn	obj	YER073W	optimal	0.08798018
+ymn	obj	YER073W OR YOR374W	optimal	0.08798018
+ymn	obj	YER081W	optimal	0.08798018
+ymn	obj	YER081W OR YIL074C	optimal	0.08798018
+ymn	obj	YER086W	optimal	0.08798018
+ymn	obj	YER090W	optimal	0.0
+ymn	obj	YER090W AND YKL211C	optimal	0.08798018
+ymn	obj	YER091C	optimal	0.0
+ymn	obj	YER099C	optimal	0.08798018
+ymn	obj	YER099C AND YOL061W	optimal	0.08798018
+ymn	obj	YER119C	optimal	0.08798018
+ymn	obj	YER145C	optimal	0.08798018
+ymn	obj	YER152C	optimal	0.08798018
+ymn	obj	YER152C OR YGL202W OR YJL060W	optimal	0.08798018
+ymn	obj	YER170W	optimal	0.08798018
+ymn	obj	YER174C	optimal	0.08798018
+ymn	obj	YER174C AND YPL091W	optimal	0.08798018
+ymn	obj	YER175C	optimal	0.08798018
+ymn	obj	YER178W	optimal	0.08718338
+ymn	obj	YER183C	optimal	0.08798018
+ymn	obj	YFL001W	optimal	0.08798018
+ymn	obj	YFL001W OR YGL063W OR YNL292W OR YPL212C	optimal	0.08798018
+ymn	obj	YFL011W	optimal	0.08798018
+ymn	obj	YFL017C	optimal	0.08798018
+ymn	obj	YFL018C	optimal	0.08479562
+ymn	obj	YFL022C	optimal	0.0
+ymn	obj	YFL022C AND YLR060W	optimal	0.08798018
+ymn	obj	YFL030W	optimal	0.08798018
+ymn	obj	YFL041W	optimal	0.08798018
+ymn	obj	YFL045C	optimal	0.0
+ymn	obj	YFL053W	optimal	0.08798018
+ymn	obj	YFL053W OR YML070W	optimal	0.08798018
+ymn	obj	YFL055W	optimal	0.08798018
+ymn	obj	YFL055W OR YKR039W OR YPL265W	optimal	0.08798018
+ymn	obj	YFR015C	optimal	0.08798018
+ymn	obj	YFR015C AND YJL137C	optimal	0.08798018
+ymn	obj	YFR015C AND YKR058W	optimal	0.08798018
+ymn	obj	YFR019W	optimal	0.08798018
+ymn	obj	YFR025C	optimal	0.0
+ymn	obj	YFR030W	optimal	0.0
+ymn	obj	YFR030W AND YJR137C	optimal	0.08798018
+ymn	obj	YFR033C	optimal	0.0184341
+ymn	obj	YFR047C	optimal	0.0
+ymn	obj	YFR053C	optimal	0.08798018
+ymn	obj	YFR053C OR YGL253W	optimal	0.08798018
+ymn	obj	YGL001C	optimal	0.0
+ymn	obj	YGL008C	optimal	0.08798018
+ymn	obj	YGL009C	optimal	0.0
+ymn	obj	YGL012W	optimal	0.0
+ymn	obj	YGL018C	optimal	0.08798018
+ymn	obj	YGL026C	optimal	0.0
+ymn	obj	YGL037C	optimal	0.08798018
+ymn	obj	YGL040C	optimal	0.0
+ymn	obj	YGL055W	optimal	0.0
+ymn	obj	YGL062W	optimal	0.08798018
+ymn	obj	YGL063W	optimal	0.08798018
+ymn	obj	YGL067W	optimal	0.08798018
+ymn	obj	YGL071W	optimal	0.08798018
+ymn	obj	YGL071W OR YPL202C	optimal	0.08798018
+ymn	obj	YGL077C	optimal	0.08798018
+ymn	obj	YGL080W	optimal	0.08798023
+ymn	obj	YGL080W AND YGR243W	optimal	0.08798018
+ymn	obj	YGL080W AND YHR162W	optimal	0.08798018
+ymn	obj	YGL084C	optimal	0.08798018
+ymn	obj	YGL091C	optimal	0.08798018
+ymn	obj	YGL119W	optimal	0.08798018
+ymn	obj	YGL125W	optimal	0.08798018
+ymn	obj	YGL125W OR YPL023C	optimal	0.08798018
+ymn	obj	YGL142C	optimal	0.08798018
+ymn	obj	YGL148W	optimal	0.0
+ymn	obj	YGL154C	optimal	0.0
+ymn	obj	YGL184C	optimal	0.08798018
+ymn	obj	YGL186C	optimal	0.08798018
+ymn	obj	YGL187C	optimal	0.0183219
+ymn	obj	YGL191W	optimal	0.0183219
+ymn	obj	YGL202W	optimal	0.08793697
+ymn	obj	YGL205W	optimal	0.08798018
+ymn	obj	YGL224C	optimal	0.08798018
+ymn	obj	YGL225W	optimal	0.08798018
+ymn	obj	YGL234W	optimal	0.0
+ymn	obj	YGL245W	optimal	0.0
+ymn	obj	YGL248W	optimal	0.08798018
+ymn	obj	YGL248W OR YOR360C	optimal	0.08798018
+ymn	obj	YGL253W	optimal	0.08798018
+ymn	obj	YGL256W	optimal	0.08798018
+ymn	obj	YGL256W OR YMR083W	optimal	0.08798018
+ymn	obj	YGR007W	optimal	0.08798018
+ymn	obj	YGR010W	optimal	0.08798018
+ymn	obj	YGR010W OR YLR328W	optimal	0.08798018
+ymn	obj	YGR019W	optimal	0.08798018
+ymn	obj	YGR020C	optimal	0.08798018
+ymn	obj	YGR029W	optimal	0.08798018
+ymn	obj	YGR032W	optimal	0.08798018
+ymn	obj	YGR032W OR YLR342W	optimal	0.08798018
+ymn	obj	YGR055W	optimal	0.08798018
+ymn	obj	YGR060W	optimal	0.0
+ymn	obj	YGR061C	optimal	0.0
+ymn	obj	YGR065C	optimal	0.08798018
+ymn	obj	YGR087C	optimal	0.08798018
+ymn	obj	YGR087C OR YLR044C OR YLR134W	optimal	0.08798018
+ymn	obj	YGR088W	optimal	0.08798018
+ymn	obj	YGR094W	optimal	0.0
+ymn	obj	YGR096W	optimal	0.08798018
+ymn	obj	YGR110W	optimal	0.08798018
+ymn	obj	YGR121C	optimal	0.08798018
+ymn	obj	YGR124W	optimal	0.08798018
+ymn	obj	YGR124W OR YPR145W	optimal	0.08798018
+ymn	obj	YGR138C	optimal	0.08798018
+ymn	obj	YGR138C OR YLL028W OR YOR273C OR YPR156C	optimal	0.08798018
+ymn	obj	YGR143W	optimal	0.08798018
+ymn	obj	YGR143W OR YPR159W	optimal	0.08798018
+ymn	obj	YGR155W	optimal	0.087978
+ymn	obj	YGR157W	optimal	0.08798018
+ymn	obj	YGR157W OR YJR073C	optimal	0.08798018
+ymn	obj	YGR170W	optimal	0.08798018
+ymn	obj	YGR171C	optimal	0.08798018
+ymn	obj	YGR175C	optimal	0.0
+ymn	obj	YGR177C	optimal	0.08798018
+ymn	obj	YGR177C OR YOR377W	optimal	0.08798018
+ymn	obj	YGR180C	optimal	0.08798018
+ymn	obj	YGR183C	optimal	0.0184341
+ymn	obj	YGR185C	optimal	0.0
+ymn	obj	YGR191W	optimal	0.08798018
+ymn	obj	YGR192C	optimal	0.08798018
+ymn	obj	YGR192C OR YJL052W OR YJR009C	optimal	0.08798018
+ymn	obj	YGR193C	optimal	0.08718338
+ymn	obj	YGR194C	optimal	0.08798018
+ymn	obj	YGR202C	optimal	0.08798018
+ymn	obj	YGR204W	optimal	0.0
+ymn	obj	YGR208W	optimal	0.08664219
+ymn	obj	YGR209C	optimal	0.08798018
+ymn	obj	YGR209C AND YIL010W	optimal	0.08798018
+ymn	obj	YGR209C AND YLR109W	optimal	0.08798018
+ymn	obj	YGR209C AND YPR167C	optimal	0.08798018
+ymn	obj	YGR240C	optimal	0.08549315
+ymn	obj	YGR240C AND YMR205C	optimal	0.08798018
+ymn	obj	YGR243W	optimal	0.08798018
+ymn	obj	YGR244C	optimal	0.08798018
+ymn	obj	YGR244C AND YOR142W	optimal	0.08798018
+ymn	obj	YGR247W	optimal	0.08798018
+ymn	obj	YGR248W	optimal	0.08798018
+ymn	obj	YGR248W OR YHR163W	optimal	0.08798018
+ymn	obj	YGR254W	optimal	0.08798018
+ymn	obj	YGR254W OR YHR174W	optimal	0.08798018
+ymn	obj	YGR255C	optimal	0.08798018
+ymn	obj	YGR256W	optimal	0.08798018
+ymn	obj	YGR256W OR YHR183W	optimal	0.08798018
+ymn	obj	YGR260W	optimal	0.08798018
+ymn	obj	YGR264C	optimal	0.0
+ymn	obj	YGR267C	optimal	0.08798018
+ymn	obj	YGR277C	optimal	0.08798018
+ymn	obj	YGR282C	optimal	0.08798018
+ymn	obj	YGR286C	optimal	0.08798018
+ymn	obj	YGR287C	optimal	0.08798018
+ymn	obj	YGR289C	optimal	0.08798018
+ymn	obj	YGR292W	optimal	0.08798018
+ymn	obj	YHL003C	optimal	0.08798018
+ymn	obj	YHL003C AND YMR298W	optimal	0.08798018
+ymn	obj	YHL011C	optimal	0.08798018
+ymn	obj	YHL011C AND YKL181W	optimal	0.08798018
+ymn	obj	YHL016C	optimal	0.08798018
+ymn	obj	YHL032C	optimal	0.08798018
+ymn	obj	YHL036W	optimal	0.08798018
+ymn	obj	YHL040C	optimal	0.08798018
+ymn	obj	YHL040C OR YEL065W	optimal	0.08798018
+ymn	obj	YHL047C	optimal	0.08798018
+ymn	obj	YHR001W-A	optimal	0.0184341
+ymn	obj	YHR002W	optimal	0.08793058
+ymn	obj	YHR007C	optimal	0.0
+ymn	obj	YHR007C AND YHR042W	optimal	0.08798018
+ymn	obj	YHR011W	optimal	0.08798018
+ymn	obj	YHR018C	optimal	0.0
+ymn	obj	YHR019C	optimal	0.0
+ymn	obj	YHR020W	optimal	0.0
+ymn	obj	YHR025W	optimal	0.0
+ymn	obj	YHR026W	optimal	0.08798018
+ymn	obj	YHR037W	optimal	0.08798018
+ymn	obj	YHR039C-A	optimal	0.08798018
+ymn	obj	YHR042W	optimal	0.0
+ymn	obj	YHR046C	optimal	0.08798018
+ymn	obj	YHR051W	optimal	0.0183219
+ymn	obj	YHR063C	optimal	0.08798018
+ymn	obj	YHR067W	optimal	0.08798018
+ymn	obj	YHR068W	optimal	0.08798018
+ymn	obj	YHR072W	optimal	0.0
+ymn	obj	YHR074W	optimal	0.0
+ymn	obj	YHR091C	optimal	0.08798025
+ymn	obj	YHR092C	optimal	0.08798018
+ymn	obj	YHR094C	optimal	0.08798018
+ymn	obj	YHR096C	optimal	0.08798018
+ymn	obj	YHR100C	optimal	0.08798018
+ymn	obj	YHR104W	optimal	0.08798018
+ymn	obj	YHR104W OR YOL151W	optimal	0.08798018
+ymn	obj	YHR106W	optimal	0.08798018
+ymn	obj	YHR122W	optimal	0.08798018
+ymn	obj	YHR123W	optimal	0.08798018
+ymn	obj	YHR123W OR YNL130C	optimal	0.08798018
+ymn	obj	YHR128W	optimal	0.08798018
+ymn	obj	YHR137W	optimal	0.08795646
+ymn	obj	YHR144C	optimal	0.08797938
+ymn	obj	YHR162W	optimal	0.08798018
+ymn	obj	YHR163W	optimal	0.08798018
+ymn	obj	YHR174W	optimal	0.08798018
+ymn	obj	YHR183W	optimal	0.08798018
+ymn	obj	YHR190W	optimal	0.0
+ymn	obj	YHR208W	optimal	0.08794657
+ymn	obj	YHR216W	optimal	0.08798018
+ymn	obj	YHR216W OR YLR432W OR YML056C	optimal	0.08798018
+ymn	obj	YIL002C	optimal	0.08798018
+ymn	obj	YIL002C OR YNL106C OR YOR109W	optimal	0.08798018
+ymn	obj	YIL003W	optimal	0.08798018
+ymn	obj	YIL003W AND YGL091C AND YKR071C AND YPR048W AND	optimal	0.08798018
+ymn	obj	YIL006W	optimal	0.08798018
+ymn	obj	YIL009W	optimal	0.08798018
+ymn	obj	YIL010W	optimal	0.08798018
+ymn	obj	YIL010W AND YLR043C	optimal	0.08798018
+ymn	obj	YIL013C	optimal	0.08798018
+ymn	obj	YIL013C OR YOR011W	optimal	0.08798018
+ymn	obj	YIL020C	optimal	0.0
+ymn	obj	YIL053W	optimal	0.08798018
+ymn	obj	YIL066C	optimal	0.08798018
+ymn	obj	YIL074C	optimal	0.08798018
+ymn	obj	YIL078W	optimal	0.0
+ymn	obj	YIL083C	optimal	0.08798018
+ymn	obj	YIL094C	optimal	0.0
+ymn	obj	YIL099W	optimal	0.08798018
+ymn	obj	YIL107C	optimal	0.08798018
+ymn	obj	YIL107C OR YOL136C	optimal	0.08798018
+ymn	obj	YIL111W	optimal	0.08798018
+ymn	obj	YIL116W	optimal	0.0
+ymn	obj	YIL124W	optimal	0.08798018
+ymn	obj	YIL125W	optimal	0.08798018
+ymn	obj	YIL128W	optimal	0.08798018
+ymn	obj	YIL134W	optimal	0.08798018
+ymn	obj	YIL145C	optimal	0.08798018
+ymn	obj	YIL155C	optimal	0.08798018
+ymn	obj	YIL160C	optimal	0.08798018
+ymn	obj	YIL162W	optimal	0.08798018
+ymn	obj	YIL172C	optimal	0.08798018
+ymn	obj	YIR027C	optimal	0.08798018
+ymn	obj	YIR028W	optimal	0.08798018
+ymn	obj	YIR029W	optimal	0.08798018
+ymn	obj	YIR031C	optimal	0.08798018
+ymn	obj	YIR031C OR YNL117W	optimal	0.08798018
+ymn	obj	YIR032C	optimal	0.08798018
+ymn	obj	YIR034C	optimal	0.0
+ymn	obj	YIR037W	optimal	0.08798018
+ymn	obj	YJL005W	optimal	0.08798018
+ymn	obj	YJL026W	optimal	0.08797793
+ymn	obj	YJL045W	optimal	0.08798018
+ymn	obj	YJL052W	optimal	0.08798018
+ymn	obj	YJL060W	optimal	0.08798018
+ymn	obj	YJL068C	optimal	0.08798018
+ymn	obj	YJL071W	optimal	0.08798018
+ymn	obj	YJL071W OR YMR062C	optimal	0.08798018
+ymn	obj	YJL088W	optimal	0.0
+ymn	obj	YJL091C	optimal	0.08798018
+ymn	obj	YJL097W	optimal	0.0
+ymn	obj	YJL100W	optimal	0.08798018
+ymn	obj	YJL100W OR YLR305C	optimal	0.08798018
+ymn	obj	YJL101C	optimal	0.08798018
+ymn	obj	YJL121C	optimal	0.08790176
+ymn	obj	YJL129C	optimal	0.08798018
+ymn	obj	YJL130C	optimal	0.0
+ymn	obj	YJL130C OR	optimal	0.08798018
+ymn	obj	YJL133W	optimal	0.08798018
+ymn	obj	YJL133W OR YKR052C	optimal	0.08798018
+ymn	obj	YJL134W	optimal	0.08798018
+ymn	obj	YJL134W OR YKR053C	optimal	0.08798018
+ymn	obj	YJL137C	optimal	0.08798018
+ymn	obj	YJL137C AND YLR258W	optimal	0.08798018
+ymn	obj	YJL139C	optimal	0.08798018
+ymn	obj	YJL153C	optimal	0.0
+ymn	obj	YJL155C	optimal	0.08798018
+ymn	obj	YJL166W	optimal	0.01843411
+ymn	obj	YJL167W	optimal	0.0
+ymn	obj	YJL196C	optimal	0.08798018
+ymn	obj	YJL198W	optimal	0.08798018
+ymn	obj	YJL212C	optimal	0.08798018
+ymn	obj	YJL214W	optimal	0.08798018
+ymn	obj	YJL216C	optimal	0.08798018
+ymn	obj	YJL219W	optimal	0.08798018
+ymn	obj	YJL221C	optimal	0.08798018
+ymn	obj	YJR001W	optimal	0.08798018
+ymn	obj	YJR009C	optimal	0.08798018
+ymn	obj	YJR010W	optimal	0.08798018
+ymn	obj	YJR013W	optimal	0.08798018
+ymn	obj	YJR016C	optimal	0.0
+ymn	obj	YJR019C	optimal	0.08798018
+ymn	obj	YJR025C	optimal	0.0
+ymn	obj	YJR045C	optimal	0.08798018
+ymn	obj	YJR048W	optimal	0.08798018
+ymn	obj	YJR048W AND YKR066C	optimal	0.08798018
+ymn	obj	YJR048W AND YML054C	optimal	0.08798018
+ymn	obj	YJR049C	optimal	0.08798018
+ymn	obj	YJR057W	optimal	0.08798018
+ymn	obj	YJR073C	optimal	0.0
+ymn	obj	YJR077C	optimal	0.08798018
+ymn	obj	YJR078W	optimal	0.0
+ymn	obj	YJR095W	optimal	0.08797109
+ymn	obj	YJR103W	optimal	0.08798018
+ymn	obj	YJR105W	optimal	0.08797073
+ymn	obj	YJR109C	optimal	0.08798018
+ymn	obj	YJR109C AND YOR303W	optimal	0.08798018
+ymn	obj	YJR110W	optimal	0.08798018
+ymn	obj	YJR110W OR YNL106C OR YOR109W	optimal	0.08798023
+ymn	obj	YJR121W	optimal	0.03501306
+ymn	obj	YJR122W	optimal	0.08798018
+ymn	obj	YJR130C	optimal	0.08798018
+ymn	obj	YJR133W	optimal	0.08798018
+ymn	obj	YJR137C	optimal	0.0
+ymn	obj	YJR139C	optimal	0.0
+ymn	obj	YJR143C	optimal	0.08798018
+ymn	obj	YJR148W	optimal	0.08791915
+ymn	obj	YJR152W	optimal	0.08798018
+ymn	obj	YJR153W	optimal	0.08798018
+ymn	obj	YJR158W	optimal	0.08798018
+ymn	obj	YJR159W	optimal	0.08798018
+ymn	obj	YJR160C	optimal	0.08798018
+ymn	obj	YKL001C	optimal	0.0
+ymn	obj	YKL004W	optimal	0.0
+ymn	obj	YKL008C	optimal	0.08798018
+ymn	obj	YKL008C AND YMR298W	optimal	0.08798018
+ymn	obj	YKL016C	optimal	0.03501306
+ymn	obj	YKL019W	optimal	0.08798018
+ymn	obj	YKL024C	optimal	0.0
+ymn	obj	YKL026C	optimal	0.08798018
+ymn	obj	YKL029C	optimal	0.08798018
+ymn	obj	YKL035W	optimal	0.08798018
+ymn	obj	YKL040C	optimal	0.08798018
+ymn	obj	YKL040C AND	optimal	0.08798018
+ymn	obj	YKL040C OR YPL135W OR YOR226C	optimal	0.08798018
+ymn	obj	YKL055C	optimal	0.08798018
+ymn	obj	YKL060C	optimal	0.08549315
+ymn	obj	YKL067W	optimal	0.0
+ymn	obj	YKL080W	optimal	0.08798018
+ymn	obj	YKL085W	optimal	0.08787054
+ymn	obj	YKL088W	optimal	0.08798018
+ymn	obj	YKL088W AND YKR072C	optimal	0.08798018
+ymn	obj	YKL088W AND YKR072C AND YOR054C	optimal	0.08798018
+ymn	obj	YKL088W AND YOR054C	optimal	0.08798018
+ymn	obj	YKL094W	optimal	0.08798018
+ymn	obj	YKL104C	optimal	0.08798023
+ymn	obj	YKL106W	optimal	0.08798018
+ymn	obj	YKL120W	optimal	0.08798018
+ymn	obj	YKL127W	optimal	0.08798018
+ymn	obj	YKL127W OR YMR105C	optimal	0.08798018
+ymn	obj	YKL127W OR YMR105C OR YMR278W	optimal	0.08798018
+ymn	obj	YKL132C	optimal	0.08798018
+ymn	obj	YKL132C OR YOR241W	optimal	0.08798018
+ymn	obj	YKL140W	optimal	0.08798018
+ymn	obj	YKL140W OR YLL012W	optimal	0.08798018
+ymn	obj	YKL141W	optimal	0.08749992
+ymn	obj	YKL146W	optimal	0.08798018
+ymn	obj	YKL146W OR YNL101W	optimal	0.08798018
+ymn	obj	YKL148C	optimal	0.08798018
+ymn	obj	YKL152C	optimal	0.08485955
+ymn	obj	YKL165C	optimal	0.08798018
+ymn	obj	YKL174C	optimal	0.08798018
+ymn	obj	YKL181W	optimal	0.08798018
+ymn	obj	YKL182W	optimal	0.0
+ymn	obj	YKL182W AND YPL231W	optimal	0.08798018
+ymn	obj	YKL184W	optimal	0.08798018
+ymn	obj	YKL188C	optimal	0.08798018
+ymn	obj	YKL188C AND YPL147W	optimal	0.08798018
+ymn	obj	YKL192C	optimal	0.08798018
+ymn	obj	YKL192C AND YOR221C	optimal	0.08798018
+ymn	obj	YKL194C	optimal	0.08798018
+ymn	obj	YKL211C	optimal	0.0
+ymn	obj	YKL212W	optimal	0.08798018
+ymn	obj	YKL216W	optimal	0.0
+ymn	obj	YKL217W	optimal	0.08798018
+ymn	obj	YKL220C	optimal	0.08798018
+ymn	obj	YKR009C	optimal	0.08798018
+ymn	obj	YKR031C	optimal	0.08798018
+ymn	obj	YKR039W	optimal	0.08798018
+ymn	obj	YKR039W OR YNL268W	optimal	0.08798018
+ymn	obj	YKR039W OR YOR348C	optimal	0.08798018
+ymn	obj	YKR043C	optimal	0.08798018
+ymn	obj	YKR052C	optimal	0.08798018
+ymn	obj	YKR053C	optimal	0.08798018
+ymn	obj	YKR058W	optimal	0.08798018
+ymn	obj	YKR058W AND YLR258W	optimal	0.08798018
+ymn	obj	YKR061W	optimal	0.08798018
+ymn	obj	YKR066C	optimal	0.08798018
+ymn	obj	YKR067W	optimal	0.08798018
+ymn	obj	YKR069W	optimal	0.08798018
+ymn	obj	YKR071C	optimal	0.08798018
+ymn	obj	YKR072C	optimal	0.08798018
+ymn	obj	YKR080W	optimal	0.08798018
+ymn	obj	YKR089C	optimal	0.08798018
+ymn	obj	YKR097W	optimal	0.08798018
+ymn	obj	YLL012W	optimal	0.08798018
+ymn	obj	YLL015W	optimal	0.08798018
+ymn	obj	YLL015W OR YDR135C	optimal	0.08798018
+ymn	obj	YLL018C	optimal	0.0
+ymn	obj	YLL027W	optimal	0.08798018
+ymn	obj	YLL027W OR YPR067W	optimal	0.08798018
+ymn	obj	YLL028W	optimal	0.08798018
+ymn	obj	YLL028W OR YOR273C	optimal	0.08798018
+ymn	obj	YLL031C	optimal	0.08798018
+ymn	obj	YLL041C	optimal	0.08749992
+ymn	obj	YLL043W	optimal	0.08798018
+ymn	obj	YLL048C	optimal	0.08798018
+ymn	obj	YLL051C	optimal	0.08798018
+ymn	obj	YLL052C	optimal	0.08798018
+ymn	obj	YLL052C OR YPR192W	optimal	0.08798018
+ymn	obj	YLL057C	optimal	0.08798018
+ymn	obj	YLL061W	optimal	0.08798018
+ymn	obj	YLL062C	optimal	0.08798018
+ymn	obj	YLL062C OR YPL273W	optimal	0.08798018
+ymn	obj	YLR011W	optimal	0.08798018
+ymn	obj	YLR017W	optimal	0.08798018
+ymn	obj	YLR020C	optimal	0.08798018
+ymn	obj	YLR027C	optimal	0.08798018
+ymn	obj	YLR028C	optimal	0.08798018
+ymn	obj	YLR028C OR YMR120C	optimal	0.08798018
+ymn	obj	YLR034C	optimal	0.08798018
+ymn	obj	YLR038C	optimal	0.0183219
+ymn	obj	YLR043C	optimal	0.08798018
+ymn	obj	YLR043C AND YLR109W	optimal	0.08798018
+ymn	obj	YLR043C AND YPR167C	optimal	0.08798018
+ymn	obj	YLR044C	optimal	0.08798018
+ymn	obj	YLR056W	optimal	0.08798018
+ymn	obj	YLR058C	optimal	0.08677266
+ymn	obj	YLR060W	optimal	0.0
+ymn	obj	YLR070C	optimal	0.08798018
+ymn	obj	YLR081W	optimal	0.08798018
+ymn	obj	YLR089C	optimal	0.08798018
+ymn	obj	YLR092W	optimal	0.08798018
+ymn	obj	YLR100W	optimal	0.0
+ymn	obj	YLR109W	optimal	0.08798018
+ymn	obj	YLR133W	optimal	0.08798018
+ymn	obj	YLR134W	optimal	0.08798018
+ymn	obj	YLR138W	optimal	0.08798018
+ymn	obj	YLR142W	optimal	0.08798018
+ymn	obj	YLR146C	optimal	0.08798018
+ymn	obj	YLR153C	optimal	0.08798018
+ymn	obj	YLR155C	optimal	0.08798018
+ymn	obj	YLR155C OR YLR157C OR YLR158C OR YLR160C	optimal	0.08798018
+ymn	obj	YLR157C	optimal	0.08798018
+ymn	obj	YLR158C	optimal	0.08798018
+ymn	obj	YLR160C	optimal	0.08798018
+ymn	obj	YLR172C	optimal	0.08798025
+ymn	obj	YLR174W	optimal	0.08797519
+ymn	obj	YLR180W	optimal	0.08798018
+ymn	obj	YLR189C	optimal	0.08798018
+ymn	obj	YLR201C	optimal	0.08798018
+ymn	obj	YLR205C	optimal	0.08798018
+ymn	obj	YLR209C	optimal	0.08798018
+ymn	obj	YLR214W	optimal	0.08798018
+ymn	obj	YLR214W OR YKL220C	optimal	0.08798018
+ymn	obj	YLR214W OR YKL220C OR YOR381W OR YNR060W	optimal	0.08798018
+ymn	obj	YLR220W	optimal	0.08798018
+ymn	obj	YLR231C	optimal	0.0
+ymn	obj	YLR237W	optimal	0.08798018
+ymn	obj	YLR237W OR YOR071C OR YOR192C	optimal	0.08798018
+ymn	obj	YLR240W	optimal	0.08798018
+ymn	obj	YLR245C	optimal	0.08798018
+ymn	obj	YLR258W	optimal	0.08798018
+ymn	obj	YLR260W	optimal	0.08798018
+ymn	obj	YLR260W OR YOR171C	optimal	0.08798018
+ymn	obj	YLR284C	optimal	0.08798018
+ymn	obj	YLR285W	optimal	0.08798018
+ymn	obj	YLR295C	optimal	0.03501306
+ymn	obj	YLR299W	optimal	0.08798018
+ymn	obj	YLR300W	optimal	0.08798018
+ymn	obj	YLR303W	optimal	0.0
+ymn	obj	YLR304C	optimal	0.0
+ymn	obj	YLR305C	optimal	0.08798018
+ymn	obj	YLR307W	optimal	0.08798018
+ymn	obj	YLR307W OR YLR308W	optimal	0.08798018
+ymn	obj	YLR308W	optimal	0.08798018
+ymn	obj	YLR328W	optimal	0.08798018
+ymn	obj	YLR342W	optimal	0.08798018
+ymn	obj	YLR348C	optimal	0.08798025
+ymn	obj	YLR354C	optimal	0.08797509
+ymn	obj	YLR355C	optimal	0.0
+ymn	obj	YLR359W	optimal	0.0
+ymn	obj	YLR369W	optimal	0.08798018
+ymn	obj	YLR369W OR YPL059W	optimal	0.08798018
+ymn	obj	YLR372W	optimal	0.08798018
+ymn	obj	YLR377C	optimal	0.08798018
+ymn	obj	YLR382C	optimal	0.08798018
+ymn	obj	YLR386W	optimal	0.08798018
+ymn	obj	YLR386W AND YNL325C	optimal	0.08798018
+ymn	obj	YLR395C	optimal	0.0183219
+ymn	obj	YLR410W	optimal	0.08798018
+ymn	obj	YLR410W OR YOR163W	optimal	0.08798018
+ymn	obj	YLR420W	optimal	0.0
+ymn	obj	YLR432W	optimal	0.08798018
+ymn	obj	YLR438W	optimal	0.08796656
+ymn	obj	YLR447C	optimal	0.08798018
+ymn	obj	YLR450W	optimal	0.08798023
+ymn	obj	YLR450W OR YML075C	optimal	0.08798018
+ymn	obj	YML004C	optimal	0.08798018
+ymn	obj	YML008C	optimal	0.0
+ymn	obj	YML022W	optimal	0.08798018
+ymn	obj	YML035C	optimal	0.08798023
+ymn	obj	YML042W	optimal	0.08798025
+ymn	obj	YML054C	optimal	0.08798018
+ymn	obj	YML056C	optimal	0.08798018
+ymn	obj	YML059C	optimal	0.08798018
+ymn	obj	YML070W	optimal	0.08798018
+ymn	obj	YML075C	optimal	0.08798018
+ymn	obj	YML081C-A	optimal	0.03501306
+ymn	obj	YML086C	optimal	0.08798018
+ymn	obj	YML100W	optimal	0.08798018
+ymn	obj	YML106W	optimal	0.08798018
+ymn	obj	YML106W OR YMR271C	optimal	0.08798018
+ymn	obj	YML110C	optimal	0.08798018
+ymn	obj	YML120C	optimal	0.08798018
+ymn	obj	YML123C	optimal	0.08798023
+ymn	obj	YML126C	optimal	0.0
+ymn	obj	YMR006C	optimal	0.08798018
+ymn	obj	YMR006C OR YMR008C	optimal	0.08798018
+ymn	obj	YMR006C OR YOL011W	optimal	0.08798018
+ymn	obj	YMR008C	optimal	0.08798018
+ymn	obj	YMR009W	optimal	0.08798018
+ymn	obj	YMR011W	optimal	0.08798018
+ymn	obj	YMR013C	optimal	0.08798018
+ymn	obj	YMR015C	optimal	0.08798018
+ymn	obj	YMR020W	optimal	0.08798018
+ymn	obj	YMR041C	optimal	0.08798018
+ymn	obj	YMR054W	optimal	0.08798018
+ymn	obj	YMR056C	optimal	0.08798018
+ymn	obj	YMR058W	optimal	0.08798018
+ymn	obj	YMR058W AND YDR270W AND YNL259C	optimal	0.08798018
+ymn	obj	YMR062C	optimal	0.0
+ymn	obj	YMR083W	optimal	0.08798018
+ymn	obj	YMR088C	optimal	0.08798018
+ymn	obj	YMR101C	optimal	0.08798018
+ymn	obj	YMR105C	optimal	0.08798018
+ymn	obj	YMR108W	optimal	0.0
+ymn	obj	YMR113W	optimal	0.08798018
+ymn	obj	YMR120C	optimal	0.08798018
+ymn	obj	YMR145C	optimal	0.08798018
+ymn	obj	YMR165C	optimal	0.08798018
+ymn	obj	YMR169C	optimal	0.08798018
+ymn	obj	YMR169C OR YMR170C	optimal	0.08798018
+ymn	obj	YMR170C	optimal	0.08798018
+ymn	obj	YMR189W	optimal	0.08686795
+ymn	obj	YMR202W	optimal	0.0
+ymn	obj	YMR205C	optimal	0.08549315
+ymn	obj	YMR207C	optimal	0.08798018
+ymn	obj	YMR208W	optimal	0.0
+ymn	obj	YMR217W	optimal	0.0
+ymn	obj	YMR220W	optimal	0.0
+ymn	obj	YMR226C	optimal	0.08798018
+ymn	obj	YMR241W	optimal	0.08798025
+ymn	obj	YMR246W	optimal	0.08798018
+ymn	obj	YMR246W OR YOR317W	optimal	0.08798018
+ymn	obj	YMR250W	optimal	0.08798018
+ymn	obj	YMR256C	optimal	0.0183219
+ymn	obj	YMR261C	optimal	0.08798018
+ymn	obj	YMR267W	optimal	0.08720618
+ymn	obj	YMR271C	optimal	0.08798018
+ymn	obj	YMR272C	optimal	0.08798018
+ymn	obj	YMR278W	optimal	0.08798018
+ymn	obj	YMR281W	optimal	0.08798018
+ymn	obj	YMR289W	optimal	0.08798018
+ymn	obj	YMR293C	optimal	0.08798018
+ymn	obj	YMR296C	optimal	0.0
+ymn	obj	YMR298W	optimal	0.08798018
+ymn	obj	YMR300C	optimal	0.0
+ymn	obj	YMR301C	optimal	0.08798018
+ymn	obj	YMR301C AND YGR029W	optimal	0.08798018
+ymn	obj	YMR303C	optimal	0.08798018
+ymn	obj	YMR308C	optimal	0.08798018
+ymn	obj	YMR308C AND	optimal	0.08798018
+ymn	obj	YMR313C	optimal	0.08798018
+ymn	obj	YMR318C	optimal	0.08798018
+ymn	obj	YMR319C	optimal	0.08798018
+ymn	obj	YNL003C	optimal	0.08798018
+ymn	obj	YNL009W	optimal	0.08798018
+ymn	obj	YNL029C	optimal	0.08798018
+ymn	obj	YNL037C	optimal	0.08798018
+ymn	obj	YNL037C AND YOR136W	optimal	0.08798018
+ymn	obj	YNL045W	optimal	0.08798018
+ymn	obj	YNL052W	optimal	0.08798018
+ymn	obj	YNL071W	optimal	0.08718338
+ymn	obj	YNL073W	optimal	0.08798018
+ymn	obj	YNL101W	optimal	0.08798018
+ymn	obj	YNL104C	optimal	0.08787735
+ymn	obj	YNL104C OR YOR108W	optimal	0.08798018
+ymn	obj	YNL106C	optimal	0.08798018
+ymn	obj	YNL106C OR YOR109W	optimal	0.08798018
+ymn	obj	YNL117W	optimal	0.08798018
+ymn	obj	YNL129W	optimal	0.08798018
+ymn	obj	YNL130C	optimal	0.08798018
+ymn	obj	YNL141W	optimal	0.08798018
+ymn	obj	YNL142W	optimal	0.08798018
+ymn	obj	YNL169C	optimal	0.08797973
+ymn	obj	YNL192W	optimal	0.08798018
+ymn	obj	YNL202W	optimal	0.08798018
+ymn	obj	YNL220W	optimal	0.0
+ymn	obj	YNL240C	optimal	0.08798018
+ymn	obj	YNL241C	optimal	0.08792533
+ymn	obj	YNL247W	optimal	0.0
+ymn	obj	YNL256W	optimal	0.08798018
+ymn	obj	YNL259C	optimal	0.08798018
+ymn	obj	YNL267W	optimal	0.08798018
+ymn	obj	YNL268W	optimal	0.08798018
+ymn	obj	YNL270C	optimal	0.08798018
+ymn	obj	YNL277W	optimal	0.0
+ymn	obj	YNL280C	optimal	0.0
+ymn	obj	YNL292W	optimal	0.08798018
+ymn	obj	YNL316C	optimal	0.0
+ymn	obj	YNL318C	optimal	0.08798018
+ymn	obj	YNL325C	optimal	0.08798018
+ymn	obj	YNR001C	optimal	0.08798023
+ymn	obj	YNR001C OR YPR001W	optimal	0.08798018
+ymn	obj	YNR008W	optimal	0.08798023
+ymn	obj	YNR012W	optimal	0.08798018
+ymn	obj	YNR013C	optimal	0.08798018
+ymn	obj	YNR016C	optimal	0.0
+ymn	obj	YNR019W	optimal	0.08798018
+ymn	obj	YNR033W	optimal	0.08798018
+ymn	obj	YNR041C	optimal	0.08798018
+ymn	obj	YNR043W	optimal	0.0
+ymn	obj	YNR050C	optimal	0.0
+ymn	obj	YNR056C	optimal	0.08798018
+ymn	obj	YNR057C	optimal	0.08798018
+ymn	obj	YNR058W	optimal	0.08798018
+ymn	obj	YNR060W	optimal	0.08798018
+ymn	obj	YNR067C	optimal	0.08798018
+ymn	obj	YNR072W	optimal	0.08798018
+ymn	obj	YOL011W	optimal	0.08798018
+ymn	obj	YOL020W	optimal	0.08798018
+ymn	obj	YOL033W	optimal	0.08798018
+ymn	obj	YOL049W	optimal	0.08798018
+ymn	obj	YOL052C	optimal	0.08798018
+ymn	obj	YOL055C	optimal	0.08798018
+ymn	obj	YOL055C OR YPL258C OR YPR121W	optimal	0.08798018
+ymn	obj	YOL058W	optimal	0.0
+ymn	obj	YOL059W	optimal	0.08798018
+ymn	obj	YOL061W	optimal	0.08798018
+ymn	obj	YOL064C	optimal	0.08718472
+ymn	obj	YOL065C	optimal	0.08798018
+ymn	obj	YOL066C	optimal	0.0
+ymn	obj	YOL068C	optimal	0.08798018
+ymn	obj	YOL086C	optimal	0.08798018
+ymn	obj	YOL096C	optimal	0.08798018
+ymn	obj	YOL097C	optimal	0.0
+ymn	obj	YOL103W	optimal	0.08798018
+ymn	obj	YOL126C	optimal	0.08795543
+ymn	obj	YOL136C	optimal	0.08798018
+ymn	obj	YOL140W	optimal	0.0
+ymn	obj	YOL143C	optimal	0.0
+ymn	obj	YOL151W	optimal	0.08798018
+ymn	obj	YOL156W	optimal	0.08798018
+ymn	obj	YOL158C	optimal	0.08798018
+ymn	obj	YOR011W	optimal	0.08798018
+ymn	obj	YOR025W	optimal	0.08798018
+ymn	obj	YOR040W	optimal	0.08798018
+ymn	obj	YOR054C	optimal	0.08798018
+ymn	obj	YOR065W	optimal	0.0184341
+ymn	obj	YOR071C	optimal	0.08798018
+ymn	obj	YOR074C	optimal	0.0
+ymn	obj	YOR081C	optimal	0.08798018
+ymn	obj	YOR095C	optimal	0.0
+ymn	obj	YOR099W	optimal	0.08798018
+ymn	obj	YOR100C	optimal	0.08798018
+ymn	obj	YOR108W	optimal	0.08798018
+ymn	obj	YOR109W	optimal	0.08798018
+ymn	obj	YOR120W	optimal	0.08798018
+ymn	obj	YOR125C	optimal	0.08798018
+ymn	obj	YOR126C	optimal	0.08798018
+ymn	obj	YOR128C	optimal	0.0
+ymn	obj	YOR130C	optimal	0.0
+ymn	obj	YOR136W	optimal	0.08798018
+ymn	obj	YOR142W	optimal	0.08798018
+ymn	obj	YOR143C	optimal	0.08798018
+ymn	obj	YOR155C	optimal	0.08798018
+ymn	obj	YOR163W	optimal	0.08798018
+ymn	obj	YOR168W	optimal	0.0
+ymn	obj	YOR171C	optimal	0.08798018
+ymn	obj	YOR175C	optimal	0.08797731
+ymn	obj	YOR176W	optimal	0.08798018
+ymn	obj	YOR180C	optimal	0.08798018
+ymn	obj	YOR184W	optimal	0.08664219
+ymn	obj	YOR190W	optimal	0.08798018
+ymn	obj	YOR192C	optimal	0.08798018
+ymn	obj	YOR202W	optimal	0.0
+ymn	obj	YOR209C	optimal	0.08798018
+ymn	obj	YOR221C	optimal	0.08798018
+ymn	obj	YOR222W	optimal	0.08798018
+ymn	obj	YOR222W OR YPL134C	optimal	0.08798018
+ymn	obj	YOR226C	optimal	0.08798018
+ymn	obj	YOR232W	optimal	0.08798018
+ymn	obj	YOR236W	optimal	0.0
+ymn	obj	YOR241W	optimal	0.08798018
+ymn	obj	YOR245C	optimal	0.08798018
+ymn	obj	YOR270C	optimal	0.08798018
+ymn	obj	YOR273C	optimal	0.08798018
+ymn	obj	YOR278W	optimal	0.08798018
+ymn	obj	YOR303W	optimal	0.08798023
+ymn	obj	YOR311C	optimal	0.08798018
+ymn	obj	YOR317W	optimal	0.08798018
+ymn	obj	YOR321W	optimal	0.08798018
+ymn	obj	YOR323C	optimal	0.08798018
+ymn	obj	YOR332W	optimal	0.08798018
+ymn	obj	YOR335C	optimal	0.0
+ymn	obj	YOR347C	optimal	0.08798018
+ymn	obj	YOR348C	optimal	0.08798018
+ymn	obj	YOR360C	optimal	0.08798018
+ymn	obj	YOR374W	optimal	0.08798018
+ymn	obj	YOR375C	optimal	0.08798018
+ymn	obj	YOR377W	optimal	0.08798018
+ymn	obj	YOR381W	optimal	0.08798018
+ymn	obj	YOR382W	optimal	0.08798018
+ymn	obj	YOR383C	optimal	0.08798018
+ymn	obj	YOR384W	optimal	0.08798018
+ymn	obj	YOR388C	optimal	0.08685553
+ymn	obj	YPL015C	optimal	0.08798018
+ymn	obj	YPL023C	optimal	0.08798018
+ymn	obj	YPL028W	optimal	0.0
+ymn	obj	YPL036W	optimal	0.08798018
+ymn	obj	YPL040C	optimal	0.08798018
+ymn	obj	YPL053C	optimal	0.08798018
+ymn	obj	YPL057C	optimal	0.08798018
+ymn	obj	YPL059W	optimal	0.08798018
+ymn	obj	YPL059W AND YPL091W	optimal	0.08798018
+ymn	obj	YPL061W	optimal	0.08795311
+ymn	obj	YPL069C	optimal	0.08798018
+ymn	obj	YPL078C	optimal	0.03501307
+ymn	obj	YPL087W	optimal	0.08797993
+ymn	obj	YPL091W	optimal	0.08798018
+ymn	obj	YPL092W	optimal	0.08798018
+ymn	obj	YPL097W	optimal	0.08798018
+ymn	obj	YPL104W	optimal	0.08798018
+ymn	obj	YPL110C	optimal	0.08798025
+ymn	obj	YPL111W	optimal	0.08798018
+ymn	obj	YPL117C	optimal	0.0
+ymn	obj	YPL134C	optimal	0.08798018
+ymn	obj	YPL135W	optimal	0.08798018
+ymn	obj	YPL135W AND YOR226C AND YDR376W AND YPL252C AND YDL120W	optimal	0.08798018
+ymn	obj	YPL147W	optimal	0.08798025
+ymn	obj	YPL148C	optimal	0.08798018
+ymn	obj	YPL160W	optimal	0.0
+ymn	obj	YPL172C	optimal	0.08798018
+ymn	obj	YPL188W	optimal	0.08798018
+ymn	obj	YPL189W	optimal	0.08798018
+ymn	obj	YPL202C	optimal	0.08798018
+ymn	obj	YPL206C	optimal	0.08798018
+ymn	obj	YPL212C	optimal	0.08798018
+ymn	obj	YPL214C	optimal	0.08798018
+ymn	obj	YPL231W	optimal	0.0
+ymn	obj	YPL234C	optimal	0.08798018
+ymn	obj	YPL244C	optimal	0.08798018
+ymn	obj	YPL252C	optimal	0.08798018
+ymn	obj	YPL258C	optimal	0.08798018
+ymn	obj	YPL262W	optimal	0.08528139
+ymn	obj	YPL265W	optimal	0.08798018
+ymn	obj	YPL268W	optimal	0.08798018
+ymn	obj	YPL271W	optimal	0.03501306
+ymn	obj	YPL273W	optimal	0.08798018
+ymn	obj	YPL274W	optimal	0.08798018
+ymn	obj	YPR001W	optimal	0.08798018
+ymn	obj	YPR002W	optimal	0.08798018
+ymn	obj	YPR006C	optimal	0.08798018
+ymn	obj	YPR020W	optimal	0.08798018
+ymn	obj	YPR021C	optimal	0.08791724
+ymn	obj	YPR026W	optimal	0.08798018
+ymn	obj	YPR033C	optimal	0.0
+ymn	obj	YPR035W	optimal	0.0
+ymn	obj	YPR036W	optimal	0.08798018
+ymn	obj	YPR047W	optimal	0.08798018
+ymn	obj	YPR048W	optimal	0.08798018
+ymn	obj	YPR060C	optimal	0.0
+ymn	obj	YPR062W	optimal	0.08798018
+ymn	obj	YPR067W	optimal	0.08798018
+ymn	obj	YPR069C	optimal	0.08798018
+ymn	obj	YPR074C	optimal	0.08798018
+ymn	obj	YPR081C	optimal	0.08798018
+ymn	obj	YPR113W	optimal	0.0
+ymn	obj	YPR121W	optimal	0.08798018
+ymn	obj	YPR124W	optimal	0.08798018
+ymn	obj	YPR128C	optimal	0.08798018
+ymn	obj	YPR138C	optimal	0.08798018
+ymn	obj	YPR140W	optimal	0.08798018
+ymn	obj	YPR145W	optimal	0.08798018
+ymn	obj	YPR156C	optimal	0.08798018
+ymn	obj	YPR159W	optimal	0.08798018
+ymn	obj	YPR160W	optimal	0.08798018
+ymn	obj	YPR167C	optimal	0.0
+ymn	obj	YPR183W	optimal	0.0
+ymn	obj	YPR184W	optimal	0.08798018
+ymn	obj	YPR191W	optimal	0.0184341
+ymn	obj	YPR192W	optimal	0.08798018
+ymn	obj	YYKL087C	optimal	0.08798018
