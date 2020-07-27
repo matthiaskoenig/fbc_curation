@@ -63,8 +63,10 @@ class FBCCuratorCobrapy(FBCCuratorImplementation):
         :return:
         """
         model = self.read_model()
+        # FIXME: ensure that correct values are returned and comparable
         try:
-            df = flux_variability_analysis(model, model.reactions)
+            df = flux_variability_analysis(model, model.reactions, fraction_of_optimum=1.0)
+            print(df.head())
             df_out = pd.DataFrame(
                 {
                     "model": model.id,
@@ -96,7 +98,6 @@ class FBCCuratorCobrapy(FBCCuratorImplementation):
         """
         model = self.read_model()
         df = single_gene_deletion(model, model.genes)
-        # FIXME: write NA for empty cells
         return pd.DataFrame(
             {
                 "model": model.id,
@@ -114,7 +115,6 @@ class FBCCuratorCobrapy(FBCCuratorImplementation):
         """
         model = self.read_model()
         df = single_reaction_deletion(model, model.reactions)
-        # FIXME: write NA for empty cells
         return pd.DataFrame(
             {
                 "model": model.id,

@@ -54,7 +54,7 @@ class FBCCuratorCameo(FBCCuratorImplementation):
     def fva(self) -> pd.DataFrame:
         model = self.read_model()
         try:
-            fva_result = flux_variability_analysis(model, reactions=model.reactions)  # type: FluxVariabilityResult
+            fva_result = flux_variability_analysis(model, reactions=model.reactions, fraction_of_optimum=1.0)  # type: FluxVariabilityResult
             df = fva_result.data_frame
             df_out = pd.DataFrame(
                 {
