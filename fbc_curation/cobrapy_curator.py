@@ -25,7 +25,7 @@ class FBCCuratorCobrapy(FBCCuratorImplementation):
     """Create FBC reference files with cobrapy."""
 
     def __init__(self, model_path: Path, objective_id: str = None):
-        super(FBCCuratorImplementation, self).__init__(model_path=model_path, objective_id=objective_id)
+        FBCCuratorImplementation.__init__(self, model_path=model_path, objective_id=objective_id)
 
     def read_model(self) -> Model:
         return read_sbml_model(str(self.model_path))  # type: cobra.Model
@@ -41,11 +41,11 @@ class FBCCuratorCobrapy(FBCCuratorImplementation):
         try:
             # fbc optimization
             solution = model.optimize()
-            value = solution.objective
+            value = solution.objective_value
             status = FBCCuratorResult.STATUS_OPTIMAL
         except OptimizationError as e:
             logger.error(f"{e}")
-            value = ''
+            value = FBCCuratorResult.VALUE_INFEASIBLE
             status = FBCCuratorResult.STATUS_INFEASIBLE
 
         return pd.DataFrame(
@@ -82,8 +82,8 @@ class FBCCuratorCobrapy(FBCCuratorImplementation):
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
                     "status": FBCCuratorResult.STATUS_INFEASIBLE,
-                    "minimum": '',
-                    "maximum": '',
+                    "minimum": FBCCuratorResult.VALUE_INFEASIBLE,
+                    "maximum": FBCCuratorResult.VALUE_INFEASIBLE,
                 })
 
         return df_out
@@ -96,6 +96,7 @@ class FBCCuratorCobrapy(FBCCuratorImplementation):
         """
         model = self.read_model()
         df = single_gene_deletion(model, model.genes)
+        # FIXME: write NA for empty cells
         return pd.DataFrame(
             {
                 "model": model.id,
@@ -113,6 +114,7 @@ class FBCCuratorCobrapy(FBCCuratorImplementation):
         """
         model = self.read_model()
         df = single_reaction_deletion(model, model.reactions)
+        # FIXME: write NA for empty cells
         return pd.DataFrame(
             {
                 "model": model.id,

@@ -2,7 +2,10 @@
 Create curation information for example models.
 """
 from fbc_curation import EXAMPLE_PATH
-from fbc_curation.fbc_files import FBCFileCreator
+from fbc_curation.fbc_curator import FBCCuratorResult
+from fbc_curation.cobrapy_curator import FBCCuratorCobrapy
+from fbc_curation.cameo_curator import FBCCuratorCameo
+
 
 
 def example_ecoli_core(results_path):
@@ -35,13 +38,21 @@ def run_examples(results_path=EXAMPLE_PATH / "results"):
 if __name__ == "__main__":
     # run_examples()
 
-    from fbc_curation.cameo_curator import FBCCurationCameo
 
     model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
+    results_path = EXAMPLE_PATH / "results" / "e_coli_core"
 
-    curator = FBCCurationCameo(model_path=model_path)
-    curator.run
+    curator_cobrapy = FBCCuratorCobrapy(model_path=model_path)
+    res_cobra = curator_cobrapy.run()
+    res_cobra.write_results(results_path / "cobrapy")
+    res_cobra2 = FBCCuratorResult.read_results(results_path / "cobrapy")
 
-    # 00 load model
 
-    from pathlib import Path
+    curator_cameo = FBCCuratorCameo(model_path=model_path)
+    res_cameo = curator_cameo.run()
+    res_cameo.write_results(results_path / "cameo")
+    res_cameo2 = FBCCuratorResult.read_results(results_path / "cameo")
+
+    # store results
+
+    # comparison
