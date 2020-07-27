@@ -20,7 +20,7 @@ logger = logging.getLogger(__file__)
 
 
 class FBCFileCreator(object):
-    """Class for creating refernce files for SBML curation."""
+    """Class for creating reference files for SBML curation."""
     NUM_DECIMALS = 6  # decimals to write in the solution
 
     # default output filenames
@@ -61,7 +61,6 @@ class FBCFileCreator(object):
 
         if not model_path.exists():
             raise ValueError(f"model_path does not exist: '{self.model_path}'")
-
 
 
     def __str__(self):
@@ -161,7 +160,7 @@ class FBCFileCreator(object):
         value = None
         try:
             solution = model.optimize()
-            value = solution.objective_value
+            value = solution.objective
             status = FBCFileCreator.STATUS_OPTIMAL
         except OptimizationError as e:
             logger.error(f"{e}")

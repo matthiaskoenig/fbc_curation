@@ -66,10 +66,9 @@ setup(
     python_requires='>=3.6',
     # List run-time dependencies here.  These will be installed by pip when
     install_requires=[
-        "pandas",
-        "cobra",
-        "pytest",
-        "pytest-cov"
+        "pandas>=1.0.5",
+        "cobra>=0.18.1",
+        "cameo>=0.11.15",
     ],
     entry_points={
         'console_scripts':

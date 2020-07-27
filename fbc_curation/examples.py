@@ -33,4 +33,15 @@ def run_examples(results_path=EXAMPLE_PATH / "results"):
 
 
 if __name__ == "__main__":
-    run_examples()
+    # run_examples()
+
+    from fbc_curation.cameo_curator import FBCCurationCameo
+
+    model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
+
+    curator = FBCCurationCameo(model_path=model_path)
+    curator.run
+
+    # 00 load model
+
+    from pathlib import Path
