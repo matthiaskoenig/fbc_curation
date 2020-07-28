@@ -1,12 +1,14 @@
 """
 Create curation information for example models.
 """
+from pathlib import path
 from fbc_curation import EXAMPLE_PATH
-from fbc_curation.fbc_curator import FBCCuratorResult
-from fbc_curation.cobrapy_curator import FBCCuratorCobrapy
-from fbc_curation.cameo_curator import FBCCuratorCameo
+from fbc_curation.curator.result import CuratorResult
+from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
+from fbc_curation.curator.cameo_curator import CuratorCameo
 
 
+def _run_example(model_path: Path, results_path: Path)
 
 def example_ecoli_core(results_path):
     """Create example files for ecoli core."""
@@ -42,16 +44,16 @@ if __name__ == "__main__":
     model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
     results_path = EXAMPLE_PATH / "results" / "e_coli_core"
 
-    curator_cobrapy = FBCCuratorCobrapy(model_path=model_path)
+    curator_cobrapy = CuratorCobrapy(model_path=model_path)
     res_cobra = curator_cobrapy.run()
     res_cobra.write_results(results_path / "cobrapy")
-    res_cobra2 = FBCCuratorResult.read_results(results_path / "cobrapy")
+    res_cobra2 = CuratorResult.read_results(results_path / "cobrapy")
 
 
-    curator_cameo = FBCCuratorCameo(model_path=model_path)
+    curator_cameo = CuratorCameo(model_path=model_path)
     res_cameo = curator_cameo.run()
     res_cameo.write_results(results_path / "cameo")
-    res_cameo2 = FBCCuratorResult.read_results(results_path / "cameo")
+    res_cameo2 = CuratorResult.read_results(results_path / "cameo")
 
     # store results
 

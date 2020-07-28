@@ -69,12 +69,13 @@ setup(
         "pandas>=1.0.5",
         "cobra>=0.18.1",
         "cameo>=0.11.15",
+        'pyfiglet'
     ],
     entry_points={
         'console_scripts':
             [
                 'fbc_curation_examples=fbc_curation.examples:run_examples',
-                'fbc_curation=fbc_curation.fbc_files:main',
+                'fbc_curation=fbc_curation.curation:main',
             ],
     },
     extras_require={},
