@@ -7,7 +7,8 @@ from cobra.core import Reaction, Gene, Model
 from cameo import load_model, fba
 from cameo.flux_analysis.analysis import flux_variability_analysis, FluxVariabilityResult
 
-from fbc_curation.curator import Curator, CuratorConstants
+from fbc_curation.curator import Curator
+from fbc_curation.constants import CuratorConstants
 
 logger = logging.getLogger(__name__)
 

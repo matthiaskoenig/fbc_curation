@@ -1,2 +1,2 @@
-from .curator import Curator, CuratorConstants
+from .curator import Curator
 from .result import CuratorResults

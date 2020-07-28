@@ -1,11 +1,14 @@
 from pathlib import Path
 import pandas as pd
-from fbc_curation import FBCFileCreator, EXAMPLE_PATH
+from fbc_curation import EXAMPLE_PATH
+from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 
 model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
 
 
 def test_objective_value(tmp_path):
+    curator = CuratorCobrapy(model_path=model_path)
+    curator.run()
     creator = FBCFileCreator(
         model_path=model_path,
         results_path=tmp_path

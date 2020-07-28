@@ -9,8 +9,11 @@ from cobra.core import Model
 from cobra.exceptions import OptimizationError
 from cobra.flux_analysis import flux_variability_analysis
 from cobra.flux_analysis import single_gene_deletion, single_reaction_deletion
+from cobra.core.configuration import Configuration
+Configuration
 
-from fbc_curation.curator import Curator, CuratorConstants
+from fbc_curation.curator import Curator
+from fbc_curation.constants import CuratorConstants
 
 logger = logging.getLogger(__file__)
 
@@ -62,7 +65,6 @@ class CuratorCobrapy(Curator):
         model = self.read_model()
         try:
             df = flux_variability_analysis(model, model.reactions, fraction_of_optimum=1.0)
-            print(df.head())
             df_out = pd.DataFrame(
                 {
                     "model": model.id,

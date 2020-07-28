@@ -69,6 +69,7 @@ setup(
         "pandas>=1.0.5",
         "cobra>=0.18.1",
         "cameo>=0.11.15",
+        "numpy",
         'pyfiglet'
     ],
     entry_points={

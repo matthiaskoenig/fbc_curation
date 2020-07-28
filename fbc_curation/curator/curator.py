@@ -6,31 +6,13 @@ from pathlib import Path
 from typing import Dict, List
 import pandas as pd
 import logging
+from collections import namedtuple
+
 
 from .result import CuratorResults
+ObjectiveInformation = namedtuple("ObjectiveInformation", "active_objective objective_ids")
 
 logger = logging.getLogger(__name__)
-
-
-class CuratorConstants:
-    KEYS = ["objective", "fva", "gene_deletion", "reaction_deletion"]
-
-    # default output filenames
-    FILENAME_OBJECTIVE_FILE = "01_objective.tsv"
-    FILENAME_FVA_FILE = "02_fva.tsv"
-    FILENAME_GENE_DELETION_FILE = "03_gene_deletion.tsv"
-    FILENAME_REACTION_DELETION_FILE = "04_reaction_deletion.tsv"
-
-    NUM_DECIMALS = 6  # decimals to write in the solution
-
-    STATUS_OPTIMAL = "optimal"
-    STATUS_INFEASIBLE = "infeasible"
-    VALUE_INFEASIBLE = ''
-
-    OBJECTIVE_VALUE_COLUMNS = ["model", "objective", "status", "value"]
-    FVA_COLUMNS = ["model", "objective", "reaction", "status", "minimum", "maximum"]
-    GENE_DELETIONS_COLUMNS = ["model", "objective", "gene", "status", "value"]
-    REACTION_DELETION_COLUMNS = ["model", "objective", "reaction", "status", "value"]
 
 
 class Curator:
@@ -78,18 +60,24 @@ class Curator:
     def reaction_deletion(self) -> pd.DataFrame:
         raise NotImplementedError
 
-    def run(self, objective_id=None) -> CuratorResults:
+    def run(self) -> CuratorResults:
         """Runs the curator and stores the results."""
+
+        print("-" * 80)
+        self._print_header(f"{self.__class__.__name__}: objective")
         objective = self.objective()
+
+        self._print_header(f"{self.__class__.__name__}: fva")
         fva = self.fva()
+
+        self._print_header(f"{self.__class__.__name__}: gene_deletion")
         gene_deletion = self.gene_deletion()
+
+        self._print_header(f"{self.__class__.__name__}: reaction_deletion")
         reaction_deletion = self.reaction_deletion()
 
-        if objective_id is None:
-            objective_id = self.active_objective
-
         return CuratorResults(
-            objective_id=objective_id,
+            objective_id=self.objective_id,
             objective=objective,
             fva=fva,
             gene_deletion=gene_deletion,
@@ -98,13 +86,10 @@ class Curator:
 
     @staticmethod
     def _print_header(title):
-        print()
-        print("-" * 80)
-        print(title)
-        print("-" * 80)
+        print(f"* {title}")
 
     @staticmethod
-    def read_objective_information(model_path) -> Dict:
+    def read_objective_information(model_path) -> ObjectiveInformation:
         """ Reads objective information from SBML file structure
 
         :param model_path:
@@ -129,7 +114,4 @@ class Curator:
             logger.warning(f"Multiple objectives exist in SBML-fbc ({objective_ids}), "
                            f"only active objective '{active_objective}' results "
                            f"are reported")
-        return {
-            'active_objective': active_objective,
-            'objective_ids': objective_ids
-        }
+        return ObjectiveInformation(active_objective=active_objective, objective_ids=objective_ids)
