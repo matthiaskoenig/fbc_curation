@@ -5,10 +5,10 @@ from fbc_curation.constants import CuratorConstants
 
 def _check_tmp_path(path):
     for curator_key in ["cobrapy", "cameo"]:
-        assert Path.exists(path / curator_key / CuratorConstants.FILENAME_OBJECTIVE_FILE)
-        assert Path.exists(path / curator_key / CuratorConstants.FILENAME_FVA_FILE)
-        assert Path.exists(path / curator_key / CuratorConstants.FILENAME_REACTION_DELETION_FILE)
-        assert Path.exists(path / curator_key / CuratorConstants.FILENAME_GENE_DELETION_FILE)
+        assert Path.exists(path / curator_key / CuratorConstants.OBJECTIVE_FILENAME)
+        assert Path.exists(path / curator_key / CuratorConstants.FVA_FILENAME)
+        assert Path.exists(path / curator_key / CuratorConstants.REACTION_DELETION_FILENAME)
+        assert Path.exists(path / curator_key / CuratorConstants.GENE_DELETION_FILENAME)
 
 
 def test_e_coli_core(tmp_path):

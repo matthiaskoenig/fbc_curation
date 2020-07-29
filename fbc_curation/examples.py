@@ -44,7 +44,7 @@ def _run_example(model_path: Path, results_path: Path) -> None:
     for curator_key in curator_keys:
         all_results[curator_key] = CuratorResults.read_results(path_in=results_path / curator_key)
 
-    # validation
+
 
     # comparison
     CuratorResults.compare(all_results)

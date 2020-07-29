@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
 import logging
 import numpy as np
 import pandas as pd
@@ -55,6 +55,9 @@ class CuratorResults:
         self.reaction_deletion.sort_values(by=['reaction'], inplace=True)
         self.reaction_deletion.index = range(len(self.reaction_deletion))
 
+        # validate
+        self.validate()
+
     def _round(self, x):
         if x == CuratorConstants.VALUE_INFEASIBLE:
             return x
@@ -68,8 +71,8 @@ class CuratorResults:
             logger.warning(f"Creating results path: {path_out}")
             path_out.mkdir(parents=True)
         for filename, df in dict(zip(
-                [CuratorConstants.FILENAME_OBJECTIVE_FILE, CuratorConstants.FILENAME_FVA_FILE,
-                 CuratorConstants.FILENAME_GENE_DELETION_FILE, CuratorConstants.FILENAME_REACTION_DELETION_FILE],
+                [CuratorConstants.OBJECTIVE_FILENAME, CuratorConstants.FVA_FILENAME,
+                 CuratorConstants.GENE_DELETION_FILENAME, CuratorConstants.REACTION_DELETION_FILENAME],
                 [self.objective, self.fva, self.gene_deletion, self.reaction_deletion]
         )).items():
             print(f"-> {path_out / filename}")
@@ -82,10 +85,10 @@ class CuratorResults:
     @classmethod
     def read_results(cls, path_in: Path):
         """Read fbc curation files from given directory."""
-        path_objective = path_in / CuratorConstants.FILENAME_OBJECTIVE_FILE
-        path_fva = path_in / CuratorConstants.FILENAME_FVA_FILE
-        path_gene_deletion = path_in / CuratorConstants.FILENAME_GENE_DELETION_FILE
-        path_reaction_deletion = path_in / CuratorConstants.FILENAME_REACTION_DELETION_FILE
+        path_objective = path_in / CuratorConstants.OBJECTIVE_FILENAME
+        path_fva = path_in / CuratorConstants.FVA_FILENAME
+        path_gene_deletion = path_in / CuratorConstants.GENE_DELETION_FILENAME
+        path_reaction_deletion = path_in / CuratorConstants.REACTION_DELETION_FILENAME
         df_dict = dict()
 
         for k, path in enumerate([path_objective, path_fva, path_gene_deletion, path_reaction_deletion]):
@@ -99,8 +102,11 @@ class CuratorResults:
         return CuratorResults(objective_id=objective_id, **df_dict)
 
     @staticmethod
-    def compare(results: Dict[str, 'CuratorResults']):
-        """Compare results against each other"""
+    def compare(results: Dict[str, 'CuratorResults']) -> bool:
+        """Compare results against each other.
+
+        Returns True of all results are identical.
+        """
         print(results)
         curator_results = list(results.values())
         keys = list(results.keys())
@@ -129,35 +135,68 @@ class CuratorResults:
         print(f"=" * 40)
         print(f"Equal: {all_equal}")
         print(f"=" * 40)
+        return all_equal
 
-    def __eq__(self, other):
-        """Compare results."""
-        pass
-        # FIXME: implement
+    def validate(self) -> bool:
+        valid_objective = self.validate_objective()
+        valid_fva = self.validate_fva()
+        valid_gene_deletion = self.validate_gene_deletion()
+        valid_reaction_deletion = self.validate_reaction_deletion()
+        return valid_objective and valid_fva and valid_gene_deletion and valid_reaction_deletion
 
-    def validate(self):
-        pass
+    def validate_objective(self) -> bool:
+        return CuratorResults._validate_df(self.objective, name=CuratorConstants.OBJECTIVE_KEY,
+                                           fields=CuratorConstants.OBJECTIVE_FIELDS)
 
-    def validate_objective(self):
+    def validate_fva(self) -> bool:
+        return CuratorResults._validate_df(self.fva, name=CuratorConstants.FVA_KEY,
+                                           fields=CuratorConstants.FVA_FIELDS)
+
+    def validate_gene_deletion(self) -> bool:
+        return CuratorResults._validate_df(self.gene_deletion, name=CuratorConstants.GENE_DELETION_KEY,
+                                           fields=CuratorConstants.GENE_DELETION_FIELDS)
+
+    def validate_reaction_deletion(self) -> bool:
+        return CuratorResults._validate_df(self.reaction_deletion, name=CuratorConstants.REACTION_DELETION_KEY,
+                                           fields=CuratorConstants.REACTION_DELETION_FIELDS)
+
+    @staticmethod
+    def _validate_df(df: pd.DataFrame, name: str, fields: List[str]) -> bool:
         valid = True
-        df = self.objective
+        if not isinstance(df, pd.DataFrame):
+            logger.error(f"'{name}': Must be 'pd.DataFrame', but type '{type(df)}'.")
+            valid = False
+        if df.empty:
+            logger.error(f"'{name}': Can not be empty.")
+            valid = False
+        if len(df.columns) != len(fields):
+            logger.error(f"'{name}': Incorrect number of columns: '{len(df.columns)} != {len(fields)}'.")
+            valid = False
+        for field in fields:
+            if not field in df.columns:
+                logger.error(f"'{name}': Missing field '{field}'")
+                valid = False
+        for k, field in enumerate(CuratorConstants.OBJECTIVE_FIELDS):
+            if not df.columns[k] == field:
+                logger.error(f"'{name}': Field at position '{k}' must be {field}', but is '{df.columns[k]}'.")
+                valid = False
 
-        assert isinstance(df, pd.DataFrame)
-        assert not df.empty
-        assert len(df.columns) == 4
+        for status_code in df.status.unique():
+            if not status_code in CuratorConstants.STATUS_CODES:
+                logger.error(f"'{name}': Incorrect status code: '{status_code}'.")
 
-        assert "model" in df.columns
-        assert "objective" in df.columns
-        assert "status" in df.columns
-        assert "value" in df.columns
-        assert df.columns[0] == "model"
-        assert df.columns[1] == "objective"
-        assert df.columns[2] == "status"
-        assert df.columns[3] == "value"
+        if name == CuratorConstants.OBJECTIVE_KEY:
+            obj_value = df['value'].values[0]
+            if not obj_value > 0:
+                logger.error(f"'{name}': objective value must be > 0, but '{obj_value}'.")
+                valid = False
 
-        obj_value = df['value'].values[0]
-        assert obj_value > 0
-    # FIXME: implement
+        if valid:
+            logger.info(f"'{name}': is VALID")
+        else:
+            logger.error(f"'{name}': is INVALID")
+
+        return valid
 
 
 
