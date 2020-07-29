@@ -13,8 +13,8 @@ class CuratorConstants:
     STATUS_INFEASIBLE = "infeasible"
     VALUE_INFEASIBLE = ''
 
-    OBJECTIVE_VALUE_COLUMNS = ["model", "objective", "status", "value"]
-    FVA_COLUMNS = ["model", "objective", "reaction", "status", "minimum", "maximum"]
-    GENE_DELETIONS_COLUMNS = ["model", "objective", "gene", "status", "value"]
-    REACTION_DELETION_COLUMNS = ["model", "objective", "reaction", "status", "value"]
+    OBJECTIVE_FIELDS = ["model", "objective", "status", "value"]
+    FVA_FIELDS = ["model", "objective", "reaction", "status", "minimum", "maximum"]
+    GENE_DELETION_FIELDS = ["model", "objective", "gene", "status", "value"]
+    REACTION_DELETION_FIELDS = ["model", "objective", "reaction", "status", "value"]
 

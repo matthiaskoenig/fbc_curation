@@ -137,6 +137,26 @@ class CuratorResults:
 
     def validate(self):
         pass
+
+    def validate_objective(self):
+        valid = True
+        df = self.objective
+
+        assert isinstance(df, pd.DataFrame)
+        assert not df.empty
+        assert len(df.columns) == 4
+
+        assert "model" in df.columns
+        assert "objective" in df.columns
+        assert "status" in df.columns
+        assert "value" in df.columns
+        assert df.columns[0] == "model"
+        assert df.columns[1] == "objective"
+        assert df.columns[2] == "status"
+        assert df.columns[3] == "value"
+
+        obj_value = df['value'].values[0]
+        assert obj_value > 0
     # FIXME: implement
 
 

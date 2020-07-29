@@ -9,7 +9,7 @@ import logging
 from collections import namedtuple
 
 
-from .result import CuratorResults
+from .results import CuratorResults
 ObjectiveInformation = namedtuple("ObjectiveInformation", "active_objective objective_ids")
 
 logger = logging.getLogger(__name__)
