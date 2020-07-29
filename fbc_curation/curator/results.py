@@ -176,7 +176,7 @@ class CuratorResults:
             if not field in df.columns:
                 logger.error(f"'{name}': Missing field '{field}'")
                 valid = False
-        for k, field in enumerate(CuratorConstants.OBJECTIVE_FIELDS):
+        for k, field in enumerate(fields):
             if not df.columns[k] == field:
                 logger.error(f"'{name}': Field at position '{k}' must be {field}', but is '{df.columns[k]}'.")
                 valid = False
@@ -197,6 +197,3 @@ class CuratorResults:
             logger.error(f"'{name}': is INVALID")
 
         return valid
-
-
-

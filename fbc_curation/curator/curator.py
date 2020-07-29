@@ -8,7 +8,7 @@ import pandas as pd
 import logging
 import cobra
 from cobra.io import read_sbml_model
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 
 from fbc_curation.curator.results import CuratorResults
@@ -91,30 +91,34 @@ class Curator:
         print(f"* {title}")
 
     @staticmethod
-    def gene_knockout_reactions(model_path: Path, genes=None):
+    def knockout_reactions_for_genes(model_path: Path, genes=None) -> Dict[str, List[str]]:
         """Calculates mapping of genes to affected reactions via
         GPR mappings.
 
+        Which reactions are knocked out by a given gene.
         A single gene knockout can affect multiple reactions.
         """
         model = read_sbml_model(str(model_path))  # type: cobra.core.Model
+        if genes is None:
+            genes = model.genes
 
+        knockout_reactions = defaultdict(list)
         for reaction in model.reactions:  # type: cobra.core.Reaction
             gpr = reaction.gene_reaction_rule
-            print(f"*** {gpr} ***")
             tree, gpr_genes = cobra.core.gene.parse_gpr(gpr)
-
-            for gene in model.genes:  # type: cobra.core.Gene
-                if gene not in gpr_genes:
-                    knockout = False
+            for gene in genes:  # type: cobra.core.Gene
+                if gene.id not in gpr_genes:
+                    gene_essential = False
                 else:
-                    knockout = not cobra.core.gene.eval_gpr(tree, knockouts={gene})
+                    # eval_gpr: True if the gene reaction rule is true with the given knockouts
+                    #             otherwise false
+                    gene_essential = not cobra.core.gene.eval_gpr(tree, knockouts={gene.id})
+                if gene_essential:
+                    knockout_reactions[gene.id].append(reaction.id)
 
-                if knockout:
-                    print(f"gene: {gene}, knockout reaction: {knockout}, {gpr}")
-
-
-
+        # from pprint import pprint
+        # pprint(knockout_reactions)
+        return knockout_reactions
 
     @staticmethod
     def read_objective_information(model_path: Path) -> ObjectiveInformation:
@@ -148,4 +152,4 @@ class Curator:
 if __name__ == "__main__":
     from fbc_curation import EXAMPLE_PATH
     model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
-    Curator.gene_knockout_reactions(model_path=model_path)
+    Curator.knockout_reactions_for_genes(model_path=model_path)

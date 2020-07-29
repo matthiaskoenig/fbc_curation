@@ -24,4 +24,3 @@ def test_iJR904(tmp_path):
 def test_iAB_AMO1410_SARS(tmp_path):
     examples.example_iAB_AMO1410_SARS(tmp_path)
     _check_tmp_path(tmp_path)
-

@@ -83,16 +83,18 @@ class CuratorCameo(Curator):
         model = self.read_model()
         gene_status = []
         gene_values = []
+
+        knockout_reactions = self.knockout_reactions_for_genes(self.model_path)
+
         for gene in model.genes:
             reaction_bounds = dict()
-            # knockout all reactions for gene by setting bounds zero
-            for reaction in gene.reactions:
-                if reaction.functional:
-                    reaction_bounds[reaction.id] = (reaction.lower_bound, reaction.upper_bound)
-                    reaction.bounds = (0, 0)
-
-            # run fba
+            # knockout all reactions affected by gene by setting bounds zero
+            for rid in knockout_reactions[gene.id]:
+                reaction = model.reactions.get_by_id(rid)
+                reaction_bounds[reaction.id] = (reaction.lower_bound, reaction.upper_bound)
+                reaction.bounds = (0, 0)
             try:
+                # run fba
                 result = fba(model)
                 value = result.objective_value
                 status = CuratorConstants.STATUS_OPTIMAL

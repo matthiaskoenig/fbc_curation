@@ -2,6 +2,7 @@ from pathlib import Path
 import pandas as pd
 import libsbml
 from fbc_curation import EXAMPLE_PATH
+from fbc_curation.curator import CuratorResults
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 from fbc_curation.constants import CuratorConstants
 
@@ -11,9 +12,7 @@ results = curator.run()
 doc = libsbml.readSBMLFromFile(str(model_path))  # type: libsbml.SBMLDocument
 model = doc.getModel()  # type: libsbml.Model
 
-
-def test_objective_df():
-    df = results.objective
+def _check_objective(df):
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
     assert len(df.columns) == len(CuratorConstants.OBJECTIVE_FIELDS)
@@ -29,9 +28,11 @@ def test_objective_df():
     assert len(status_codes) <= 2
     assert "optimal" in status_codes
 
+def test_objective_df():
+    df = results.objective
+    _check_objective(df)
 
-def test_fva_df():
-    df = results.fva
+def _check_fva(df):
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
     assert len(df.columns) == len(CuratorConstants.FVA_FIELDS)
@@ -46,9 +47,11 @@ def test_fva_df():
     assert len(status_codes) <= 2
     assert "optimal" in status_codes
 
+def test_fva_df():
+    df = results.fva
+    _check_fva(df)
 
-def test_gene_deletion():
-    df = results.gene_deletion
+def _check_gene_deletion(df):
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
     assert len(df.columns) == len(CuratorConstants.GENE_DELETION_FIELDS)
@@ -64,9 +67,11 @@ def test_gene_deletion():
     assert len(status_codes) <= 2
     assert "optimal" in status_codes
 
+def test_gene_deletion():
+    df = results.gene_deletion
+    _check_gene_deletion(df)
 
-def test_reaction_deletion(tmp_path):
-    df = results.reaction_deletion
+def _check_reaction_deletion(df):
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
     assert len(df.columns) == len(CuratorConstants.REACTION_DELETION_FIELDS)
@@ -80,3 +85,24 @@ def test_reaction_deletion(tmp_path):
     status_codes = df.status.unique()
     assert len(status_codes) <= 2
     assert "optimal" in status_codes
+
+
+def test_reaction_deletion(tmp_path):
+    df = results.reaction_deletion
+    _check_reaction_deletion(df)
+
+
+def test_read_write_check1(tmp_path):
+    results.write_results(tmp_path)
+    results2 = CuratorResults.read_results(tmp_path)
+    assert CuratorResults.compare({'res1': results, 'res2': results2})
+
+
+def test_read_write_check2(tmp_path):
+    results.write_results(tmp_path)
+    results2 = CuratorResults.read_results(tmp_path)
+    assert results2.validate_objective()
+    assert results2.validate_fva()
+    assert results2.validate_gene_deletion()
+    assert results2.validate_reaction_deletion()
+    assert results2.validate()
