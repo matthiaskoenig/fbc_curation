@@ -26,7 +26,7 @@ Currently two separate implementations of the reference files are included in th
 `fbc_curation` is a python package which can be included in python applications. In addition a command line tool is provided which allows easy usage outside of python. 
 
 ## Installation
-The `fbc_curation` package can be installed via pip. 
+The `fbc_curation` package can be installed via pip and is working on python 3.6 and python 3.7 
 ```bash
 pip install fbc_curation
 ```
