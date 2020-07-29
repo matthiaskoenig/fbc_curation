@@ -26,8 +26,8 @@ def example_iJR904(results_path: Path) -> Dict:
     return _run_example(EXAMPLE_PATH / "models" / "iJR904.xml.gz", results_path=results_path)
 
 
-def example_iAB_AMO1410_SARS(results_path: Path):
-    _run_example(EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml", results_path=results_path)
+def example_iAB_AMO1410_SARS(results_path: Path) -> Dict:
+    return _run_example(EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml", results_path=results_path)
 
 
 def _run_example(model_path: Path, results_path: Path) -> Dict:

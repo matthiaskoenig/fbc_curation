@@ -24,7 +24,7 @@ def test_curation1(monkeypatch, tmp_path, filename):
 
 def test_curation2(monkeypatch, tmp_path):
     """
-    curation --model ../examples/models/e_coli_core.xml --path ../examples/results/e_coli_core
+    curation --model examples/models/e_coli_core.xml --path examples/results/e_coli_core --reference ../examples/results/e_coli_core/cobrapy
     """
     with monkeypatch.context() as m:
         args = [
