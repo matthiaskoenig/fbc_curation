@@ -1,4 +1,4 @@
 from pathlib import Path
-from .fbc_files import FBCFileCreator
+from ._version import __version__, __citation__
 
-EXAMPLE_PATH = Path(__file__).parent / "examples"
+EXAMPLE_PATH = Path(__file__).parent.parent / "examples"

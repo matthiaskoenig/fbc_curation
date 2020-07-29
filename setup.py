@@ -66,16 +66,17 @@ setup(
     python_requires='>=3.6',
     # List run-time dependencies here.  These will be installed by pip when
     install_requires=[
-        "pandas",
-        "cobra",
-        "pytest",
-        "pytest-cov"
+        "pandas>=1.0.5",
+        "cobra>=0.18.1",
+        "cameo>=0.11.15",
+        "numpy",
+        'pyfiglet'
     ],
     entry_points={
         'console_scripts':
             [
                 'fbc_curation_examples=fbc_curation.examples:run_examples',
-                'fbc_curation=fbc_curation.fbc_files:main',
+                'fbc_curation=fbc_curation.curation:main',
             ],
     },
     extras_require={},
