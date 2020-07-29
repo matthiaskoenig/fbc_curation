@@ -32,6 +32,9 @@ def main():
     parser.add_option('-o', '--objective',
                       action="store", dest="objective",
                       help="(optional) objective to use in optimization, defaults to active objective")
+    parser.add_option('-r', '--reference',
+                      action="store", dest="reference_path",
+                      help="(optional) directory path to reference output (comparison is performed)")
 
     f = Figlet(font='slant')
     print(f.renderText('FBC CURATION'))
@@ -58,6 +61,13 @@ def main():
     if not output_path.exists():
         logger.warning(f"output path --path '{output_path}' does not exist, path will be created.")
 
+    if not options.reference_path:
+        reference_path = None
+    else:
+        reference_path = Path(options.reference_path)
+        if not reference_path.exists():
+            _parser_message(f"--reference '{options.reference_path}' does not exist, ensure valid reference path.")
+
     if not options.curator:
         options.curator = "all"
     supported_curators = ["cameo", "cobrapy", "all"]
@@ -79,23 +89,37 @@ def main():
                             f"--objective {obj_info.active_objective}")
 
     # Perform imports here to avoid messages above parser messages
-    output_paths = [output_path]
+
     if options.curator == "cobrapy":
         from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
         curator_classes = [CuratorCobrapy]
+        curator_keys = ["cobrapy"]
     elif options.curator == "cameo":
         from fbc_curation.curator.cameo_curator import CuratorCameo
         curator_classes = [CuratorCameo]
+        curator_keys = ["cameo"]
     elif options.curator == "all":
         from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
         from fbc_curation.curator.cameo_curator import CuratorCameo
         curator_classes = [CuratorCobrapy, CuratorCameo]
-        output_paths = [output_path / "cobrapy", output_path / "cameo"]
+        curator_keys = ["cobrapy", "cameo"]
+
+    # Reading reference solution
+    res_dict = {}
+    if reference_path:
+        reference_results = CuratorResults.read_results(reference_path)
+        res_dict['reference'] = reference_results
 
     for k, curator_class in enumerate(curator_classes):
+        key = curator_keys[k]
         curator = curator_class(model_path=model_path, objective_id=objective_id)
         results = curator.run()  # type: CuratorResults
-        results.write_results(output_paths[k])
+        results.write_results(output_path / key)
+        res_dict[key] = CuratorResults.read_results(output_path / key)
+
+    # perform comparison
+    if len(res_dict) > 1:
+        CuratorResults.compare(res_dict)
 
 
 if __name__ == "__main__":

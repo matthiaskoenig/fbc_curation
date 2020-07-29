@@ -107,12 +107,13 @@ class CuratorResults:
 
         Returns True of all results are identical.
         """
-        print(results)
         curator_results = list(results.values())
         keys = list(results.keys())
         num_res = len(curator_results)
         # only comparing comparison between two data frames
 
+        print(f"=" * 40)
+        print("Comparison of results")
         print(f"=" * 40)
         all_equal = True
 

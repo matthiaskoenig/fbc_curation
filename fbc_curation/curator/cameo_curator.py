@@ -30,7 +30,7 @@ class CuratorCameo(Curator):
         Curator.__init__(self, model_path=model_path, objective_id=objective_id)
 
     def read_model(self):
-        return load_model(str(self.model_path))  # type: Model
+        return load_model(str(self.model_path), sanitize=False)  # type: Model
 
     def objective(self) -> pd.DataFrame:
         model = self.read_model()
