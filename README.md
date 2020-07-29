@@ -14,16 +14,31 @@ This repository creates standardized reference files for a given FBC model based
 ## Usage
 To create FBC curation files for a given SBML model use the `fbc_curation` command line tool. The reference files are created for the provided objective in the model, if no objective is provided the `active` objective or default objective is used.
 ```bash
+    __________  ______   ________  ______  ___  ______________  _   __
+   / ____/ __ )/ ____/  / ____/ / / / __ \/   |/_  __/  _/ __ \/ | / /
+  / /_  / __  / /      / /   / / / / /_/ / /| | / /  / // / / /  |/ / 
+ / __/ / /_/ / /___   / /___/ /_/ / _, _/ ___ |/ / _/ // /_/ / /|  /  
+/_/   /_____/\____/   \____/\____/_/ |_/_/  |_/_/ /___/\____/_/ |_/   
+                                                                      
+
+        Version 0.1.0a1 (https://github.com/matthiaskoenig/fbc_curation)
+        Citation https://doi.org/10.5281/zenodo.3708271
+
+Required argument '--model' missing
 Usage: fbc_curation [options]
 
 Options:
   -h, --help            show this help message and exit
   -m MODEL_PATH, --model=MODEL_PATH
-                        path to SBML model with fbc information
+                        (required) path to SBML model with fbc information
   -p OUTPUT_PATH, --path=OUTPUT_PATH
-                        path to write the files to (directory)
+                        (required) directory path to write output files to
+  -c CURATOR, --curator=CURATOR
+                        (optional) curator tool to create reference files:
+                        Select from ['cobrapy', 'cameo', 'all']
   -o OBJECTIVE, --objective=OBJECTIVE
-                        optional objective to use in optimization
+                        (optional) objective to use in optimization, defaults
+                        to active objective
 ```
 For instance for the `e_coli_core.xml` example use
 ```
@@ -141,6 +156,11 @@ Example models are from the [BiGG Database](http://bigg.ucsd.edu/)
 King ZA, Lu JS, Dräger A, Miller PC, Federowicz S, Lerman JA, Ebrahim A, Palsson BO, and Lewis NE. BiGG Models: A platform for integrating, standardizing, and sharing genome-scale models (2016) Nucleic Acids Research 44(D1):D515-D522. doi:10.1093/nar/gkv1049
 
 ## Changelog
+### v0.1.0
+- result validation against schema
+- second solver implementation (cameo)
+- improved user interface and documentation
+
 ### v0.0.6
 - fixed fbc_curation_example bug #11
 - reproducible tolerances for examples

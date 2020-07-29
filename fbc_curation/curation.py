@@ -6,7 +6,7 @@ import logging
 from pathlib import Path
 from pyfiglet import Figlet
 
-from fbc_curation import __version__
+from fbc_curation import __version__, __citation__
 from fbc_curation.curator import Curator, CuratorResults
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,8 @@ def main():
 
     f = Figlet(font='slant')
     print(f.renderText('FBC CURATION'))
-    print(f"Version {__version__} (https://github.com/matthiaskoenig/fbc_curation)\n")
+    print(f"\tVersion {__version__} (https://github.com/matthiaskoenig/fbc_curation)")
+    print(f"\tCitation {__citation__}\n")
 
     options, args = parser.parse_args()
 
