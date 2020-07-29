@@ -7,7 +7,13 @@
 
 <b>Matthias König</b>
 # fbc_curation
-* [Overview](https://github.com/matthiaskoenig/fbc_curation#overview)
+This repository creates standardized reference files for a given FBC model based on cobrapy and glpk. These files can be used in the model curation process for validating the model behavior. The format of the standardized reference files is described below. 
+Currently two separate implementations of the reference files are included in the package:
+* `cobrapy` based on COBRApy (Constraint-Based Reconstruction and Analysis in Python) available from https://github.com/opencobra/cobrapy/
+* `cameo` based on Cameo (Cameo—Computer Aided Metabolic Engineering and Optimization) available from https://github.com/biosustain/cameo
+
+`fbc_curation` is a python package which can be included in python applications. In addition a command line tool is provided which allows easy usage outside of python. 
+
 * [Installation](https://github.com/matthiaskoenig/fbc_curation#installation)
 * [Usage](https://github.com/matthiaskoenig/fbc_curation#usage)
 * [Standardized reference files](https://github.com/matthiaskoenig/fbc_curation#standardized-reference-files)
@@ -17,16 +23,8 @@
 * [Funding](https://github.com/matthiaskoenig/fbc_curation#funding)
 * [Changelog](https://github.com/matthiaskoenig/fbc_curation#changelog)
 
-## Overview
-This repository creates standardized reference files for a given FBC model based on cobrapy and glpk. These files can be used in the model curation process for validating the model behavior. The format of the standardized reference files is described below. 
-Currently two separate implementations of the reference files are included in the package:
-* `cobrapy` based on COBRApy (Constraint-Based Reconstruction and Analysis in Python) available from https://github.com/opencobra/cobrapy/
-* `cameo` based on Cameo (Cameo—Computer Aided Metabolic Engineering and Optimization) available from https://github.com/biosustain/cameo
-
-`fbc_curation` is a python package which can be included in python applications. In addition a command line tool is provided which allows easy usage outside of python. 
-
 ## Installation
-The `fbc_curation` package can be installed via pip and is working on python 3.6 and python 3.7 
+[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) The `fbc_curation` package can be installed via pip and is working on python 3.6 and python 3.7 
 ```bash
 pip install fbc_curation
 ```
@@ -38,6 +36,7 @@ pip install fbc_curation --upgrade
 ```
 
 ## Usage
+[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) 
 ### Create reference files
 To create FBC curation files for a given SBML model use the `fbc_curation` command line tool. The reference files are created for the provided objective in the model, if no objective is provided the `active` objective or default objective is used.
 ```bash
@@ -73,14 +72,17 @@ Options:
 ```
 For instance to create the reference files for the `e_coli_core.xml` example use
 ```
-fbc_curation --model ./fbc_curation/examples/models/e_coli_core.xml --path ./fbc_curation/examples/results/e_coli_core 
+fbc_curation --model ./fbc_curation/examples/models/e_coli_core.xml \
+--path ./fbc_curation/examples/results/e_coli_core 
 ```
 This creates the FBC curation files for the `model` in the output `path`.
 
 ### Compare existing reference files
 In addition existing reference files can be compared with the solutions by `cobrapy` and `cameo`. The `--reference` argument can be used to provide the path to the reference files.
 ```
-curation --model examples/models/e_coli_core.xml --path examples/results/e_coli_core --reference ../examples/results/e_coli_core/cobrapy
+curation --model examples/models/e_coli_core.xml \
+--path examples/results/e_coli_core \
+--reference ../examples/results/e_coli_core/cobrapy
 ```
 The comparison results are provided as a matrix for the various reference files with `1` being equal output and `0` if differences exist between the respective reference files. If all matrices are one matrices the results are equal.
 ```
@@ -113,7 +115,7 @@ Equal: True
 ```
 
 ## Standardized reference files
-In the following the four created reference files are described and examples provided for the [`e_coli_core.xml`](examples/models/e_coli_core.xml) model. All output files are tab separated files (TSV) with the first three columns being `model`, `objective`, and `status`. The column `model` encodes the SBML model id. The column `objective` encodes the SBML objective id, which is the objective which was optimized in the respective simulation. The column `status` encodes the status of the simulation. The status can be either `optimal` (optimization worked) or `infeasible` (no solution found or problem in simulation).  
+[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) In the following the four created reference files are described and examples provided for the [`e_coli_core.xml`](examples/models/e_coli_core.xml) model. All output files are tab separated files (TSV) with the first three columns being `model`, `objective`, and `status`. The column `model` encodes the SBML model id. The column `objective` encodes the SBML objective id, which is the objective which was optimized in the respective simulation. The column `status` encodes the status of the simulation. The status can be either `optimal` (optimization worked) or `infeasible` (no solution found or problem in simulation).  
 
 ### 01 Objective value
 The objective value file `01_objective.tsv` contains the four columns with the headers `model`, `objective` and `status`, `value`. The `value` is the optimal value of the respective objective function when the model is optimized with default settings. If the status is `infeasible` the value is ``.
@@ -177,7 +179,7 @@ e_coli_core	obj	AKGDH	optimal	0.858307
 See for instance: [`e_coli_core/04_reaction_deletion.tsv`](examples/results/e_coli_core/04_reaction_deletion.tsv). For more information: https://cobrapy.readthedocs.io/en/latest/deletions.html
 
 ## Examples
-The examples can be run via
+[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) The examples can be run via
 ```
 fbc_curation_examples
 ```
@@ -186,7 +188,7 @@ Example models are from the [BiGG Database](http://bigg.ucsd.edu/)
 King ZA, Lu JS, Dräger A, Miller PC, Federowicz S, Lerman JA, Ebrahim A, Palsson BO, and Lewis NE. BiGG Models: A platform for integrating, standardizing, and sharing genome-scale models (2016) Nucleic Acids Research 44(D1):D515-D522. doi:10.1093/nar/gkv1049
 
 ## Testing
-To run the tests clone the repository
+[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) To run the tests clone the repository
 ```
 git clone https://github.com/matthiaskoenig/fbc_curation.git
 cd fbc_curation
@@ -195,14 +197,17 @@ pytest
 ```
 
 ## License
+[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) 
 * Source Code: [LGPLv3](http://opensource.org/licenses/LGPL-3.0)
 * Documentation: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
 
 ## Funding
+[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) 
 Matthias König is supported by the Federal Ministry of Education and Research (BMBF, Germany)
 within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054).
 
 ## Changelog
+[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) 
 ### v0.1.0
 - result validation against schema
 - second solver implementation (cameo)
