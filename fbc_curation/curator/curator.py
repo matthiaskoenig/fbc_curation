@@ -6,10 +6,12 @@ from pathlib import Path
 from typing import Dict, List
 import pandas as pd
 import logging
+import cobra
+from cobra.io import read_sbml_model
 from collections import namedtuple
 
 
-from .results import CuratorResults
+from fbc_curation.curator.results import CuratorResults
 ObjectiveInformation = namedtuple("ObjectiveInformation", "active_objective objective_ids")
 
 logger = logging.getLogger(__name__)
@@ -89,7 +91,33 @@ class Curator:
         print(f"* {title}")
 
     @staticmethod
-    def read_objective_information(model_path) -> ObjectiveInformation:
+    def gene_knockout_reactions(model_path: Path, genes=None):
+        """Calculates mapping of genes to affected reactions via
+        GPR mappings.
+
+        A single gene knockout can affect multiple reactions.
+        """
+        model = read_sbml_model(str(model_path))  # type: cobra.core.Model
+
+        for reaction in model.reactions:  # type: cobra.core.Reaction
+            gpr = reaction.gene_reaction_rule
+            print(f"*** {gpr} ***")
+            tree, gpr_genes = cobra.core.gene.parse_gpr(gpr)
+
+            for gene in model.genes:  # type: cobra.core.Gene
+                if gene not in gpr_genes:
+                    knockout = False
+                else:
+                    knockout = not cobra.core.gene.eval_gpr(tree, knockouts={gene})
+
+                if knockout:
+                    print(f"gene: {gene}, knockout reaction: {knockout}, {gpr}")
+
+
+
+
+    @staticmethod
+    def read_objective_information(model_path: Path) -> ObjectiveInformation:
         """ Reads objective information from SBML file structure
 
         :param model_path:
@@ -115,3 +143,9 @@ class Curator:
                            f"only active objective '{active_objective}' results "
                            f"are reported")
         return ObjectiveInformation(active_objective=active_objective, objective_ids=objective_ids)
+
+
+if __name__ == "__main__":
+    from fbc_curation import EXAMPLE_PATH
+    model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
+    Curator.gene_knockout_reactions(model_path=model_path)
