@@ -107,6 +107,7 @@ class CuratorResults:
 
         Returns True of all results are identical.
         """
+        curator_keys = list(results.keys())
         curator_results = list(results.values())
         keys = list(results.keys())
         num_res = len(curator_results)
@@ -124,9 +125,14 @@ class CuratorResults:
                     df1 = getattr(res1, key)
                     df2 = getattr(res2, key)
                     if df1.equals(df2):
-                        mat_equal[p, q] = 1
+                        equal = 1
                     else:
-                        mat_equal[p, q] = 0
+                        equal = 0
+                    mat_equal[p, q] = equal
+
+                    if equal == 0:
+                        print(f"difference: '{curator_keys[p]}' vs '{curator_keys[q]}'")
+                        CuratorResults.analyse_df_differende(df1, df2)
 
             df_equal = pd.DataFrame(mat_equal, columns=list(keys), index=list(keys), dtype=int)
             print(f"--- {key} ---")
@@ -137,6 +143,12 @@ class CuratorResults:
         print(f"Equal: {all_equal}")
         print(f"=" * 40)
         return all_equal
+
+    @staticmethod
+    def analyse_df_differende(df1: pd.DataFrame, df2: pd.DataFrame):
+        """Analyse DataFrame difference"""
+        df_diff = pd.concat([df1, df2]).drop_duplicates(keep=False)
+        print(df_diff)
 
     def validate(self) -> bool:
         valid_objective = self.validate_objective()

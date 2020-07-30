@@ -59,6 +59,6 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
 
 
 if __name__ == "__main__":
-    run_examples()
-    # example_ecoli_core(results_path=EXAMPLE_PATH / "results" / "e_coli_core")
+    # run_examples()
+    example_ecoli_core(results_path=EXAMPLE_PATH / "results" / "e_coli_core")
     # example_iAB_AMO1410_SARS(results_path=EXAMPLE_PATH / "results" / "iAB_AMO1410_SARS")
