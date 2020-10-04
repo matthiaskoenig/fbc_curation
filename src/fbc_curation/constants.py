@@ -20,7 +20,7 @@ class CuratorConstants:
         OBJECTIVE_FILENAME,
         FVA_FILENAME,
         GENE_DELETION_FILENAME,
-        REACTION_DELETION_FILENAME
+        REACTION_DELETION_FILENAME,
     ]
 
     # fields
@@ -35,8 +35,5 @@ class CuratorConstants:
     STATUS_CODES = [STATUS_OPTIMAL, STATUS_INFEASIBLE]
 
     # special settings for comparison
-    VALUE_INFEASIBLE = ''
+    VALUE_INFEASIBLE = ""
     NUM_DECIMALS = 6  # decimals to write in the solution
-
-
-

@@ -18,10 +18,15 @@ class CuratorResults:
     CuratorResults can either be created by a Curator or read from file.
     """
 
-    def __init__(self, objective_id: str, objective: pd.DataFrame, fva: pd.DataFrame,
-                 gene_deletion: pd.DataFrame, reaction_deletion: pd.DataFrame,
-                 num_decimals: int = None
-                 ):
+    def __init__(
+        self,
+        objective_id: str,
+        objective: pd.DataFrame,
+        fva: pd.DataFrame,
+        gene_deletion: pd.DataFrame,
+        reaction_deletion: pd.DataFrame,
+        num_decimals: int = None,
+    ):
         self.objective_id = objective_id
         self.objective = objective
         self.fva = fva
@@ -32,29 +37,28 @@ class CuratorResults:
             num_decimals = CuratorConstants.NUM_DECIMALS
         self.num_decimals = num_decimals
 
-
         # FIXME: processing must be done on creating the files ?!
         # round and sort objective value
         for key in ["value"]:
             self.objective[key] = self.objective[key].apply(self._round)
-        self.objective.sort_values(by=['objective'], inplace=True)
+        self.objective.sort_values(by=["objective"], inplace=True)
 
         # round and sort fva
         for key in ["minimum", "maximum"]:
             self.fva[key] = self.fva[key].apply(self._round)
-        self.fva.sort_values(by=['reaction'], inplace=True)
+        self.fva.sort_values(by=["reaction"], inplace=True)
         self.fva.index = range(len(self.fva))
 
         # round and sort gene_deletion
         for key in ["value"]:
             self.gene_deletion[key] = self.gene_deletion[key].apply(self._round)
-        self.gene_deletion.sort_values(by=['gene'], inplace=True)
+        self.gene_deletion.sort_values(by=["gene"], inplace=True)
         self.gene_deletion.index = range(len(self.gene_deletion))
 
         # round and sort reaction deletion
         for key in ["value"]:
             self.reaction_deletion[key] = self.reaction_deletion[key].apply(self._round)
-        self.reaction_deletion.sort_values(by=['reaction'], inplace=True)
+        self.reaction_deletion.sort_values(by=["reaction"], inplace=True)
         self.reaction_deletion.index = range(len(self.reaction_deletion))
 
         # validate
@@ -72,11 +76,17 @@ class CuratorResults:
         if not path_out.exists():
             logger.warning(f"Creating results path: {path_out}")
             path_out.mkdir(parents=True)
-        for filename, df in dict(zip(
-                [CuratorConstants.OBJECTIVE_FILENAME, CuratorConstants.FVA_FILENAME,
-                 CuratorConstants.GENE_DELETION_FILENAME, CuratorConstants.REACTION_DELETION_FILENAME],
-                [self.objective, self.fva, self.gene_deletion, self.reaction_deletion]
-        )).items():
+        for filename, df in dict(
+            zip(
+                [
+                    CuratorConstants.OBJECTIVE_FILENAME,
+                    CuratorConstants.FVA_FILENAME,
+                    CuratorConstants.GENE_DELETION_FILENAME,
+                    CuratorConstants.REACTION_DELETION_FILENAME,
+                ],
+                [self.objective, self.fva, self.gene_deletion, self.reaction_deletion],
+            )
+        ).items():
             print(f"-> {path_out / filename}")
             df.to_csv(path_out / filename, sep="\t", index=False)
             # df.to_json(path_out / filename, sep="\t", index=False)
@@ -94,18 +104,20 @@ class CuratorResults:
         path_reaction_deletion = path_in / CuratorConstants.REACTION_DELETION_FILENAME
         df_dict = dict()
 
-        for k, path in enumerate([path_objective, path_fva, path_gene_deletion, path_reaction_deletion]):
+        for k, path in enumerate(
+            [path_objective, path_fva, path_gene_deletion, path_reaction_deletion]
+        ):
             if not path_objective.exists():
                 logger.error(f"Required file for fbc curation does not exist: '{path}'")
             else:
                 df_dict[CuratorConstants.KEYS[k]] = pd.read_csv(path, sep="\t")
 
-        objective_id = df_dict['objective'].objective.values[0]
+        objective_id = df_dict["objective"].objective.values[0]
 
         return CuratorResults(objective_id=objective_id, **df_dict)
 
     @staticmethod
-    def compare(results: Dict[str, 'CuratorResults']) -> bool:
+    def compare(results: Dict[str, "CuratorResults"]) -> bool:
         """Compare results against each other.
 
         Returns True of all results are identical.
@@ -137,10 +149,14 @@ class CuratorResults:
                         print(f"difference: '{curator_keys[p]}' vs '{curator_keys[q]}'")
                         CuratorResults.analyse_df_differende(df1, df2)
 
-            df_equal = pd.DataFrame(mat_equal, columns=list(keys), index=list(keys), dtype=int)
+            df_equal = pd.DataFrame(
+                mat_equal, columns=list(keys), index=list(keys), dtype=int
+            )
             print(f"--- {key} ---")
             print(df_equal)
-            all_equal = all_equal and np.sum(np.sum(df_equal.values)) == num_res*num_res
+            all_equal = (
+                all_equal and np.sum(np.sum(df_equal.values)) == num_res * num_res
+            )
 
         print(f"=" * 40)
         print(f"Equal: {all_equal}")
@@ -158,23 +174,38 @@ class CuratorResults:
         valid_fva = self.validate_fva()
         valid_gene_deletion = self.validate_gene_deletion()
         valid_reaction_deletion = self.validate_reaction_deletion()
-        return valid_objective and valid_fva and valid_gene_deletion and valid_reaction_deletion
+        return (
+            valid_objective
+            and valid_fva
+            and valid_gene_deletion
+            and valid_reaction_deletion
+        )
 
     def validate_objective(self) -> bool:
-        return CuratorResults._validate_df(self.objective, name=CuratorConstants.OBJECTIVE_KEY,
-                                           fields=CuratorConstants.OBJECTIVE_FIELDS)
+        return CuratorResults._validate_df(
+            self.objective,
+            name=CuratorConstants.OBJECTIVE_KEY,
+            fields=CuratorConstants.OBJECTIVE_FIELDS,
+        )
 
     def validate_fva(self) -> bool:
-        return CuratorResults._validate_df(self.fva, name=CuratorConstants.FVA_KEY,
-                                           fields=CuratorConstants.FVA_FIELDS)
+        return CuratorResults._validate_df(
+            self.fva, name=CuratorConstants.FVA_KEY, fields=CuratorConstants.FVA_FIELDS
+        )
 
     def validate_gene_deletion(self) -> bool:
-        return CuratorResults._validate_df(self.gene_deletion, name=CuratorConstants.GENE_DELETION_KEY,
-                                           fields=CuratorConstants.GENE_DELETION_FIELDS)
+        return CuratorResults._validate_df(
+            self.gene_deletion,
+            name=CuratorConstants.GENE_DELETION_KEY,
+            fields=CuratorConstants.GENE_DELETION_FIELDS,
+        )
 
     def validate_reaction_deletion(self) -> bool:
-        return CuratorResults._validate_df(self.reaction_deletion, name=CuratorConstants.REACTION_DELETION_KEY,
-                                           fields=CuratorConstants.REACTION_DELETION_FIELDS)
+        return CuratorResults._validate_df(
+            self.reaction_deletion,
+            name=CuratorConstants.REACTION_DELETION_KEY,
+            fields=CuratorConstants.REACTION_DELETION_FIELDS,
+        )
 
     @staticmethod
     def _validate_df(df: pd.DataFrame, name: str, fields: List[str]) -> bool:
@@ -186,7 +217,9 @@ class CuratorResults:
             logger.error(f"'{name}': Can not be empty.")
             valid = False
         if len(df.columns) != len(fields):
-            logger.error(f"'{name}': Incorrect number of columns: '{len(df.columns)} != {len(fields)}'.")
+            logger.error(
+                f"'{name}': Incorrect number of columns: '{len(df.columns)} != {len(fields)}'."
+            )
             valid = False
         for field in fields:
             if not field in df.columns:
@@ -194,7 +227,9 @@ class CuratorResults:
                 valid = False
         for k, field in enumerate(fields):
             if not df.columns[k] == field:
-                logger.error(f"'{name}': Field at position '{k}' must be {field}', but is '{df.columns[k]}'.")
+                logger.error(
+                    f"'{name}': Field at position '{k}' must be {field}', but is '{df.columns[k]}'."
+                )
                 valid = False
 
         for status_code in df.status.unique():
@@ -202,9 +237,11 @@ class CuratorResults:
                 logger.error(f"'{name}': Incorrect status code: '{status_code}'.")
 
         if name == CuratorConstants.OBJECTIVE_KEY:
-            obj_value = df['value'].values[0]
+            obj_value = df["value"].values[0]
             if not obj_value > 0:
-                logger.error(f"'{name}': objective value must be > 0, but '{obj_value}'.")
+                logger.error(
+                    f"'{name}': objective value must be > 0, but '{obj_value}'."
+                )
                 valid = False
 
         if valid:

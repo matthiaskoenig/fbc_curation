@@ -15,6 +15,7 @@ results = curator.run()
 doc = libsbml.readSBMLFromFile(str(model_path))  # type: libsbml.SBMLDocument
 model = doc.getModel()  # type: libsbml.Model
 
+
 def _check_objective(df):
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
@@ -24,16 +25,18 @@ def _check_objective(df):
     for k, field in enumerate(CuratorConstants.OBJECTIVE_FIELDS):
         assert df.columns[k] == field
 
-    obj_value = df['value'].values[0]
+    obj_value = df["value"].values[0]
     assert obj_value > 0
 
     status_codes = df.status.unique()
     assert len(status_codes) <= 2
     assert "optimal" in status_codes
 
+
 def test_objective_df():
     df = results.objective
     _check_objective(df)
+
 
 def _check_fva(df):
     assert isinstance(df, pd.DataFrame)
@@ -50,9 +53,11 @@ def _check_fva(df):
     assert len(status_codes) <= 2
     assert "optimal" in status_codes
 
+
 def test_fva_df():
     df = results.fva
     _check_fva(df)
+
 
 def _check_gene_deletion(df):
     assert isinstance(df, pd.DataFrame)
@@ -70,9 +75,11 @@ def _check_gene_deletion(df):
     assert len(status_codes) <= 2
     assert "optimal" in status_codes
 
+
 def test_gene_deletion():
     df = results.gene_deletion
     _check_gene_deletion(df)
+
 
 def _check_reaction_deletion(df):
     assert isinstance(df, pd.DataFrame)
@@ -98,7 +105,7 @@ def test_reaction_deletion(tmp_path):
 def test_read_write_check1(tmp_path):
     results.write_results(tmp_path)
     results2 = CuratorResults.read_results(tmp_path)
-    assert CuratorResults.compare({'res1': results, 'res2': results2})
+    assert CuratorResults.compare({"res1": results, "res2": results2})
 
 
 def test_read_write_check2(tmp_path):

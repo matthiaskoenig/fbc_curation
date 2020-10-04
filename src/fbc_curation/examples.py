@@ -18,16 +18,23 @@ def run_examples(results_path: Path = EXAMPLE_PATH / "results"):
 
 def example_ecoli_core(results_path: Path) -> Dict:
     """Create example files for ecoli core."""
-    return _run_example(EXAMPLE_PATH / "models" / "e_coli_core.xml", results_path=results_path)
+    return _run_example(
+        EXAMPLE_PATH / "models" / "e_coli_core.xml", results_path=results_path
+    )
 
 
 def example_iJR904(results_path: Path) -> Dict:
     """Create example files for ecoli core."""
-    return _run_example(EXAMPLE_PATH / "models" / "iJR904.xml.gz", results_path=results_path)
+    return _run_example(
+        EXAMPLE_PATH / "models" / "iJR904.xml.gz", results_path=results_path
+    )
 
 
 def example_iAB_AMO1410_SARS(results_path: Path) -> Dict:
-    return _run_example(EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml", results_path=results_path)
+    return _run_example(
+        EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml",
+        results_path=results_path,
+    )
 
 
 def _run_example(model_path: Path, results_path: Path) -> Dict:
@@ -38,21 +45,25 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
 
     curator_keys = ["cobrapy", "cameo"]
     for k, curator_class in enumerate([CuratorCobrapy, CuratorCameo]):
-        curator = curator_class(model_path=model_path, objective_id=obj_info.active_objective)
+        curator = curator_class(
+            model_path=model_path, objective_id=obj_info.active_objective
+        )
         results = curator.run()  # type: CuratorResults
         results.write_results(results_path / curator_keys[k])
 
     all_results = {}
     for curator_key in curator_keys:
-        all_results[curator_key] = CuratorResults.read_results(path_in=results_path / curator_key)
+        all_results[curator_key] = CuratorResults.read_results(
+            path_in=results_path / curator_key
+        )
 
     # comparison
     valid = [r.validate() for r in all_results.values()]
     equal = CuratorResults.compare(all_results)
     info = {
-        'model_path': model_path,
-        'valid': valid,
-        'equal': equal,
+        "model_path": model_path,
+        "valid": valid,
+        "equal": equal,
     }
     print(info)
     return info

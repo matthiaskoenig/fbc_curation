@@ -8,12 +8,16 @@ def _check_tmp_path(path):
     for curator_key in ["cobrapy", "cameo"]:
         assert Path.exists(path / curator_key / CuratorConstants.OBJECTIVE_FILENAME)
         assert Path.exists(path / curator_key / CuratorConstants.FVA_FILENAME)
-        assert Path.exists(path / curator_key / CuratorConstants.REACTION_DELETION_FILENAME)
+        assert Path.exists(
+            path / curator_key / CuratorConstants.REACTION_DELETION_FILENAME
+        )
         assert Path.exists(path / curator_key / CuratorConstants.GENE_DELETION_FILENAME)
 
+
 def _check_example_results(res):
-    assert res['valid'] == [True, True]
-    assert res['equal']
+    assert res["valid"] == [True, True]
+    assert res["equal"]
+
 
 def test_e_coli_core(tmp_path):
     res = examples.example_ecoli_core(tmp_path)

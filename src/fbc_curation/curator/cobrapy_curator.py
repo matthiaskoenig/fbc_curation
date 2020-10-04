@@ -5,7 +5,6 @@ from typing import Dict, List
 import cobra
 import pandas as pd
 from cobra.core import Model
-from cobra.core.configuration import Configuration
 from cobra.exceptions import OptimizationError
 from cobra.flux_analysis import (
     flux_variability_analysis,
@@ -15,8 +14,6 @@ from cobra.flux_analysis import (
 from cobra.io import read_sbml_model
 
 
-Configuration
-
 from fbc_curation.constants import CuratorConstants
 from fbc_curation.curator import Curator
 
@@ -25,13 +22,13 @@ logger = logging.getLogger(__file__)
 
 
 class CuratorCobrapy(Curator):
-    """ FBC curator based on cameo.
+    """FBC curator based on cameo.
 
     Uses GLPK as default solver.
     """
 
     def __init__(self, model_path: Path, objective_id: str = None):
-        Curator.__init__(self, model_path=model_path, objective_id=objective_id)
+        super().__init__(self, model_path=model_path, objective_id=objective_id)
 
     def read_model(self) -> Model:
         return read_sbml_model(str(self.model_path))  # type: cobra.Model
