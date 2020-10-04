@@ -1,17 +1,19 @@
 """
 Base class for all FBC curators.
 """
-import libsbml
+import logging
+from collections import defaultdict, namedtuple
 from pathlib import Path
 from typing import Dict, List
-import pandas as pd
-import logging
-import cobra
-from cobra.io import read_sbml_model
-from collections import namedtuple, defaultdict
 
+import cobra
+import libsbml
+import pandas as pd
+from cobra.io import read_sbml_model
 
 from fbc_curation.curator.results import CuratorResults
+
+
 ObjectiveInformation = namedtuple("ObjectiveInformation", "active_objective objective_ids")
 
 logger = logging.getLogger(__name__)

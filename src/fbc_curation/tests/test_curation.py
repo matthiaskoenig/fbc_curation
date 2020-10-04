@@ -1,7 +1,9 @@
 import sys
-from fbc_curation import curation, EXAMPLE_PATH
-from fbc_curation.constants import CuratorConstants
+
 import pytest
+
+from fbc_curation import EXAMPLE_PATH, curation
+from fbc_curation.constants import CuratorConstants
 
 
 @pytest.mark.parametrize('filename', ['e_coli_core.xml', 'iJR904.xml.gz'])

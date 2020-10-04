@@ -4,10 +4,13 @@ Module for creating FBC curation files.
 """
 import logging
 from pathlib import Path
+
 from pyfiglet import Figlet
 
-from fbc_curation import __version__, __citation__
+from fbc_curation import __citation__, __version__
 from fbc_curation.curator import Curator, CuratorResults
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -17,8 +20,8 @@ def main():
          python curation.py --model ../examples/models/e_coli_core.xml --path ../examples/results/e_coli_core
          fbc_curation --model examples/models/e_coli_core.xml --path examples/results/e_coli_core
      """
-    import sys
     import optparse
+    import sys
     parser = optparse.OptionParser()
     parser.add_option('-m', '--model',
                       action="store", dest="model_path",
@@ -99,8 +102,8 @@ def main():
         curator_classes = [CuratorCameo]
         curator_keys = ["cameo"]
     elif options.curator == "all":
-        from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
         from fbc_curation.curator.cameo_curator import CuratorCameo
+        from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
         curator_classes = [CuratorCobrapy, CuratorCameo]
         curator_keys = ["cobrapy", "cameo"]
 

@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from fbc_curation import examples
 from fbc_curation.constants import CuratorConstants
 

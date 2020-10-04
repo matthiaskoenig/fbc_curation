@@ -4,10 +4,10 @@ Create curation information for example models.
 from pathlib import Path
 from typing import Dict
 
-from fbc_curation.curator import Curator, CuratorResults
-from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
-from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation import EXAMPLE_PATH
+from fbc_curation.curator import Curator, CuratorResults
+from fbc_curation.curator.cameo_curator import CuratorCameo
+from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 
 
 def run_examples(results_path: Path = EXAMPLE_PATH / "results"):

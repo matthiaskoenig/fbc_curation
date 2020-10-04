@@ -1,10 +1,13 @@
 from pathlib import Path
-import pandas as pd
+
 import libsbml
+import pandas as pd
+
 from fbc_curation import EXAMPLE_PATH
+from fbc_curation.constants import CuratorConstants
 from fbc_curation.curator import CuratorResults
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
-from fbc_curation.constants import CuratorConstants
+
 
 model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
 curator = CuratorCobrapy(model_path=model_path)

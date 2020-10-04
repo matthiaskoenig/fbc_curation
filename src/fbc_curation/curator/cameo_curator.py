@@ -1,14 +1,18 @@
 
 import logging
-import pandas as pd
 from pathlib import Path
-from cobra.core import Reaction, Gene, Model
 
-from cameo import load_model, fba
-from cameo.flux_analysis.analysis import flux_variability_analysis, FluxVariabilityResult
+import pandas as pd
+from cameo import fba, load_model
+from cameo.flux_analysis.analysis import (
+    FluxVariabilityResult,
+    flux_variability_analysis,
+)
+from cobra.core import Gene, Model, Reaction
 
-from fbc_curation.curator import Curator
 from fbc_curation.constants import CuratorConstants
+from fbc_curation.curator import Curator
+
 
 logger = logging.getLogger(__name__)
 

@@ -1,19 +1,25 @@
-from typing import List, Dict
 import logging
 from pathlib import Path
-import pandas as pd
+from typing import Dict, List
 
 import cobra
-from cobra.io import read_sbml_model
+import pandas as pd
 from cobra.core import Model
-from cobra.exceptions import OptimizationError
-from cobra.flux_analysis import flux_variability_analysis
-from cobra.flux_analysis import single_gene_deletion, single_reaction_deletion
 from cobra.core.configuration import Configuration
+from cobra.exceptions import OptimizationError
+from cobra.flux_analysis import (
+    flux_variability_analysis,
+    single_gene_deletion,
+    single_reaction_deletion,
+)
+from cobra.io import read_sbml_model
+
+
 Configuration
 
-from fbc_curation.curator import Curator
 from fbc_curation.constants import CuratorConstants
+from fbc_curation.curator import Curator
+
 
 logger = logging.getLogger(__file__)
 
