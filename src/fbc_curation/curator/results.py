@@ -77,6 +77,7 @@ class CuratorResults:
         )).items():
             print(f"-> {path_out / filename}")
             df.to_csv(path_out / filename, sep="\t", index=False)
+            # df.to_json(path_out / filename, sep="\t", index=False)
         # self.objective.to_csv(path_out / CuratorConstants.FILENAME_OBJECTIVE_FILE, sep="\t", index=False)
         # self.fva.to_csv(path_out / CuratorConstants.FILENAME_FVA_FILE, sep="\t", index=False)
         # self.reaction_deletion.to_csv(path_out / CuratorConstants.FILENAME_REACTION_DELETION_FILE, sep="\t", index=False)
