@@ -5,3 +5,4 @@ dist
 src/fbc_curation.egg-info/
 coverage.xml
 .coverage
+.coverage.*

@@ -50,5 +50,5 @@ class CuratorConstants:
     STATUS_CODES = [STATUS_OPTIMAL, STATUS_INFEASIBLE]
 
     # special settings for comparison
-    VALUE_INFEASIBLE = ""
+    VALUE_INFEASIBLE = ""  # pd.NA
     NUM_DECIMALS = 6  # decimals to write in the solution
