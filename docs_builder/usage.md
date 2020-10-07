@@ -43,9 +43,8 @@ This creates the FBC curation files for the `model` in the output `path`.
 ## Compare existing reference files
 In addition existing reference files can be compared with the solutions by `cobrapy` and `cameo`. The `--reference` argument can be used to provide the path to the reference files.
 ```
-curation --model examples/models/e_coli_core.xml \
---path examples/results/e_coli_core \
---reference ../examples/results/e_coli_core/cobrapy
+fbc_curation --model ./fbc_curation/examples/models/e_coli_core.xml \
+--path ./fbc_curation/examples/results/e_coli_core 
 ```
 The comparison results are provided as a matrix for the various reference files with `1` being equal output and `0` if differences exist between the respective reference files. If all matrices are one matrices the results are equal.
 ```
