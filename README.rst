@@ -17,6 +17,10 @@ fbc_curation
    :target: http://opensource.org/licenses/LGPL-3.0
    :alt: GNU Lesser General Public License 3
 
+.. image:: https://readthedocs.org/projects/fbc_curation/badge/?version=latest
+   :target: https://fbc-curation.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 .. image:: https://codecov.io/gh/matthiaskoenig/fbc_curation/branch/develop/graph/badge.svg
    :target: https://codecov.io/gh/matthiaskoenig/fbc_curation
    :alt: Codecov
@@ -33,41 +37,15 @@ fbc_curation
 ``fbc_curation``: Reproducibility of constraint-based models
 available from https://github.com/matthiaskoenig/fbc_curation.
 
-The documentation is available on `https://fbc-curation.readthedocs.io <https://fbc-curation.readthedocs.io>`__.
-If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/fbc_curation/issues>`__.
-
-<b>Matthias König</b>
-# fbc_curation
 This repository creates standardized reference files for a given FBC model based on cobrapy and glpk. These files can be used in the model curation process for validating the model behavior. The format of the standardized reference files is described below. 
 Currently two separate implementations of the reference files are included in the package:
 * `cobrapy` based on COBRApy (Constraint-Based Reconstruction and Analysis in Python) available from https://github.com/opencobra/cobrapy/
 * `cameo` based on Cameo (Cameo—Computer Aided Metabolic Engineering and Optimization) available from https://github.com/biosustain/cameo
 
-`fbc_curation` is a python package which can be included in python applications. In addition a command line tool is provided which allows easy usage outside of python. 
+`fbc_curation` is a python package which can be included in python applications. In addition a command line tool is provided which allows easy usage outside of python.
 
-
-## Installation
-[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) The `fbc_curation` package can be installed via pip and is working on python 3.6 and python 3.7 
-```bash
-pip install fbc_curation
-```
-After pip installation the `fbc_curation` command line tool is available.
-
-To upgrade use
-```bash
-pip install fbc_curation --upgrade
-```
-
-## Testing
-[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) To run the tests clone the repository
-```
-git clone https://github.com/matthiaskoenig/fbc_curation.git
-cd fbc_curation
-pip install -e .
-pytest
-```
-
-
+The documentation is available on `https://fbc-curation.readthedocs.io <https://fbc-curation.readthedocs.io>`__.
+If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/fbc_curation/issues>`__.
 
 How to cite
 ===========
@@ -100,34 +78,35 @@ within the research network Systems Medicine of the Liver (**LiSyM**, grant numb
 
 Installation
 ============
-``sbmlsim`` is available from `pypi <https://pypi.python.org/pypi/sbmlsim>`__ and
+``fbc_curation`` is available from `pypi <https://pypi.python.org/pypi/fbc-curation>`__ and
 can be installed via::
 
-    pip install sbmlsim
+    pip install fbc-curation
 
-Requirements
-------------
-
-HDF5 support is required which can be installed on linux via::
-
-    sudo apt-get install -y libhdf5-serial-dev
 
 Develop version
 ---------------
 The latest develop version can be installed via::
 
-    pip install git+https://github.com/matthiaskoenig/sbmlsim.git@develop
+    pip install git+https://github.com/matthiaskoenig/fbc-curation.git@develop
 
 Or via cloning the repository and installing via::
 
-    git clone https://github.com/matthiaskoenig/sbmlsim.git
-    cd sbmlsim
+    git clone https://github.com/matthiaskoenig/fbc_curation.git
+    cd fbc_curation
     pip install -e .
 
 To install for development use::
 
     pip install -e .[development]
     
+Testing
+--------
+To run the tests clone the repository::
 
+    git clone https://github.com/matthiaskoenig/fbc_curation.git
+    cd fbc_curation
+    pip install -e .
+    pytest
 
 © 2020 Matthias König

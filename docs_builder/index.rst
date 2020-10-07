@@ -17,6 +17,10 @@ Welcome to fbc_curation's documentation!
    :target: http://opensource.org/licenses/LGPL-3.0
    :alt: GNU Lesser General Public License 3
 
+.. image:: https://readthedocs.org/projects/fbc_curation/badge/?version=latest
+   :target: https://fbc-curation.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 .. image:: https://codecov.io/gh/matthiaskoenig/fbc_curation/branch/develop/graph/badge.svg
    :target: https://codecov.io/gh/matthiaskoenig/fbc_curation
    :alt: Codecov
@@ -28,6 +32,8 @@ Welcome to fbc_curation's documentation!
 
 ``fbc_curation`` python utilties for reproducibility of constraint-based models
 available from `https://github.com/matthiaskoenig/fbc_curation <https://github.com/matthiaskoenig/fbc_curation>`_.
+The documentation is available on `https://fbc-curation.readthedocs.io <https://fbc-curation.readthedocs.io>`__.
+If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/fbc_curation/issues>`__.
 
 Contents:
 
@@ -37,8 +43,6 @@ Contents:
    overview
    reference_files
    usage
-
-
 
 
 Indices and tables
