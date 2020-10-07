@@ -1,6 +1,5 @@
 import logging
 from pathlib import Path
-from typing import Dict, List
 
 import cobra
 import pandas as pd
@@ -13,7 +12,6 @@ from cobra.flux_analysis import (
 )
 from cobra.io import read_sbml_model
 
-
 from fbc_curation.constants import CuratorConstants
 from fbc_curation.curator import Curator
 
@@ -22,23 +20,17 @@ logger = logging.getLogger(__file__)
 
 
 class CuratorCobrapy(Curator):
-    """FBC curator based on cameo.
-
-    Uses GLPK as default solver.
-    """
+    """FBC curator based on cobrapy."""
 
     def __init__(self, model_path: Path, objective_id: str = None):
         super().__init__(model_path=model_path, objective_id=objective_id)
 
     def read_model(self) -> Model:
-        return read_sbml_model(str(self.model_path))  # type: cobra.Model
+        return read_sbml_model(str(self.model_path))
 
     def objective(self) -> pd.DataFrame:
-        """ Creates pandas DataFrame with objective value.
-
+        """Creates pandas DataFrame with objective value.
         see https://cobrapy.readthedocs.io/en/latest/simulating.html
-
-        :return:
         """
         model = self.read_model()
         try:
@@ -57,17 +49,20 @@ class CuratorCobrapy(Curator):
                 "objective": [self.objective_id],
                 "status": [status],
                 "value": [value],
-             })
+            }
+        )
 
     def fva(self) -> pd.DataFrame:
-        """ Creates DataFrame file with minimum and maximum value of Flux variability analysis.
+        """Creates DataFrame file with minimum and maximum value of Flux variability analysis.
 
         see https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA
         :return:
         """
         model = self.read_model()
         try:
-            df = flux_variability_analysis(model, model.reactions, fraction_of_optimum=1.0)
+            df = flux_variability_analysis(
+                model, model.reactions, fraction_of_optimum=1.0
+            )
             df_out = pd.DataFrame(
                 {
                     "model": model.id,
@@ -75,8 +70,9 @@ class CuratorCobrapy(Curator):
                     "reaction": df.index,
                     "status": CuratorConstants.STATUS_OPTIMAL,
                     "minimum": df.minimum,
-                    "maximum": df.maximum
-                 })
+                    "maximum": df.maximum,
+                }
+            )
         except OptimizationError as e:
             logger.error(f"{e}")
             df_out = pd.DataFrame(
@@ -87,15 +83,16 @@ class CuratorCobrapy(Curator):
                     "status": CuratorConstants.STATUS_INFEASIBLE,
                     "minimum": CuratorConstants.VALUE_INFEASIBLE,
                     "maximum": CuratorConstants.VALUE_INFEASIBLE,
-                })
+                }
+            )
 
         return df_out
 
     def gene_deletion(self) -> pd.DataFrame:
-        """ Create pd.DataFrame with results of gene deletion.
+        """Create pd.DataFrame with results of gene deletion.
 
         https://cobrapy.readthedocs.io/en/latest/deletions.html
-        :return:
+        :return: pandas.DataFrame
         """
         model = self.read_model()
         df = single_gene_deletion(model, model.genes)
@@ -106,13 +103,14 @@ class CuratorCobrapy(Curator):
                 "gene": [set(ids).pop() for ids in df.index],
                 "status": df.status,
                 "value": df.growth,
-             })
+            }
+        )
 
     def reaction_deletion(self) -> pd.DataFrame:
-        """ Create pd.DataFramewith results of reaction deletion.
+        """Create pd.DataFramewith results of reaction deletion.
 
         https://cobrapy.readthedocs.io/en/latest/deletions.html
-        :return:
+        :return: pandas.
         """
         model = self.read_model()
         df = single_reaction_deletion(model, model.reactions)
@@ -123,4 +121,5 @@ class CuratorCobrapy(Curator):
                 "reaction": [set(ids).pop() for ids in df.index],
                 "status": df.status,
                 "value": df.growth,
-             })
+            }
+        )
