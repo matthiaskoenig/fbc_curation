@@ -7,7 +7,7 @@ The objective value file `01_objective.tsv` contains the four columns with the h
 model	objective	status	value
 e_coli_core	obj	optimal	0.873922
 ```
-For an example file see [`e_coli_core/01_objective.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/01_objective.tsv). For more information on how to simulate the FBA see https://cobrapy.readthedocs.io/en/latest/simulating.html.
+For an example file see [`e_coli_core/01_objective.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/01_objective.tsv). For more information on how to simulate the FBA see [https://cobrapy.readthedocs.io/en/latest/simulating.html](https://cobrapy.readthedocs.io/en/latest/simulating.html).
 
 ## 02 Flux variability analysis (FVA)
 The FVA file `02_fva.tsv` contains five columns with the headers `model`, `objective`, `reaction`, `status`, `minimum` and `maximum`. The `reaction` column stores the SBML reaction id. The `minimum` and `maximum` columns contain the minimum and maximum values of the FVA. The rows are sorted based on the SBML reaction identifier. The `status` contains the status of the optimization (`optimal` or `infeasible`). If the status is `infeasible` the value is empty.
@@ -24,7 +24,7 @@ e_coli_core	obj	ADK1	optimal	0.0	0.0
 e_coli_core	obj	AKGDH	optimal	5.064376	5.064376
 ...
 ```
-See for instance: [`e_coli_core/02_fva.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/02_fva.tsv). For more information: https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA
+See for instance: [`e_coli_core/02_fva.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/02_fva.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA](https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA)
 
 ## 03 Gene deletions 
 The gene deletion file `03_gene_deletion.tsv` contains five columns with the headers `model`, `objective`, `gene`, `status` and `value`. 
@@ -42,7 +42,7 @@ e_coli_core	obj	b2415	infeasible
 e_coli_core	obj	b2416	infeasible	
 ...
 ```
-See for instance: [`e_coli_core/03_gene_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/03_gene_deletion.tsv). For more information: https://cobrapy.readthedocs.io/en/latest/deletions.html
+See for instance: [`e_coli_core/03_gene_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/03_gene_deletion.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/deletions.html](https://cobrapy.readthedocs.io/en/latest/deletions.html)
 
 ## 04 Reaction deletions 
 The reaction deletion file `04_reaction_deletion.tsv` contains five columns with the headers `model`, `objective`, `reaction`, `status` and `value`. 
@@ -59,4 +59,4 @@ e_coli_core	obj	ADK1	optimal	0.873922
 e_coli_core	obj	AKGDH	optimal	0.858307
 ...
 ```
-See for instance: [`e_coli_core/04_reaction_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/04_reaction_deletion.tsv). For more information: https://cobrapy.readthedocs.io/en/latest/deletions.html
+See for instance: [`e_coli_core/04_reaction_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/04_reaction_deletion.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/deletions.html](https://cobrapy.readthedocs.io/en/latest/deletions.html).

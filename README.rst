@@ -33,6 +33,10 @@ fbc_curation
 ``fbc_curation``: Reproducibility of constraint-based models
 available from https://github.com/matthiaskoenig/fbc_curation.
 
+The documentation is available on `https://fbc-curation.readthedocs.io <https://fbc-curation.readthedocs.io>`__.
+If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/fbc_curation/issues>`__.
+
+
 How to cite
 ===========
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3708271.svg
