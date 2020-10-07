@@ -22,9 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class Curator:
-    """
-    Base class of all Curator implementations.
-    """
+    """Base class of all Curator implementations."""
 
     def __init__(self, model_path: Path, objective_id: str = None):
         if not model_path.exists():

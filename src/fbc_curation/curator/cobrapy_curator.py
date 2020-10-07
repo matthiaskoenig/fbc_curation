@@ -28,7 +28,7 @@ class CuratorCobrapy(Curator):
     """
 
     def __init__(self, model_path: Path, objective_id: str = None):
-        super().__init__(self, model_path=model_path, objective_id=objective_id)
+        super().__init__(model_path=model_path, objective_id=objective_id)
 
     def read_model(self) -> Model:
         return read_sbml_model(str(self.model_path))  # type: cobra.Model
