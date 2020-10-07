@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""Setup of fbc_curation package."""
 from setuptools import setup
 
 

@@ -1,3 +1,5 @@
+"""Curate fbc with cameo."""
+
 import logging
 from pathlib import Path
 
@@ -7,7 +9,7 @@ from cameo.flux_analysis.analysis import (
     FluxVariabilityResult,
     flux_variability_analysis,
 )
-from cobra.core import Gene, Model, Reaction
+from cobra.core import Model
 
 from fbc_curation.constants import CuratorConstants
 from fbc_curation.curator import Curator
@@ -30,6 +32,7 @@ class CuratorCameo(Curator):
     """
 
     def __init__(self, model_path: Path, objective_id: str = None):
+        """Create instance."""
         Curator.__init__(self, model_path=model_path, objective_id=objective_id)
 
     def read_model(self) -> Model:

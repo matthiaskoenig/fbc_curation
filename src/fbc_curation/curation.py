@@ -1,7 +1,4 @@
-#!/bin/sh
-"""
-Module for creating FBC curation files.
-"""
+"""Module creates FBC curation files."""
 import logging
 from pathlib import Path
 
@@ -15,11 +12,15 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    """
+    """Entry point which runs fbc_curation script.
+
     Example:
-        python curation.py --model ../examples/models/e_coli_core.xml --path ../examples/results/e_coli_core
-        fbc_curation --model examples/models/e_coli_core.xml --path examples/results/e_coli_core
+        python curation.py --model ../examples/models/e_coli_core.xml
+          --path ../examples/results/e_coli_core
+        fbc_curation --model examples/models/e_coli_core.xml
+          --path examples/results/e_coli_core
     """
+
     import optparse
     import sys
 
@@ -43,14 +44,16 @@ def main():
         "--curator",
         action="store",
         dest="curator",
-        help="(optional) curator tool to create reference files: Select from ['cobrapy', 'cameo', 'all']",
+        help="(optional) curator tool to create reference files: Select from "
+        "['cobrapy', 'cameo', 'all']",
     )
     parser.add_option(
         "-o",
         "--objective",
         action="store",
         dest="objective",
-        help="(optional) objective to use in optimization, defaults to active objective",
+        help="(optional) objective to use in optimization, "
+        "defaults to active objective",
     )
     parser.add_option(
         "-r",
@@ -95,13 +98,14 @@ def main():
         reference_path = Path(options.reference_path)
         if not reference_path.exists():
             _parser_message(
-                f"--reference '{options.reference_path}' does not exist, ensure valid reference path."
+                f"--reference '{options.reference_path}' does not exist, ensure "
+                f"valid reference path."
             )
 
     if not options.curator:
         options.curator = "all"
     supported_curators = ["cameo", "cobrapy", "all"]
-    if not options.curator in supported_curators:
+    if options.curator not in supported_curators:
         _parser_message(
             f"--curator '{options.curator}' is not supported, use one of the supported "
             f"curators: {supported_curators}"
@@ -112,7 +116,7 @@ def main():
         objective_id = obj_info.active_objective
     else:
         objective_id = options.objective
-        if not objective_id in obj_info.objective_ids:
+        if objective_id not in obj_info.objective_ids:
             _parser_message(
                 f"Objective --objective'{objective_id}' dose not exist "
                 f"in SBML model objectives: "

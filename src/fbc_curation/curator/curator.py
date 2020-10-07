@@ -1,6 +1,4 @@
-"""
-Base class for all FBC curators.
-"""
+"""Base class for all FBC curators."""
 import logging
 from collections import defaultdict, namedtuple
 from pathlib import Path
@@ -25,6 +23,7 @@ class Curator:
     """Base class of all Curator implementations."""
 
     def __init__(self, model_path: Path, objective_id: str = None):
+        """Create instance."""
         if not model_path.exists():
             raise ValueError(f"model_path does not exist: '{model_path}'")
 
@@ -35,7 +34,8 @@ class Curator:
 
         if objective_id is None:
             logger.warning(
-                f"No objective id provided, using the active objective: {self.active_objective}"
+                f"No objective id provided, using the active objective: "
+                f"{self.active_objective}"
             )
             self.objective_id = self.active_objective
         else:
@@ -49,6 +49,7 @@ class Curator:
                 self.objective_id = objective_id
 
     def __str__(self):
+        """Create string representation."""
         lines = [
             f"--- {self.__class__.__name__} ---",
             f"\tmodel_path: {self.model_path}",
@@ -72,7 +73,7 @@ class Curator:
         raise NotImplementedError
 
     def run(self) -> CuratorResults:
-        """Runs the curator and stores the results."""
+        """Run the curator and stores the results."""
 
         print("-" * 80)
         self._print_header(f"{self.__class__.__name__}: objective")
@@ -103,11 +104,11 @@ class Curator:
     def knockout_reactions_for_genes(
         model_path: Path, genes=None
     ) -> Dict[str, List[str]]:
-        """Calculates mapping of genes to affected reactions via
-        GPR mappings.
+        """Calculate mapping of genes to affected reactions.
 
         Which reactions are knocked out by a given gene.
         A single gene knockout can affect multiple reactions.
+        Uses GPR mappings.
         """
         model = read_sbml_model(str(model_path))  # type: cobra.core.Model
         if genes is None:
@@ -121,8 +122,8 @@ class Curator:
                 if gene.id not in gpr_genes:
                     gene_essential = False
                 else:
-                    # eval_gpr: True if the gene reaction rule is true with the given knockouts
-                    #             otherwise false
+                    # eval_gpr: True if the gene reaction rule is true with
+                    # the given knockouts otherwise false
                     gene_essential = not cobra.core.gene.eval_gpr(
                         tree, knockouts={gene.id}
                     )
@@ -135,11 +136,7 @@ class Curator:
 
     @staticmethod
     def read_objective_information(model_path: Path) -> ObjectiveInformation:
-        """Reads objective information from SBML file structure
-
-        :param model_path:
-        :return:
-        """
+        """Read objective information from SBML file structure."""
         # read objective information from sbml (multiple objectives)
         doc = libsbml.readSBMLFromFile(str(model_path))  # type: libsbml.SBMLDocument
         model = doc.getModel()  # type: libsbml.Model

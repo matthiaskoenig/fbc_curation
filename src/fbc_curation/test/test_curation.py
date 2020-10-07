@@ -1,3 +1,5 @@
+"""Test fbc_curation command line script."""
+
 import sys
 
 import pytest
@@ -8,8 +10,10 @@ from fbc_curation.constants import CuratorConstants
 
 @pytest.mark.parametrize("filename", ["e_coli_core.xml", "iJR904.xml.gz"])
 def test_curation1(monkeypatch, tmp_path, filename):
-    """
-    curation --model ../examples/models/e_coli_core.xml --path ../examples/results/e_coli_core
+    """First example via command line tool.
+
+    curation --model ../examples/models/e_coli_core.xml
+    --path ../examples/results/e_coli_core
     """
     with monkeypatch.context() as m:
         args = [
@@ -27,8 +31,11 @@ def test_curation1(monkeypatch, tmp_path, filename):
 
 
 def test_curation2(monkeypatch, tmp_path):
-    """
-    curation --model examples/models/e_coli_core.xml --path examples/results/e_coli_core --reference ../examples/results/e_coli_core/cobrapy
+    """Second example via command line tool.
+
+    curation --model examples/models/e_coli_core.xml
+    --path examples/results/e_coli_core
+    --reference ../examples/results/e_coli_core/cobrapy
     """
     with monkeypatch.context() as m:
         args = [

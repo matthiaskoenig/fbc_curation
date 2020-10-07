@@ -1,3 +1,4 @@
+"""Test the fbc_curation on the examples."""
 from pathlib import Path
 
 import pytest
@@ -22,12 +23,14 @@ def _check_example_results(res):
 
 
 def test_e_coli_core(tmp_path):
+    """Test fbc_curation."""
     res = examples.example_ecoli_core(tmp_path)
     _check_tmp_path(tmp_path)
     _check_example_results(res)
 
 
 def test_iJR904(tmp_path):
+    """Test fbc_curation."""
     res = examples.example_iJR904(tmp_path)
     _check_tmp_path(tmp_path)
     _check_example_results(res)
@@ -35,6 +38,7 @@ def test_iJR904(tmp_path):
 
 @pytest.mark.skip(reason="Failing test")
 def test_iAB_AMO1410_SARS(tmp_path):
+    """Test fbc_curation."""
     res = examples.example_iAB_AMO1410_SARS(tmp_path)
     _check_tmp_path(tmp_path)
     _check_example_results(res)

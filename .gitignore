@@ -1,3 +1,4 @@
+.tox
 .idea
 __pycache__
 dist

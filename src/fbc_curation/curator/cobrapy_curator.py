@@ -1,7 +1,8 @@
+"""Provide cobrapy fbc curator."""
+
 import logging
 from pathlib import Path
 
-import cobra
 import pandas as pd
 from cobra.core import Model
 from cobra.exceptions import OptimizationError
@@ -23,13 +24,16 @@ class CuratorCobrapy(Curator):
     """FBC curator based on cobrapy."""
 
     def __init__(self, model_path: Path, objective_id: str = None):
+        """Create instance."""
         super().__init__(model_path=model_path, objective_id=objective_id)
 
     def read_model(self) -> Model:
+        """Read the model."""
         return read_sbml_model(str(self.model_path))
 
     def objective(self) -> pd.DataFrame:
-        """Creates pandas DataFrame with objective value.
+        """Create pandas DataFrame with objective value.
+
         see https://cobrapy.readthedocs.io/en/latest/simulating.html
         """
         model = self.read_model()
@@ -53,10 +57,10 @@ class CuratorCobrapy(Curator):
         )
 
     def fva(self) -> pd.DataFrame:
-        """Creates DataFrame file with minimum and maximum value of Flux variability analysis.
+        """Create DataFrame file with minimum and maximum value of FVA.
 
+        Runs flux variability analysis.
         see https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA
-        :return:
         """
         model = self.read_model()
         try:

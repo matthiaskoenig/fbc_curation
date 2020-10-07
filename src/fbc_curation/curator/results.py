@@ -1,3 +1,4 @@
+"""Manage FBC curation results."""
 import logging
 from pathlib import Path
 from typing import Dict, List
@@ -5,16 +6,15 @@ from typing import Dict, List
 import numpy as np
 import pandas as pd
 
+from fbc_curation.constants import CuratorConstants
+
 
 logger = logging.getLogger(__name__)
 
 
-from fbc_curation.constants import CuratorConstants
-
-
 class CuratorResults:
-    """
-    Class for working with fbc curation results.
+    """Class for working with fbc curation results.
+
     CuratorResults can either be created by a Curator or read from file.
     """
 
@@ -27,6 +27,7 @@ class CuratorResults:
         reaction_deletion: pd.DataFrame,
         num_decimals: int = None,
     ):
+        """Create instance."""
         self.objective_id = objective_id
         self.objective = objective
         self.fva = fva
@@ -90,10 +91,6 @@ class CuratorResults:
             print(f"-> {path_out / filename}")
             df.to_csv(path_out / filename, sep="\t", index=False)
             # df.to_json(path_out / filename, sep="\t", index=False)
-        # self.objective.to_csv(path_out / CuratorConstants.FILENAME_OBJECTIVE_FILE, sep="\t", index=False)
-        # self.fva.to_csv(path_out / CuratorConstants.FILENAME_FVA_FILE, sep="\t", index=False)
-        # self.reaction_deletion.to_csv(path_out / CuratorConstants.FILENAME_REACTION_DELETION_FILE, sep="\t", index=False)
-        # self.gene_deletion.to_csv(path_out / CuratorConstants.FILENAME_GENE_DELETION_FILE, sep="\t", index=False)
 
     @classmethod
     def read_results(cls, path_in: Path):
@@ -128,9 +125,9 @@ class CuratorResults:
         num_res = len(curator_results)
         # only comparing comparison between two data frames
 
-        print(f"=" * 40)
+        print("=" * 40)
         print("Comparison of results")
-        print(f"=" * 40)
+        print("=" * 40)
         all_equal = True
 
         for key in CuratorConstants.KEYS:
@@ -158,18 +155,19 @@ class CuratorResults:
                 all_equal and np.sum(np.sum(df_equal.values)) == num_res * num_res
             )
 
-        print(f"=" * 40)
+        print("=" * 40)
         print(f"Equal: {all_equal}")
-        print(f"=" * 40)
+        print("=" * 40)
         return all_equal
 
     @staticmethod
     def analyse_df_differende(df1: pd.DataFrame, df2: pd.DataFrame):
-        """Analyse DataFrame difference"""
+        """Analyse DataFrame difference."""
         df_diff = pd.concat([df1, df2]).drop_duplicates(keep=False)
         print(df_diff)
 
     def validate(self) -> bool:
+        """Validate results."""
         valid_objective = self.validate_objective()
         valid_fva = self.validate_fva()
         valid_gene_deletion = self.validate_gene_deletion()
@@ -182,6 +180,7 @@ class CuratorResults:
         )
 
     def validate_objective(self) -> bool:
+        """Validate objective."""
         return CuratorResults._validate_df(
             self.objective,
             name=CuratorConstants.OBJECTIVE_KEY,
@@ -189,11 +188,13 @@ class CuratorResults:
         )
 
     def validate_fva(self) -> bool:
+        """Validate FVA."""
         return CuratorResults._validate_df(
             self.fva, name=CuratorConstants.FVA_KEY, fields=CuratorConstants.FVA_FIELDS
         )
 
     def validate_gene_deletion(self) -> bool:
+        """Validate gene deletion."""
         return CuratorResults._validate_df(
             self.gene_deletion,
             name=CuratorConstants.GENE_DELETION_KEY,
@@ -201,6 +202,7 @@ class CuratorResults:
         )
 
     def validate_reaction_deletion(self) -> bool:
+        """Validate reaction deletion."""
         return CuratorResults._validate_df(
             self.reaction_deletion,
             name=CuratorConstants.REACTION_DELETION_KEY,
@@ -218,22 +220,24 @@ class CuratorResults:
             valid = False
         if len(df.columns) != len(fields):
             logger.error(
-                f"'{name}': Incorrect number of columns: '{len(df.columns)} != {len(fields)}'."
+                f"'{name}': Incorrect number of columns: "
+                f"'{len(df.columns)} != {len(fields)}'."
             )
             valid = False
         for field in fields:
-            if not field in df.columns:
+            if field not in df.columns:
                 logger.error(f"'{name}': Missing field '{field}'")
                 valid = False
         for k, field in enumerate(fields):
             if not df.columns[k] == field:
                 logger.error(
-                    f"'{name}': Field at position '{k}' must be {field}', but is '{df.columns[k]}'."
+                    f"'{name}': Field at position '{k}' must be {field}', "
+                    f"but is '{df.columns[k]}'."
                 )
                 valid = False
 
         for status_code in df.status.unique():
-            if not status_code in CuratorConstants.STATUS_CODES:
+            if status_code not in CuratorConstants.STATUS_CODES:
                 logger.error(f"'{name}': Incorrect status code: '{status_code}'.")
 
         if name == CuratorConstants.OBJECTIVE_KEY:

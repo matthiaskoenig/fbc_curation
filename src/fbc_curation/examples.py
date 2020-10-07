@@ -1,6 +1,4 @@
-"""
-Create curation information for example models.
-"""
+"""Create curation information for example models."""
 from pathlib import Path
 from typing import Dict
 
@@ -11,6 +9,7 @@ from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 
 
 def run_examples(results_path: Path = EXAMPLE_PATH / "results"):
+    """Run all examples."""
     example_ecoli_core(results_path=results_path / "e_coli_core")
     example_iJR904(results_path=results_path / "iJR904")
     example_iAB_AMO1410_SARS(results_path=results_path / "iAB_AMO1410_SARS")
@@ -24,13 +23,14 @@ def example_ecoli_core(results_path: Path) -> Dict:
 
 
 def example_iJR904(results_path: Path) -> Dict:
-    """Create example files for ecoli core."""
+    """Create example files for iJR904."""
     return _run_example(
         EXAMPLE_PATH / "models" / "iJR904.xml.gz", results_path=results_path
     )
 
 
 def example_iAB_AMO1410_SARS(results_path: Path) -> Dict:
+    """Create example files for iAB_AMO1410_SARS."""
     return _run_example(
         EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml",
         results_path=results_path,
@@ -72,4 +72,3 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
 if __name__ == "__main__":
     # run_examples()
     example_ecoli_core(results_path=EXAMPLE_PATH / "results" / "e_coli_core")
-    # example_iAB_AMO1410_SARS(results_path=EXAMPLE_PATH / "results" / "iAB_AMO1410_SARS")

@@ -1,4 +1,9 @@
+"""Reused constants."""
+
+
 class CuratorConstants:
+    """Class storing constants for curation and file format."""
+
     # keys of outputs
     OBJECTIVE_KEY = "objective"
     FVA_KEY = "fva"

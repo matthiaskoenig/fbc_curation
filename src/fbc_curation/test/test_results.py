@@ -1,3 +1,5 @@
+"""Testing result."""
+
 import libsbml
 import pandas as pd
 
@@ -15,6 +17,7 @@ model = doc.getModel()  # type: libsbml.Model
 
 
 def _check_objective(df):
+    """Check objective DataFrame."""
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
     assert len(df.columns) == len(CuratorConstants.OBJECTIVE_FIELDS)
@@ -31,12 +34,14 @@ def _check_objective(df):
     assert "optimal" in status_codes
 
 
-def test_objective_df():
+def test_objective():
+    """Check objective."""
     df = results.objective
     _check_objective(df)
 
 
 def _check_fva(df):
+    """Check FVA."""
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
     assert len(df.columns) == len(CuratorConstants.FVA_FIELDS)
@@ -52,12 +57,14 @@ def _check_fva(df):
     assert "optimal" in status_codes
 
 
-def test_fva_df():
+def test_fva():
+    """Check FVA DataFrame."""
     df = results.fva
     _check_fva(df)
 
 
 def _check_gene_deletion(df):
+    """Check gene deletion."""
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
     assert len(df.columns) == len(CuratorConstants.GENE_DELETION_FIELDS)
@@ -75,11 +82,13 @@ def _check_gene_deletion(df):
 
 
 def test_gene_deletion():
+    """Check gene deletion."""
     df = results.gene_deletion
     _check_gene_deletion(df)
 
 
 def _check_reaction_deletion(df):
+    """Check reaction deletion."""
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
     assert len(df.columns) == len(CuratorConstants.REACTION_DELETION_FIELDS)
@@ -96,17 +105,20 @@ def _check_reaction_deletion(df):
 
 
 def test_reaction_deletion(tmp_path):
+    """Check reaction deletion."""
     df = results.reaction_deletion
     _check_reaction_deletion(df)
 
 
 def test_read_write_check1(tmp_path):
+    """Test reading/writing of results."""
     results.write_results(tmp_path)
     results2 = CuratorResults.read_results(tmp_path)
     assert CuratorResults.compare({"res1": results, "res2": results2})
 
 
 def test_read_write_check2(tmp_path):
+    """Test reading/writing of results."""
     results.write_results(tmp_path)
     results2 = CuratorResults.read_results(tmp_path)
     assert results2.validate_objective()
