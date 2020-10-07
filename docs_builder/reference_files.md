@@ -10,7 +10,7 @@ The following fields are required or optional
 - `software.url` (optional): url to software
 - `environment` (optional): information on operating system and environment
 - `model.filename` (required): SBML model filename
-- `model.md5` (required): Sha5 hash of model
+- `model.md5` (required): MD5 hash of model
 - `solver.name` (required): solver used for optimization,
 - `solver.version` (required): solver version
 
