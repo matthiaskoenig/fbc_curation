@@ -1,5 +1,34 @@
-# Standardized reference files
-In the following the four created reference files are described and examples provided for the [`e_coli_core.xml`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/models/e_coli_core.xml) model. All output files are tab separated files (TSV) with the first three columns being `model`, `objective`, and `status`. The column `model` encodes the SBML model id. The column `objective` encodes the SBML objective id, which is the objective which was optimized in the respective simulation. The column `status` encodes the status of the simulation. The status can be either `optimal` (optimization worked) or `infeasible` (no solution found or problem in simulation).  
+# Reference files
+In the following the four created reference files and the metadata file are described and examples provided for the [`e_coli_core.xml`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/models/e_coli_core.xml) model. All output files are tab separated files (TSV) with the first three columns being `model`, `objective`, and `status`. The column `model` encodes the SBML model id. The column `objective` encodes the SBML objective id, which is the objective which was optimized in the respective simulation. The column `status` encodes the status of the simulation. The status can be either `optimal` (optimization worked) or `infeasible` (no solution found or problem in simulation).  
+
+## Metadata file
+A required metadata file `metadata.json` encodes information about the curation run and the used software and library.
+The following fields are required or optional
+
+- `software.name` (required): software used to create the reference files,
+- `software.version` (required): software version
+- `software.url` (optional): url to software
+- `environment` (optional): information on operating system and environment
+- `model.filename` (required): SBML model filename
+- `model.md5` (required): Sha5 hash of model
+- `solver.name` (required): solver used for optimization,
+- `solver.version` (required): solver version
+
+A concrete example of the metadata is shown below
+```
+{
+  "software.name": "fbc_curation",
+  "software.version": "0.1.1",
+  "software.url": "https://doi.org/10.5281/zenodo.3708271",
+  "environment": "posix, Linux, 5.4.0-48-generic",
+  "model.filename": "e_coli_core.xml",
+  "model.md5": "4574760460afe9e1b3388dc15f354706",
+  "solver.name": "cobrapy (glpk)",
+  "solver.version": "0.20.0"
+}
+```
+
+For an example file see [`e_coli_core/metadata.json`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/metadata.json).
 
 ## 01 Objective value
 The objective value file `01_objective.tsv` contains the four columns with the headers `model`, `objective`, `status`, and `value`. The `value` is the optimal value of the respective objective function when the model is optimized. If the status is `infeasible`, no value is provided, i.e., the value is empty.

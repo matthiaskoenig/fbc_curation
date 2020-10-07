@@ -5,6 +5,7 @@ class CuratorConstants:
     """Class storing constants for curation and file format."""
 
     # keys of outputs
+    METADATA_KEY = "metadata"
     OBJECTIVE_KEY = "objective"
     FVA_KEY = "fva"
     GENE_DELETION_KEY = "gene_deletion"
@@ -17,6 +18,7 @@ class CuratorConstants:
     ]
 
     # output filenames
+    METADATA_FILENAME = "metadata.json"
     OBJECTIVE_FILENAME = f"01_{OBJECTIVE_KEY}.tsv"
     FVA_FILENAME = f"02_{FVA_KEY}.tsv"
     GENE_DELETION_FILENAME = f"03_{GENE_DELETION_KEY}.tsv"

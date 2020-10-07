@@ -9,6 +9,7 @@ import libsbml
 import pandas as pd
 from cobra.io import read_sbml_model
 
+from fbc_curation.curator.metadata import create_metadata
 from fbc_curation.curator.results import CuratorResults
 
 
@@ -60,6 +61,9 @@ class Curator:
     def read_model(self):
         raise NotImplementedError
 
+    def metadata(self) -> Dict:
+        return create_metadata(path=self.model_path)
+
     def objective(self) -> pd.DataFrame:
         raise NotImplementedError
 
@@ -76,6 +80,9 @@ class Curator:
         """Run the curator and stores the results."""
 
         print("-" * 80)
+        self._print_header(f"{self.__class__.__name__}: metadata")
+        metadata = self.metadata()
+
         self._print_header(f"{self.__class__.__name__}: objective")
         objective = self.objective()
 
@@ -89,6 +96,7 @@ class Curator:
         reaction_deletion = self.reaction_deletion()
 
         return CuratorResults(
+            metadata=metadata,
             objective_id=self.objective_id,
             objective=objective,
             fva=fva,

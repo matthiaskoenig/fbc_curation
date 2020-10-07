@@ -1,4 +1,5 @@
 """Manage FBC curation results."""
+import json
 import logging
 from pathlib import Path
 from typing import Dict, List
@@ -20,6 +21,7 @@ class CuratorResults:
 
     def __init__(
         self,
+        metadata: dict,
         objective_id: str,
         objective: pd.DataFrame,
         fva: pd.DataFrame,
@@ -28,6 +30,7 @@ class CuratorResults:
         num_decimals: int = None,
     ):
         """Create instance."""
+        self.metadata = metadata
         self.objective_id = objective_id
         self.objective = objective
         self.fva = fva
@@ -77,6 +80,12 @@ class CuratorResults:
         if not path_out.exists():
             logger.warning(f"Creating results path: {path_out}")
             path_out.mkdir(parents=True)
+
+        # write metadata file
+        with open(path_out / CuratorConstants.METADATA_FILENAME, "w") as f_json:
+            json.dump(self.metadata, fp=f_json, indent=2)
+
+        # write reference files
         for filename, df in dict(
             zip(
                 [
@@ -95,6 +104,7 @@ class CuratorResults:
     @classmethod
     def read_results(cls, path_in: Path):
         """Read fbc curation files from given directory."""
+        path_metadata = path_in / CuratorConstants.METADATA_FILENAME
         path_objective = path_in / CuratorConstants.OBJECTIVE_FILENAME
         path_fva = path_in / CuratorConstants.FVA_FILENAME
         path_gene_deletion = path_in / CuratorConstants.GENE_DELETION_FILENAME
@@ -109,6 +119,8 @@ class CuratorResults:
             else:
                 df_dict[CuratorConstants.KEYS[k]] = pd.read_csv(path, sep="\t")
 
+        with open(path_metadata, "r") as f_json:
+            df_dict[CuratorConstants.METADATA_KEY] = json.load(fp=f_json)
         objective_id = df_dict["objective"].objective.values[0]
 
         return CuratorResults(objective_id=objective_id, **df_dict)

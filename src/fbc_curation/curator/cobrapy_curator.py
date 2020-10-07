@@ -2,8 +2,10 @@
 
 import logging
 from pathlib import Path
+from typing import Dict
 
 import pandas as pd
+from cobra import __version__ as cobra_version
 from cobra.core import Model
 from cobra.exceptions import OptimizationError
 from cobra.flux_analysis import (
@@ -30,6 +32,13 @@ class CuratorCobrapy(Curator):
     def read_model(self) -> Model:
         """Read the model."""
         return read_sbml_model(str(self.model_path))
+
+    def metadata(self) -> Dict:
+        """Create metadata dictionary."""
+        d = super().metadata()
+        d["solver.name"] = f"cobrapy (glpk)"
+        d["solver.version"] = f"{cobra_version}"
+        return d
 
     def objective(self) -> pd.DataFrame:
         """Create pandas DataFrame with objective value.
@@ -104,7 +113,7 @@ class CuratorCobrapy(Curator):
             {
                 "model": model.id,
                 "objective": self.objective_id,
-                "gene": [set(ids).pop() for ids in df.index],
+                "gene": [set(ids).pop() for ids in df.ids],
                 "status": df.status,
                 "value": df.growth,
             }
@@ -122,7 +131,7 @@ class CuratorCobrapy(Curator):
             {
                 "model": model.id,
                 "objective": self.objective_id,
-                "reaction": [set(ids).pop() for ids in df.index],
+                "reaction": [set(ids).pop() for ids in df.ids],
                 "status": df.status,
                 "value": df.growth,
             }

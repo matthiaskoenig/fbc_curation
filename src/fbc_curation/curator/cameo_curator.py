@@ -2,8 +2,10 @@
 
 import logging
 from pathlib import Path
+from typing import Dict
 
 import pandas as pd
+from cameo import __version__ as cameo_version
 from cameo import fba, load_model
 from cameo.flux_analysis.analysis import (
     FluxVariabilityResult,
@@ -37,6 +39,13 @@ class CuratorCameo(Curator):
 
     def read_model(self) -> Model:
         return load_model(str(self.model_path), sanitize=False)
+
+    def metadata(self) -> Dict:
+        """Create metadata dictionary."""
+        d = super().metadata()
+        d["solver.name"] = f"cameo (glpk)"
+        d["solver.version"] = f"{cameo_version}"
+        return d
 
     def objective(self) -> pd.DataFrame:
         model = self.read_model()
