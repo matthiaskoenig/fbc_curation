@@ -70,6 +70,8 @@ class CuratorCameo(Curator):
 
     def fva(self) -> pd.DataFrame:
         model = self.read_model()
+        result = fba(model)
+        fluxes = result.fluxes
         try:
             fva_result = flux_variability_analysis(
                 model, reactions=model.reactions, fraction_of_optimum=1.0
@@ -80,6 +82,7 @@ class CuratorCameo(Curator):
                     "model": self.model_path.name,
                     "objective": self.objective_id,
                     "reaction": df.index,
+                    "flux": fluxes,
                     "status": CuratorConstants.STATUS_OPTIMAL,
                     "minimum": df.lower_bound,
                     "maximum": df.upper_bound,
@@ -92,6 +95,7 @@ class CuratorCameo(Curator):
                     "model": self.model_path.name,
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
+                    "flux": fluxes,
                     "status": CuratorConstants.STATUS_INFEASIBLE,
                     "minimum": CuratorConstants.VALUE_INFEASIBLE,
                     "maximum": CuratorConstants.VALUE_INFEASIBLE,

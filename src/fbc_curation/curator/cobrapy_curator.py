@@ -72,6 +72,8 @@ class CuratorCobrapy(Curator):
         see https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA
         """
         model = self.read_model()
+        solution = model.optimize()
+        fluxes = solution.fluxes
         try:
             df = flux_variability_analysis(
                 model, model.reactions, fraction_of_optimum=1.0
@@ -81,6 +83,7 @@ class CuratorCobrapy(Curator):
                     "model": self.model_path.name,
                     "objective": self.objective_id,
                     "reaction": df.index,
+                    "flux": fluxes,
                     "status": CuratorConstants.STATUS_OPTIMAL,
                     "minimum": df.minimum,
                     "maximum": df.maximum,
@@ -93,6 +96,7 @@ class CuratorCobrapy(Curator):
                     "model": self.model_path.name,
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
+                    "flux": fluxes,
                     "status": CuratorConstants.STATUS_INFEASIBLE,
                     "minimum": CuratorConstants.VALUE_INFEASIBLE,
                     "maximum": CuratorConstants.VALUE_INFEASIBLE,

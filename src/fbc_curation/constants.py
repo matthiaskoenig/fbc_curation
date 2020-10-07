@@ -32,7 +32,7 @@ class CuratorConstants:
 
     # fields
     OBJECTIVE_FIELDS = ["model", "objective", "status", "value"]
-    FVA_FIELDS = ["model", "objective", "reaction", "status", "minimum", "maximum"]
+    FVA_FIELDS = ["model", "objective", "reaction", "flux", "status", "minimum", "maximum"]
     GENE_DELETION_FIELDS = ["model", "objective", "gene", "status", "value"]
     REACTION_DELETION_FIELDS = ["model", "objective", "reaction", "status", "value"]
 

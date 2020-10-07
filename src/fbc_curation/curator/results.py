@@ -48,7 +48,7 @@ class CuratorResults:
         self.objective.sort_values(by=["objective"], inplace=True)
 
         # round and sort fva
-        for key in ["minimum", "maximum"]:
+        for key in ["flux", "minimum", "maximum"]:
             self.fva[key] = self.fva[key].apply(self._round)
         self.fva.sort_values(by=["reaction"], inplace=True)
         self.fva.index = range(len(self.fva))
@@ -69,11 +69,17 @@ class CuratorResults:
         self.validate()
 
     def _round(self, x):
+        """Rounds the float and sets small values positive.
+
+        Ensuring positivity removes -0.0, 0.0 changes to files.
+        """
         if x == CuratorConstants.VALUE_INFEASIBLE:
             return x
         else:
-            # FIXME: this creates a bug for negative values
-            return abs(round(x, self.num_decimals))  # abs fixes the -0.0 | +0.0 diffs
+            x = round(x, self.num_decimals)
+            if abs(x) < 1E-10:
+                x = abs(x)
+            return x
 
     def write_results(self, path_out: Path):
         """Write results to path."""
