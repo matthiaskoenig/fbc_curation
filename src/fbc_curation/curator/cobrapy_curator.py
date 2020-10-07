@@ -58,7 +58,7 @@ class CuratorCobrapy(Curator):
 
         return pd.DataFrame(
             {
-                "model": model.id,
+                "model": self.model_path.name,
                 "objective": [self.objective_id],
                 "status": [status],
                 "value": [value],
@@ -78,7 +78,7 @@ class CuratorCobrapy(Curator):
             )
             df_out = pd.DataFrame(
                 {
-                    "model": model.id,
+                    "model": self.model_path.name,
                     "objective": self.objective_id,
                     "reaction": df.index,
                     "status": CuratorConstants.STATUS_OPTIMAL,
@@ -90,7 +90,7 @@ class CuratorCobrapy(Curator):
             logger.error(f"{e}")
             df_out = pd.DataFrame(
                 {
-                    "model": model.id,
+                    "model": self.model_path.name,
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
                     "status": CuratorConstants.STATUS_INFEASIBLE,
@@ -111,7 +111,7 @@ class CuratorCobrapy(Curator):
         df = single_gene_deletion(model, model.genes)
         return pd.DataFrame(
             {
-                "model": model.id,
+                "model": self.model_path.name,
                 "objective": self.objective_id,
                 "gene": [set(ids).pop() for ids in df.ids],
                 "status": df.status,
@@ -129,7 +129,7 @@ class CuratorCobrapy(Curator):
         df = single_reaction_deletion(model, model.reactions)
         return pd.DataFrame(
             {
-                "model": model.id,
+                "model": self.model_path.name,
                 "objective": self.objective_id,
                 "reaction": [set(ids).pop() for ids in df.ids],
                 "status": df.status,
