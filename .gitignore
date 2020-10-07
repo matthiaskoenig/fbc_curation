@@ -4,3 +4,4 @@ __pycache__
 dist
 src/fbc_curation.egg-info/
 coverage.xml
+.coverage
