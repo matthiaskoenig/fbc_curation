@@ -35,9 +35,9 @@ Contents:
    :maxdepth: 2
 
    overview
-   usage
    reference_files
-   examples
+   usage
+
 
 
 

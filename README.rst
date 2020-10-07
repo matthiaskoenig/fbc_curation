@@ -36,6 +36,38 @@ available from https://github.com/matthiaskoenig/fbc_curation.
 The documentation is available on `https://fbc-curation.readthedocs.io <https://fbc-curation.readthedocs.io>`__.
 If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/fbc_curation/issues>`__.
 
+<b>Matthias König</b>
+# fbc_curation
+This repository creates standardized reference files for a given FBC model based on cobrapy and glpk. These files can be used in the model curation process for validating the model behavior. The format of the standardized reference files is described below. 
+Currently two separate implementations of the reference files are included in the package:
+* `cobrapy` based on COBRApy (Constraint-Based Reconstruction and Analysis in Python) available from https://github.com/opencobra/cobrapy/
+* `cameo` based on Cameo (Cameo—Computer Aided Metabolic Engineering and Optimization) available from https://github.com/biosustain/cameo
+
+`fbc_curation` is a python package which can be included in python applications. In addition a command line tool is provided which allows easy usage outside of python. 
+
+
+## Installation
+[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) The `fbc_curation` package can be installed via pip and is working on python 3.6 and python 3.7 
+```bash
+pip install fbc_curation
+```
+After pip installation the `fbc_curation` command line tool is available.
+
+To upgrade use
+```bash
+pip install fbc_curation --upgrade
+```
+
+## Testing
+[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) To run the tests clone the repository
+```
+git clone https://github.com/matthiaskoenig/fbc_curation.git
+cd fbc_curation
+pip install -e .
+pytest
+```
+
+
 
 How to cite
 ===========
@@ -49,7 +81,7 @@ License
 * Source Code: `LGPLv3 <http://opensource.org/licenses/LGPL-3.0>`__
 * Documentation: `CC BY-SA 4.0 <http://creativecommons.org/licenses/by-sa/4.0/>`__
 
-The sbmlsim source is released under both the GPL and LGPL licenses version 2 or
+The ``fbc_curation`` source is released under both the GPL and LGPL licenses version 2 or
 later. You may choose which license you choose to use the software under.
 
 This program is free software: you can redistribute it and/or modify it under
@@ -68,7 +100,7 @@ within the research network Systems Medicine of the Liver (**LiSyM**, grant numb
 
 Installation
 ============
-`sbmlsim` is available from `pypi <https://pypi.python.org/pypi/sbmlsim>`__ and
+``sbmlsim`` is available from `pypi <https://pypi.python.org/pypi/sbmlsim>`__ and
 can be installed via::
 
     pip install sbmlsim
