@@ -11,7 +11,7 @@ For an example file see [`e_coli_core/01_objective.tsv`](https://raw.githubuserc
 
 ## 02 Flux variability analysis (FVA)
 The FVA file `02_fva.tsv` contains five columns with the headers `model`, `objective`, `reaction`, `status`, `minimum` and `maximum`. The `reaction` column stores the SBML reaction id. The `minimum` and `maximum` columns contain the minimum and maximum values of the FVA. The rows are sorted based on the SBML reaction identifier. The `status` contains the status of the optimization (`optimal` or `infeasible`). If the status is `infeasible` the value is empty.
-Flux variability is calculated with `fraction_of_optimum = 1.0`, i.e. the objective of the model is set to its maximum in secondary optimization.
+Flux variability is calculated with `fraction_of_optimum = 1.0`, i.e. the objective of the model is set to its maximum in secondary optimization (percent of optimum is 100%).
 ```
 model	objective	reaction	status	minimum	maximum
 e_coli_core	obj	ACALD	optimal	0.0	0.0
