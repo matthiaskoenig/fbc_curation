@@ -1,4 +1,8 @@
+.tox
 .idea
 __pycache__
-fbc_curation.egg-info/
 dist
+src/fbc_curation.egg-info/
+coverage.xml
+.coverage
+.coverage.*

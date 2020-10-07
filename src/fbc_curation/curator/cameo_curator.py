@@ -1,20 +1,28 @@
+"""Curate fbc with cameo."""
 
 import logging
-import pandas as pd
 from pathlib import Path
-from cobra.core import Reaction, Gene, Model
+from typing import Dict
 
-from cameo import load_model, fba
-from cameo.flux_analysis.analysis import flux_variability_analysis, FluxVariabilityResult
+import pandas as pd
+from cameo import __version__ as cameo_version
+from cameo import fba
+from cameo.flux_analysis.analysis import (
+    FluxVariabilityResult,
+    flux_variability_analysis,
+)
+from cobra.core import Model
+from cobra.io import read_sbml_model
 
-from fbc_curation.curator import Curator
 from fbc_curation.constants import CuratorConstants
+from fbc_curation.curator import Curator
+
 
 logger = logging.getLogger(__name__)
 
 
 class CuratorCameo(Curator):
-    """ FBC curator based on cameo.
+    """FBC curator based on cameo.
 
     Cameo is a high-level python library developed to aid the strain design
     process in metabolic engineering projects. The library provides a modular
@@ -27,10 +35,18 @@ class CuratorCameo(Curator):
     """
 
     def __init__(self, model_path: Path, objective_id: str = None):
+        """Create instance."""
         Curator.__init__(self, model_path=model_path, objective_id=objective_id)
 
-    def read_model(self):
-        return load_model(str(self.model_path), sanitize=False)  # type: Model
+    def read_model(self) -> Model:
+        return read_sbml_model(str(self.model_path), f_replace={})
+
+    def metadata(self) -> Dict:
+        """Create metadata dictionary."""
+        d = super().metadata()
+        d["solver.name"] = "cameo (glpk)"
+        d["solver.version"] = f"{cameo_version}"
+        return d
 
     def objective(self) -> pd.DataFrame:
         model = self.read_model()
@@ -46,37 +62,46 @@ class CuratorCameo(Curator):
 
         return pd.DataFrame(
             {
-                "model": model.id,
+                "model": self.model_path.name,
                 "objective": [self.objective_id],
                 "status": [status],
                 "value": [value],
-             })
+            }
+        )
 
     def fva(self) -> pd.DataFrame:
         model = self.read_model()
+        result = fba(model)
+        fluxes = result.fluxes
         try:
-            fva_result = flux_variability_analysis(model, reactions=model.reactions, fraction_of_optimum=1.0)  # type: FluxVariabilityResult
+            fva_result = flux_variability_analysis(
+                model, reactions=model.reactions, fraction_of_optimum=1.0
+            )  # type: FluxVariabilityResult
             df = fva_result.data_frame
             df_out = pd.DataFrame(
                 {
-                    "model": model.id,
+                    "model": self.model_path.name,
                     "objective": self.objective_id,
                     "reaction": df.index,
+                    "flux": fluxes,
                     "status": CuratorConstants.STATUS_OPTIMAL,
                     "minimum": df.lower_bound,
-                    "maximum": df.upper_bound
-                 })
+                    "maximum": df.upper_bound,
+                }
+            )
         except Exception as e:
             logger.error(f"{e}")
             df_out = pd.DataFrame(
                 {
-                    "model": model.id,
+                    "model": self.model_path.name,
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
+                    "flux": fluxes,
                     "status": CuratorConstants.STATUS_INFEASIBLE,
                     "minimum": CuratorConstants.VALUE_INFEASIBLE,
                     "maximum": CuratorConstants.VALUE_INFEASIBLE,
-                })
+                }
+            )
         return df_out
 
     def gene_deletion(self) -> pd.DataFrame:
@@ -91,7 +116,10 @@ class CuratorCameo(Curator):
             # knockout all reactions affected by gene by setting bounds zero
             for rid in knockout_reactions[gene.id]:
                 reaction = model.reactions.get_by_id(rid)
-                reaction_bounds[reaction.id] = (reaction.lower_bound, reaction.upper_bound)
+                reaction_bounds[reaction.id] = (
+                    reaction.lower_bound,
+                    reaction.upper_bound,
+                )
                 reaction.bounds = (0, 0)
             try:
                 # run fba
@@ -111,12 +139,13 @@ class CuratorCameo(Curator):
 
         return pd.DataFrame(
             {
-                "model": model.id,
+                "model": self.model_path.name,
                 "objective": self.objective_id,
                 "gene": [gene.id for gene in model.genes],
                 "status": gene_status,
                 "value": gene_values,
-             })
+            }
+        )
 
     def reaction_deletion(self) -> pd.DataFrame:
         model = self.read_model()
@@ -145,9 +174,10 @@ class CuratorCameo(Curator):
 
         return pd.DataFrame(
             {
-                "model": model.id,
+                "model": self.model_path.name,
                 "objective": self.objective_id,
                 "reaction": [r.id for r in model.reactions],
                 "status": reaction_status,
                 "value": reaction_values,
-             })
+            }
+        )

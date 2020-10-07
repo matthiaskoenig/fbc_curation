@@ -1,45 +1,56 @@
-"""
-Base class for all FBC curators.
-"""
-import libsbml
+"""Base class for all FBC curators."""
+import logging
+from collections import defaultdict, namedtuple
 from pathlib import Path
 from typing import Dict, List
-import pandas as pd
-import logging
+
 import cobra
+import libsbml
+import pandas as pd
 from cobra.io import read_sbml_model
-from collections import namedtuple, defaultdict
 
-
+from fbc_curation.curator.metadata import create_metadata
 from fbc_curation.curator.results import CuratorResults
-ObjectiveInformation = namedtuple("ObjectiveInformation", "active_objective objective_ids")
+
+
+ObjectiveInformation = namedtuple(
+    "ObjectiveInformation", "active_objective objective_ids"
+)
 
 logger = logging.getLogger(__name__)
 
 
 class Curator:
-    """
-    Base class of all Curator implementations.
-    """
+    """Base class of all Curator implementations."""
+
     def __init__(self, model_path: Path, objective_id: str = None):
+        """Create instance."""
         if not model_path.exists():
             raise ValueError(f"model_path does not exist: '{model_path}'")
 
         self.model_path = model_path
-        self.active_objective, self.objective_ids = Curator.read_objective_information(model_path)
+        self.active_objective, self.objective_ids = Curator.read_objective_information(
+            model_path
+        )
 
         if objective_id is None:
-            logger.warning(f"No objective id provided, using the active objective: {self.active_objective}")
+            logger.warning(
+                f"No objective id provided, using the active objective: "
+                f"{self.active_objective}"
+            )
             self.objective_id = self.active_objective
         else:
             if objective_id not in self.objective_ids:
-                logger.error(f"objective id does not exist in model: '{self.objective_id}', "
-                             f"using the active objective: {self.active_objective}")
+                logger.error(
+                    f"objective id does not exist in model: '{self.objective_id}', "
+                    f"using the active objective: {self.active_objective}"
+                )
                 self.objective_id = self.active_objective
             else:
                 self.objective_id = objective_id
 
     def __str__(self):
+        """Create string representation."""
         lines = [
             f"--- {self.__class__.__name__} ---",
             f"\tmodel_path: {self.model_path}",
@@ -49,6 +60,9 @@ class Curator:
 
     def read_model(self):
         raise NotImplementedError
+
+    def metadata(self) -> Dict:
+        return create_metadata(path=self.model_path)
 
     def objective(self) -> pd.DataFrame:
         raise NotImplementedError
@@ -63,9 +77,12 @@ class Curator:
         raise NotImplementedError
 
     def run(self) -> CuratorResults:
-        """Runs the curator and stores the results."""
+        """Run the curator and stores the results."""
 
         print("-" * 80)
+        self._print_header(f"{self.__class__.__name__}: metadata")
+        metadata = self.metadata()
+
         self._print_header(f"{self.__class__.__name__}: objective")
         objective = self.objective()
 
@@ -79,6 +96,7 @@ class Curator:
         reaction_deletion = self.reaction_deletion()
 
         return CuratorResults(
+            metadata=metadata,
             objective_id=self.objective_id,
             objective=objective,
             fva=fva,
@@ -91,14 +109,16 @@ class Curator:
         print(f"* {title}")
 
     @staticmethod
-    def knockout_reactions_for_genes(model_path: Path, genes=None) -> Dict[str, List[str]]:
-        """Calculates mapping of genes to affected reactions via
-        GPR mappings.
+    def knockout_reactions_for_genes(
+        model_path: Path, genes=None
+    ) -> Dict[str, List[str]]:
+        """Calculate mapping of genes to affected reactions.
 
         Which reactions are knocked out by a given gene.
         A single gene knockout can affect multiple reactions.
+        Uses GPR mappings.
         """
-        model = read_sbml_model(str(model_path))  # type: cobra.core.Model
+        model = read_sbml_model(str(model_path), f_replace={})  # type: cobra.core.Model
         if genes is None:
             genes = model.genes
 
@@ -110,9 +130,11 @@ class Curator:
                 if gene.id not in gpr_genes:
                     gene_essential = False
                 else:
-                    # eval_gpr: True if the gene reaction rule is true with the given knockouts
-                    #             otherwise false
-                    gene_essential = not cobra.core.gene.eval_gpr(tree, knockouts={gene.id})
+                    # eval_gpr: True if the gene reaction rule is true with
+                    # the given knockouts otherwise false
+                    gene_essential = not cobra.core.gene.eval_gpr(
+                        tree, knockouts={gene.id}
+                    )
                 if gene_essential:
                     knockout_reactions[gene.id].append(reaction.id)
 
@@ -122,11 +144,7 @@ class Curator:
 
     @staticmethod
     def read_objective_information(model_path: Path) -> ObjectiveInformation:
-        """ Reads objective information from SBML file structure
-
-        :param model_path:
-        :return:
-        """
+        """Read objective information from SBML file structure."""
         # read objective information from sbml (multiple objectives)
         doc = libsbml.readSBMLFromFile(str(model_path))  # type: libsbml.SBMLDocument
         model = doc.getModel()  # type: libsbml.Model
@@ -143,13 +161,18 @@ class Curator:
                 objective_ids.append(objective.getId())
 
         if len(objective_ids) > 1:
-            logger.warning(f"Multiple objectives exist in SBML-fbc ({objective_ids}), "
-                           f"only active objective '{active_objective}' results "
-                           f"are reported")
-        return ObjectiveInformation(active_objective=active_objective, objective_ids=objective_ids)
+            logger.warning(
+                f"Multiple objectives exist in SBML-fbc ({objective_ids}), "
+                f"only active objective '{active_objective}' results "
+                f"are reported"
+            )
+        return ObjectiveInformation(
+            active_objective=active_objective, objective_ids=objective_ids
+        )
 
 
 if __name__ == "__main__":
     from fbc_curation import EXAMPLE_PATH
+
     model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
     Curator.knockout_reactions_for_genes(model_path=model_path)

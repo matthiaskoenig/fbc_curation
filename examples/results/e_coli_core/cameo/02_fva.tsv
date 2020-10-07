@@ -1,96 +1,96 @@
-model	objective	reaction	status	minimum	maximum
-e_coli_core	obj	ACALD	optimal	0.0	0.0
-e_coli_core	obj	ACALDt	optimal	0.0	0.0
-e_coli_core	obj	ACKr	optimal	0.0	0.0
-e_coli_core	obj	ACONTa	optimal	6.00725	6.00725
-e_coli_core	obj	ACONTb	optimal	6.00725	6.00725
-e_coli_core	obj	ACt2r	optimal	0.0	0.0
-e_coli_core	obj	ADK1	optimal	0.0	0.0
-e_coli_core	obj	AKGDH	optimal	5.064376	5.064376
-e_coli_core	obj	AKGt2r	optimal	0.0	0.0
-e_coli_core	obj	ALCD2x	optimal	0.0	0.0
-e_coli_core	obj	ATPM	optimal	8.39	8.39
-e_coli_core	obj	ATPS4r	optimal	45.51401	45.51401
-e_coli_core	obj	BIOMASS_Ecoli_core_w_GAM	optimal	0.873922	0.873922
-e_coli_core	obj	CO2t	optimal	22.809833	22.809833
-e_coli_core	obj	CS	optimal	6.00725	6.00725
-e_coli_core	obj	CYTBD	optimal	43.598985	43.598985
-e_coli_core	obj	D_LACt2	optimal	0.0	0.0
-e_coli_core	obj	ENO	optimal	14.71614	14.71614
-e_coli_core	obj	ETOHt2r	optimal	0.0	0.0
-e_coli_core	obj	EX_ac_e	optimal	0.0	0.0
-e_coli_core	obj	EX_acald_e	optimal	0.0	0.0
-e_coli_core	obj	EX_akg_e	optimal	0.0	0.0
-e_coli_core	obj	EX_co2_e	optimal	22.809833	22.809833
-e_coli_core	obj	EX_etoh_e	optimal	0.0	0.0
-e_coli_core	obj	EX_for_e	optimal	0.0	0.0
-e_coli_core	obj	EX_fru_e	optimal	0.0	0.0
-e_coli_core	obj	EX_fum_e	optimal	0.0	0.0
-e_coli_core	obj	EX_glc__D_e	optimal	10.0	10.0
-e_coli_core	obj	EX_gln__L_e	optimal	0.0	0.0
-e_coli_core	obj	EX_glu__L_e	optimal	0.0	0.0
-e_coli_core	obj	EX_h2o_e	optimal	29.175827	29.175827
-e_coli_core	obj	EX_h_e	optimal	17.530865	17.530865
-e_coli_core	obj	EX_lac__D_e	optimal	0.0	0.0
-e_coli_core	obj	EX_mal__L_e	optimal	0.0	0.0
-e_coli_core	obj	EX_nh4_e	optimal	4.765319	4.765319
-e_coli_core	obj	EX_o2_e	optimal	21.799493	21.799493
-e_coli_core	obj	EX_pi_e	optimal	3.214895	3.214895
-e_coli_core	obj	EX_pyr_e	optimal	0.0	0.0
-e_coli_core	obj	EX_succ_e	optimal	0.0	0.0
-e_coli_core	obj	FBA	optimal	7.477382	7.477382
-e_coli_core	obj	FBP	optimal	0.0	0.0
-e_coli_core	obj	FORt	optimal	0.0	0.0
-e_coli_core	obj	FORt2	optimal	0.0	0.0
-e_coli_core	obj	FRD7	optimal	0.0	994.935624
-e_coli_core	obj	FRUpts2	optimal	0.0	0.0
-e_coli_core	obj	FUM	optimal	5.064376	5.064376
-e_coli_core	obj	FUMt2_2	optimal	0.0	0.0
-e_coli_core	obj	G6PDH2r	optimal	4.959985	4.959985
-e_coli_core	obj	GAPD	optimal	16.023526	16.023526
-e_coli_core	obj	GLCpts	optimal	10.0	10.0
-e_coli_core	obj	GLNS	optimal	0.223462	0.223462
-e_coli_core	obj	GLNabc	optimal	0.0	0.0
-e_coli_core	obj	GLUDy	optimal	4.541857	4.541857
-e_coli_core	obj	GLUN	optimal	0.0	0.0
-e_coli_core	obj	GLUSy	optimal	0.0	0.0
-e_coli_core	obj	GLUt2r	optimal	0.0	0.0
-e_coli_core	obj	GND	optimal	4.959985	4.959985
-e_coli_core	obj	H2Ot	optimal	29.175827	29.175827
-e_coli_core	obj	ICDHyr	optimal	6.00725	6.00725
-e_coli_core	obj	ICL	optimal	0.0	0.0
-e_coli_core	obj	LDH_D	optimal	0.0	0.0
-e_coli_core	obj	MALS	optimal	0.0	0.0
-e_coli_core	obj	MALt2_2	optimal	0.0	0.0
-e_coli_core	obj	MDH	optimal	5.064376	5.064376
-e_coli_core	obj	ME1	optimal	0.0	0.0
-e_coli_core	obj	ME2	optimal	0.0	0.0
-e_coli_core	obj	NADH16	optimal	38.53461	38.53461
-e_coli_core	obj	NADTRHD	optimal	0.0	0.0
-e_coli_core	obj	NH4t	optimal	4.765319	4.765319
-e_coli_core	obj	O2t	optimal	21.799493	21.799493
-e_coli_core	obj	PDH	optimal	9.282533	9.282533
-e_coli_core	obj	PFK	optimal	7.477382	7.477382
-e_coli_core	obj	PFL	optimal	0.0	0.0
-e_coli_core	obj	PGI	optimal	4.860861	4.860861
-e_coli_core	obj	PGK	optimal	16.023526	16.023526
-e_coli_core	obj	PGL	optimal	4.959985	4.959985
-e_coli_core	obj	PGM	optimal	14.71614	14.71614
-e_coli_core	obj	PIt2r	optimal	3.214895	3.214895
-e_coli_core	obj	PPC	optimal	2.504309	2.504309
-e_coli_core	obj	PPCK	optimal	0.0	0.0
-e_coli_core	obj	PPS	optimal	0.0	0.0
-e_coli_core	obj	PTAr	optimal	0.0	0.0
-e_coli_core	obj	PYK	optimal	1.758177	1.758177
-e_coli_core	obj	PYRt2	optimal	0.0	0.0
-e_coli_core	obj	RPE	optimal	2.678482	2.678482
-e_coli_core	obj	RPI	optimal	2.281503	2.281503
-e_coli_core	obj	SUCCt2_2	optimal	0.0	0.0
-e_coli_core	obj	SUCCt3	optimal	0.0	0.0
-e_coli_core	obj	SUCDi	optimal	5.064376	1000.0
-e_coli_core	obj	SUCOAS	optimal	5.064376	5.064376
-e_coli_core	obj	TALA	optimal	1.496984	1.496984
-e_coli_core	obj	THD2	optimal	0.0	0.0
-e_coli_core	obj	TKT1	optimal	1.496984	1.496984
-e_coli_core	obj	TKT2	optimal	1.181498	1.181498
-e_coli_core	obj	TPI	optimal	7.477382	7.477382
+model	objective	reaction	flux	status	minimum	maximum
+e_coli_core.xml	obj	R_ACALD	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ACALDt	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ACKr	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ACONTa	6.00725	optimal	6.00725	6.00725
+e_coli_core.xml	obj	R_ACONTb	6.00725	optimal	6.00725	6.00725
+e_coli_core.xml	obj	R_ACt2r	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ADK1	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_AKGDH	5.064376	optimal	5.064376	5.064376
+e_coli_core.xml	obj	R_AKGt2r	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ALCD2x	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ATPM	8.39	optimal	8.39	8.39
+e_coli_core.xml	obj	R_ATPS4r	45.51401	optimal	45.51401	45.51401
+e_coli_core.xml	obj	R_BIOMASS_Ecoli_core_w_GAM	0.873922	optimal	0.873922	0.873922
+e_coli_core.xml	obj	R_CO2t	-22.809833	optimal	-22.809833	-22.809833
+e_coli_core.xml	obj	R_CS	6.00725	optimal	6.00725	6.00725
+e_coli_core.xml	obj	R_CYTBD	43.598985	optimal	43.598985	43.598985
+e_coli_core.xml	obj	R_D_LACt2	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ENO	14.71614	optimal	14.71614	14.71614
+e_coli_core.xml	obj	R_ETOHt2r	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_ac_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_acald_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_akg_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_co2_e	22.809833	optimal	22.809833	22.809833
+e_coli_core.xml	obj	R_EX_etoh_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_for_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_fru_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_fum_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_glc__D_e	-10.0	optimal	-10.0	-10.0
+e_coli_core.xml	obj	R_EX_gln__L_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_glu__L_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_h2o_e	29.175827	optimal	29.175827	29.175827
+e_coli_core.xml	obj	R_EX_h_e	17.530865	optimal	17.530865	17.530865
+e_coli_core.xml	obj	R_EX_lac__D_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_mal__L_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_nh4_e	-4.765319	optimal	-4.765319	-4.765319
+e_coli_core.xml	obj	R_EX_o2_e	-21.799493	optimal	-21.799493	-21.799493
+e_coli_core.xml	obj	R_EX_pi_e	-3.214895	optimal	-3.214895	-3.214895
+e_coli_core.xml	obj	R_EX_pyr_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_EX_succ_e	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_FBA	7.477382	optimal	7.477382	7.477382
+e_coli_core.xml	obj	R_FBP	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_FORt	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_FORt2	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_FRD7	0.0	optimal	0.0	994.935624
+e_coli_core.xml	obj	R_FRUpts2	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_FUM	5.064376	optimal	5.064376	5.064376
+e_coli_core.xml	obj	R_FUMt2_2	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_G6PDH2r	4.959985	optimal	4.959985	4.959985
+e_coli_core.xml	obj	R_GAPD	16.023526	optimal	16.023526	16.023526
+e_coli_core.xml	obj	R_GLCpts	10.0	optimal	10.0	10.0
+e_coli_core.xml	obj	R_GLNS	0.223462	optimal	0.223462	0.223462
+e_coli_core.xml	obj	R_GLNabc	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_GLUDy	-4.541857	optimal	-4.541857	-4.541857
+e_coli_core.xml	obj	R_GLUN	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_GLUSy	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_GLUt2r	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_GND	4.959985	optimal	4.959985	4.959985
+e_coli_core.xml	obj	R_H2Ot	-29.175827	optimal	-29.175827	-29.175827
+e_coli_core.xml	obj	R_ICDHyr	6.00725	optimal	6.00725	6.00725
+e_coli_core.xml	obj	R_ICL	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_LDH_D	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_MALS	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_MALt2_2	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_MDH	5.064376	optimal	5.064376	5.064376
+e_coli_core.xml	obj	R_ME1	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ME2	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_NADH16	38.53461	optimal	38.53461	38.53461
+e_coli_core.xml	obj	R_NADTRHD	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_NH4t	4.765319	optimal	4.765319	4.765319
+e_coli_core.xml	obj	R_O2t	21.799493	optimal	21.799493	21.799493
+e_coli_core.xml	obj	R_PDH	9.282533	optimal	9.282533	9.282533
+e_coli_core.xml	obj	R_PFK	7.477382	optimal	7.477382	7.477382
+e_coli_core.xml	obj	R_PFL	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_PGI	4.860861	optimal	4.860861	4.860861
+e_coli_core.xml	obj	R_PGK	-16.023526	optimal	-16.023526	-16.023526
+e_coli_core.xml	obj	R_PGL	4.959985	optimal	4.959985	4.959985
+e_coli_core.xml	obj	R_PGM	-14.71614	optimal	-14.71614	-14.71614
+e_coli_core.xml	obj	R_PIt2r	3.214895	optimal	3.214895	3.214895
+e_coli_core.xml	obj	R_PPC	2.504309	optimal	2.504309	2.504309
+e_coli_core.xml	obj	R_PPCK	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_PPS	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_PTAr	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_PYK	1.758177	optimal	1.758177	1.758177
+e_coli_core.xml	obj	R_PYRt2	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_RPE	2.678482	optimal	2.678482	2.678482
+e_coli_core.xml	obj	R_RPI	-2.281503	optimal	-2.281503	-2.281503
+e_coli_core.xml	obj	R_SUCCt2_2	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_SUCCt3	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_SUCDi	5.064376	optimal	5.064376	1000.0
+e_coli_core.xml	obj	R_SUCOAS	-5.064376	optimal	-5.064376	-5.064376
+e_coli_core.xml	obj	R_TALA	1.496984	optimal	1.496984	1.496984
+e_coli_core.xml	obj	R_THD2	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_TKT1	1.496984	optimal	1.496984	1.496984
+e_coli_core.xml	obj	R_TKT2	1.181498	optimal	1.181498	1.181498
+e_coli_core.xml	obj	R_TPI	7.477382	optimal	7.477382	7.477382

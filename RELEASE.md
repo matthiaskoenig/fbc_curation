@@ -1,29 +1,16 @@
-# Release info
-Steps for release are
-## github release
-* github: close and update issues/milestone
-* update version number in develop branch
-* make sure all tests run (`pytest`)
-* add changes to README changelog section
-* github: merge all develop changes to master via pull request
-* github: create release from master branch
+# Release information
 
-## pypi
-* release on [pypi](https://pypi.python.org/pypi/fbc_curation)
-```
-git branch master
-git pull
-rm -rf dist
-# cleanup pycache
-find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
-python setup.py sdist
-twine upload dist/*
-```
+## make release
+* sort imports (`isort src/sbmlsim`)
+* code formating (`black src/sbmlsim`)
+* make sure all tests run (`tox --`)
+* update release notes in `release-notes`
+* bump version (`bumpversion patch` or `bumpversion` minor)
+* `git push --tags` (triggers release)
+* add release-notes for next version
+
 * test installation in virtualenv from pypi
 ```
 mkvirtualenv test --python=python3.7
-(test) pip install fbc_curation
+(test) pip install fbc-curation
 ```
-
-## version bump
-* switch to develop branch and increase version number
