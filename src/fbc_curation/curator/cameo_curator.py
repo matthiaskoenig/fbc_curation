@@ -6,12 +6,13 @@ from typing import Dict
 
 import pandas as pd
 from cameo import __version__ as cameo_version
-from cameo import fba, load_model
+from cameo import fba
 from cameo.flux_analysis.analysis import (
     FluxVariabilityResult,
     flux_variability_analysis,
 )
 from cobra.core import Model
+from cobra.io import read_sbml_model
 
 from fbc_curation.constants import CuratorConstants
 from fbc_curation.curator import Curator
@@ -38,12 +39,12 @@ class CuratorCameo(Curator):
         Curator.__init__(self, model_path=model_path, objective_id=objective_id)
 
     def read_model(self) -> Model:
-        return load_model(str(self.model_path), sanitize=False)
+        return read_sbml_model(str(self.model_path), f_replace={})
 
     def metadata(self) -> Dict:
         """Create metadata dictionary."""
         d = super().metadata()
-        d["solver.name"] = f"cameo (glpk)"
+        d["solver.name"] = "cameo (glpk)"
         d["solver.version"] = f"{cameo_version}"
         return d
 

@@ -31,12 +31,12 @@ class CuratorCobrapy(Curator):
 
     def read_model(self) -> Model:
         """Read the model."""
-        return read_sbml_model(str(self.model_path))
+        return read_sbml_model(str(self.model_path), f_replace={})
 
     def metadata(self) -> Dict:
         """Create metadata dictionary."""
         d = super().metadata()
-        d["solver.name"] = f"cobrapy (glpk)"
+        d["solver.name"] = "cobrapy (glpk)"
         d["solver.version"] = f"{cobra_version}"
         return d
 

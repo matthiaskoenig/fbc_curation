@@ -69,7 +69,7 @@ class CuratorResults:
         self.validate()
 
     def _round(self, x):
-        """Rounds the float and sets small values positive.
+        """Round the float and sets small values positive.
 
         Ensuring positivity removes -0.0, 0.0 changes to files.
         """
@@ -77,7 +77,7 @@ class CuratorResults:
             return x
         else:
             x = round(x, self.num_decimals)
-            if abs(x) < 1E-10:
+            if abs(x) < 1e-10:
                 x = abs(x)
             return x
 

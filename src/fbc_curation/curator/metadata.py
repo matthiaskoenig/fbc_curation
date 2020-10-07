@@ -23,7 +23,7 @@ def create_metadata(path: Path):
 
 
 def md5_for_path(path: Path):
-    """Calculates MD5 of file content."""
+    """Calculate MD5 of file content."""
 
     # Open,close, read file and calculate MD5 on its contents
     with open(path, "rb") as f_check:

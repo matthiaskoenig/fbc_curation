@@ -118,7 +118,7 @@ class Curator:
         A single gene knockout can affect multiple reactions.
         Uses GPR mappings.
         """
-        model = read_sbml_model(str(model_path))  # type: cobra.core.Model
+        model = read_sbml_model(str(model_path), f_replace={})  # type: cobra.core.Model
         if genes is None:
             genes = model.genes
 

@@ -44,20 +44,20 @@ The FVA file `02_fva.tsv` contains six columns with the headers `model`, `object
 Flux variability is calculated with `fraction_of_optimum = 1.0`, i.e. the objective of the model is set to its maximum in secondary optimization (percent of optimum is 100%). The `flux` column stores the reference flux.
 ```
 model	objective	reaction	flux	status	minimum	maximum
-e_coli_core.xml	obj	ACALD	0.0	optimal	0.0	0.0
-e_coli_core.xml	obj	ACALDt	0.0	optimal	0.0	0.0
-e_coli_core.xml	obj	ACKr	0.0	optimal	0.0	0.0
-e_coli_core.xml	obj	ACONTa	6.00725	optimal	6.00725	6.00725
-e_coli_core.xml	obj	ACONTb	6.00725	optimal	6.00725	6.00725
-e_coli_core.xml	obj	ACt2r	0.0	optimal	0.0	0.0
-e_coli_core.xml	obj	ADK1	0.0	optimal	0.0	0.0
-e_coli_core.xml	obj	AKGDH	5.064376	optimal	5.064376	5.064376
-e_coli_core.xml	obj	AKGt2r	0.0	optimal	0.0	0.0
-e_coli_core.xml	obj	ALCD2x	0.0	optimal	0.0	0.0
-e_coli_core.xml	obj	ATPM	8.39	optimal	8.39	8.39
-e_coli_core.xml	obj	ATPS4r	45.51401	optimal	45.51401	45.51401
-e_coli_core.xml	obj	BIOMASS_Ecoli_core_w_GAM	0.873922	optimal	0.873922	0.873922
-e_coli_core.xml	obj	CO2t	-22.809833	optimal	-22.809833	-22.809833
+e_coli_core.xml	obj	R_ACALD	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ACALDt	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ACKr	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ACONTa	6.00725	optimal	6.00725	6.00725
+e_coli_core.xml	obj	R_ACONTb	6.00725	optimal	6.00725	6.00725
+e_coli_core.xml	obj	R_ACt2r	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ADK1	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_AKGDH	5.064376	optimal	5.064376	5.064376
+e_coli_core.xml	obj	R_AKGt2r	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ALCD2x	0.0	optimal	0.0	0.0
+e_coli_core.xml	obj	R_ATPM	8.39	optimal	8.39	8.39
+e_coli_core.xml	obj	R_ATPS4r	45.51401	optimal	45.51401	45.51401
+e_coli_core.xml	obj	R_BIOMASS_Ecoli_core_w_GAM	0.873922	optimal	0.873922	0.873922
+e_coli_core.xml	obj	R_CO2t	-22.809833	optimal	-22.809833	-22.809833
 ...
 ```
 See for instance: [`e_coli_core/02_fva.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/02_fva.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA](https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA)
@@ -67,15 +67,16 @@ The gene deletion file `03_gene_deletion.tsv` contains five columns with the hea
 The `gene` column contains the SBML gene identifiers. The `status` and `value` columns contain the status of the optimization (`optimal` or `infeasible`) and optimal value under the given gene deletion. If the status is `infeasible` the value is empty. The rows are sorted based on gene identifier.
 ```
 model	objective	gene	status	value
-e_coli_core.xml	obj	b0008	optimal	0.873922
-e_coli_core.xml	obj	b0114	optimal	0.796696
-e_coli_core.xml	obj	b0115	optimal	0.796696
-e_coli_core.xml	obj	b0116	optimal	0.782351
-e_coli_core.xml	obj	b0118	optimal	0.873922
-e_coli_core.xml	obj	b0351	optimal	0.873922
+e_coli_core.xml	obj	G_b0008	optimal	0.873922
+e_coli_core.xml	obj	G_b0114	optimal	0.796696
+e_coli_core.xml	obj	G_b0115	optimal	0.796696
+e_coli_core.xml	obj	G_b0116	optimal	0.782351
+e_coli_core.xml	obj	G_b0118	optimal	0.873922
+e_coli_core.xml	obj	G_b0351	optimal	0.873922
+e_coli_core.xml	obj	G_b0356	optimal	0.873922
 ...
-e_coli_core.xml	obj	b2415	infeasible	
-e_coli_core.xml	obj	b2416	infeasible	
+e_coli_core.xml	obj	G_b2415	infeasible	
+e_coli_core.xml	obj	G_b2416	infeasible	
 ...
 ```
 See for instance: [`e_coli_core/03_gene_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/03_gene_deletion.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/deletions.html](https://cobrapy.readthedocs.io/en/latest/deletions.html)
@@ -85,14 +86,14 @@ The reaction deletion file `04_reaction_deletion.tsv` contains five columns with
 The `reaction` column contains the SBML reaction identifiers. The `status` and `value` columns contain the status of the optimization (`optimal` or `infeasible`) and optimal value under the given reaction deletion. If the status is `infeasible` the value is empty. The rows are sorted based on reaction identifier.
 ```
 model	objective	reaction	status	value
-e_coli_core.xml	obj	ACALD	optimal	0.873922
-e_coli_core.xml	obj	ACALDt	optimal	0.873922
-e_coli_core.xml	obj	ACKr	optimal	0.873922
-e_coli_core.xml	obj	ACONTa	optimal	0.0
-e_coli_core.xml	obj	ACONTb	optimal	0.0
-e_coli_core.xml	obj	ACt2r	optimal	0.873922
-e_coli_core.xml	obj	ADK1	optimal	0.873922
-e_coli_core.xml	obj	AKGDH	optimal	0.858307
+e_coli_core.xml	obj	R_ACALD	optimal	0.873922
+e_coli_core.xml	obj	R_ACALDt	optimal	0.873922
+e_coli_core.xml	obj	R_ACKr	optimal	0.873922
+e_coli_core.xml	obj	R_ACONTa	optimal	0.0
+e_coli_core.xml	obj	R_ACONTb	optimal	0.0
+e_coli_core.xml	obj	R_ACt2r	optimal	0.873922
+e_coli_core.xml	obj	R_ADK1	optimal	0.873922
+e_coli_core.xml	obj	R_AKGDH	optimal	0.858307
 ...
 ```
 See for instance: [`e_coli_core/04_reaction_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/04_reaction_deletion.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/deletions.html](https://cobrapy.readthedocs.io/en/latest/deletions.html).
