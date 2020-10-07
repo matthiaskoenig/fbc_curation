@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Usage &mdash; fbc_curation  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Standardized reference files" href="reference_files.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fbc_curation
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#create-reference-files">Create reference files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#compare-existing-reference-files">Compare existing reference files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference_files.html">Standardized reference files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fbc_curation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Usage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/usage.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="create-reference-files">
+<h2>Create reference files<a class="headerlink" href="#create-reference-files" title="Permalink to this headline">¶</a></h2>
+<p>To create FBC curation files for a given SBML model use the <code class="docutils literal notranslate"><span class="pre">fbc_curation</span></code> command line tool. The reference files are created for the provided objective in the model, if no objective is provided the <code class="docutils literal notranslate"><span class="pre">active</span></code> objective or default objective is used.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ fbc_curation
+    __________  ______   ________  ______  ___  ______________  _   __
+   / ____/ __ <span class="o">)</span>/ ____/  / ____/ / / / __ <span class="se">\/</span>   <span class="p">|</span>/_  __/  _/ __ <span class="se">\/</span> <span class="p">|</span> / /
+  / /_  / __  / /      / /   / / / / /_/ / /<span class="p">|</span> <span class="p">|</span> / /  / // / / /  <span class="p">|</span>/ / 
+ / __/ / /_/ / /___   / /___/ /_/ / _, _/ ___ <span class="p">|</span>/ / _/ // /_/ / /<span class="p">|</span>  /  
+/_/   /_____/<span class="se">\_</span>___/   <span class="se">\_</span>___/<span class="se">\_</span>___/_/ <span class="p">|</span>_/_/  <span class="p">|</span>_/_/ /___/<span class="se">\_</span>___/_/ <span class="p">|</span>_/   
+                                                                      
+
+        Version <span class="m">0</span>.1.0 <span class="o">(</span>https://github.com/matthiaskoenig/fbc_curation<span class="o">)</span>
+        Citation https://doi.org/10.5281/zenodo.3708271
+
+Required argument <span class="s1">&#39;--model&#39;</span> missing
+Usage: fbc_curation <span class="o">[</span>options<span class="o">]</span>
+
+Options:
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
+  -m MODEL_PATH, --model<span class="o">=</span>MODEL_PATH
+                        <span class="o">(</span>required<span class="o">)</span> path to SBML model with fbc information
+  -p OUTPUT_PATH, --path<span class="o">=</span>OUTPUT_PATH
+                        <span class="o">(</span>required<span class="o">)</span> directory path to write output files to
+  -c CURATOR, --curator<span class="o">=</span>CURATOR
+                        <span class="o">(</span>optional<span class="o">)</span> curator tool to create reference files:
+                        Select from <span class="o">[</span><span class="s1">&#39;cobrapy&#39;</span>, <span class="s1">&#39;cameo&#39;</span>, <span class="s1">&#39;all&#39;</span><span class="o">]</span>
+  -o OBJECTIVE, --objective<span class="o">=</span>OBJECTIVE
+                        <span class="o">(</span>optional<span class="o">)</span> objective to use in optimization, defaults
+                        to active objective
+  -r REFERENCE_PATH, --reference<span class="o">=</span>REFERENCE_PATH
+                        <span class="o">(</span>optional<span class="o">)</span> directory path to reference output
+                        <span class="o">(</span>comparison is performed<span class="o">)</span>
+</pre></div>
+</div>
+<p>For instance to create the reference files for the <code class="docutils literal notranslate"><span class="pre">e_coli_core.xml</span></code> example use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fbc_curation</span> <span class="o">--</span><span class="n">model</span> <span class="o">./</span><span class="n">fbc_curation</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">e_coli_core</span><span class="o">.</span><span class="n">xml</span> \
+<span class="o">--</span><span class="n">path</span> <span class="o">./</span><span class="n">fbc_curation</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">e_coli_core</span> 
+</pre></div>
+</div>
+<p>This creates the FBC curation files for the <code class="docutils literal notranslate"><span class="pre">model</span></code> in the output <code class="docutils literal notranslate"><span class="pre">path</span></code>.</p>
+<div class="section" id="compare-existing-reference-files">
+<h3>Compare existing reference files<a class="headerlink" href="#compare-existing-reference-files" title="Permalink to this headline">¶</a></h3>
+<p>In addition existing reference files can be compared with the solutions by <code class="docutils literal notranslate"><span class="pre">cobrapy</span></code> and <code class="docutils literal notranslate"><span class="pre">cameo</span></code>. The <code class="docutils literal notranslate"><span class="pre">--reference</span></code> argument can be used to provide the path to the reference files.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curation</span> <span class="o">--</span><span class="n">model</span> <span class="n">examples</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">e_coli_core</span><span class="o">.</span><span class="n">xml</span> \
+<span class="o">--</span><span class="n">path</span> <span class="n">examples</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">e_coli_core</span> \
+<span class="o">--</span><span class="n">reference</span> <span class="o">../</span><span class="n">examples</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">e_coli_core</span><span class="o">/</span><span class="n">cobrapy</span>
+</pre></div>
+</div>
+<p>The comparison results are provided as a matrix for the various reference files with <code class="docutils literal notranslate"><span class="pre">1</span></code> being equal output and <code class="docutils literal notranslate"><span class="pre">0</span></code> if differences exist between the respective reference files. If all matrices are one matrices the results are equal.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">========================================</span>
+<span class="n">Comparison</span> <span class="n">of</span> <span class="n">results</span>
+<span class="o">========================================</span>
+<span class="o">---</span> <span class="n">objective</span> <span class="o">---</span>
+           <span class="n">reference</span>  <span class="n">cobrapy</span>  <span class="n">cameo</span>
+<span class="n">reference</span>          <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="n">cobrapy</span>            <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="n">cameo</span>              <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="o">---</span> <span class="n">fva</span> <span class="o">---</span>
+           <span class="n">reference</span>  <span class="n">cobrapy</span>  <span class="n">cameo</span>
+<span class="n">reference</span>          <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="n">cobrapy</span>            <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="n">cameo</span>              <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="o">---</span> <span class="n">gene_deletion</span> <span class="o">---</span>
+           <span class="n">reference</span>  <span class="n">cobrapy</span>  <span class="n">cameo</span>
+<span class="n">reference</span>          <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="n">cobrapy</span>            <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="n">cameo</span>              <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="o">---</span> <span class="n">reaction_deletion</span> <span class="o">---</span>
+           <span class="n">reference</span>  <span class="n">cobrapy</span>  <span class="n">cameo</span>
+<span class="n">reference</span>          <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="n">cobrapy</span>            <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="n">cameo</span>              <span class="mi">1</span>        <span class="mi">1</span>      <span class="mi">1</span>
+<span class="o">========================================</span>
+<span class="n">Equal</span><span class="p">:</span> <span class="kc">True</span>
+<span class="o">========================================</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="reference_files.html" class="btn btn-neutral float-right" title="Standardized reference files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Matthias König
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

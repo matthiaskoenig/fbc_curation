@@ -205,39 +205,3 @@ pytest
 Matthias König is supported by the Federal Ministry of Education and Research (BMBF, Germany)
 within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054).
 
-## Changelog
-[[^]](https://github.com/matthiaskoenig/fbc_curation#fbc_curation) 
-### v0.1.0
-- result validation against schema
-- second solver implementation (cameo)
-- improved user interface and documentation
-- comparison of results
-- support for reference files
-- bugfixes
-
-### v0.0.6
-- fixed fbc_curation_example bug #11
-- reproducible tolerances for examples
-
-### v0.0.5
-- major refactoring
-- handling solver exceptions
-- improved file format & naming
-- support for additional models
-- minimal support for multiple objective functions
-
-### v0.0.4
-- package data fix & cleanup
-
-### v0.0.3
-- bugfixes
-- example data included in package
-- licenses and references added
-
-### v0.0.2
-- improved documentation
-- commands added
-
-### v0.0.1
-- initial release
-- create first version of files

@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Standardized reference files &mdash; fbc_curation  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fbc_curation
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Standardized reference files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#objective-value">01 Objective value</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#flux-variability-analysis-fva">02 Flux variability analysis (FVA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gene-deletions">03 Gene deletions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reaction-deletions">04 Reaction deletions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fbc_curation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Standardized reference files</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/reference_files.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="standardized-reference-files">
+<h1>Standardized reference files<a class="headerlink" href="#standardized-reference-files" title="Permalink to this headline">¶</a></h1>
+<p>In the following the four created reference files are described and examples provided for the <a class="reference external" href="https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/models/e_coli_core.xml"><code class="docutils literal notranslate"><span class="pre">e_coli_core.xml</span></code></a> model. All output files are tab separated files (TSV) with the first three columns being <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">objective</span></code>, and <code class="docutils literal notranslate"><span class="pre">status</span></code>. The column <code class="docutils literal notranslate"><span class="pre">model</span></code> encodes the SBML model id. The column <code class="docutils literal notranslate"><span class="pre">objective</span></code> encodes the SBML objective id, which is the objective which was optimized in the respective simulation. The column <code class="docutils literal notranslate"><span class="pre">status</span></code> encodes the status of the simulation. The status can be either <code class="docutils literal notranslate"><span class="pre">optimal</span></code> (optimization worked) or <code class="docutils literal notranslate"><span class="pre">infeasible</span></code> (no solution found or problem in simulation).</p>
+<div class="section" id="objective-value">
+<h2>01 Objective value<a class="headerlink" href="#objective-value" title="Permalink to this headline">¶</a></h2>
+<p>The objective value file <code class="docutils literal notranslate"><span class="pre">01_objective.tsv</span></code> contains the four columns with the headers <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">objective</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, and <code class="docutils literal notranslate"><span class="pre">value</span></code>. The <code class="docutils literal notranslate"><span class="pre">value</span></code> is the optimal value of the respective objective function when the model is optimized. If the status is <code class="docutils literal notranslate"><span class="pre">infeasible</span></code>, no value is provided, i.e., the value is empty.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>	<span class="n">objective</span>	<span class="n">status</span>	<span class="n">value</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">optimal</span>	<span class="mf">0.873922</span>
+</pre></div>
+</div>
+<p>For an example file see <a class="reference external" href="https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/01_objective.tsv"><code class="docutils literal notranslate"><span class="pre">e_coli_core/01_objective.tsv</span></code></a>. For more information on how to simulate the FBA see https://cobrapy.readthedocs.io/en/latest/simulating.html.</p>
+</div>
+<div class="section" id="flux-variability-analysis-fva">
+<h2>02 Flux variability analysis (FVA)<a class="headerlink" href="#flux-variability-analysis-fva" title="Permalink to this headline">¶</a></h2>
+<p>The FVA file <code class="docutils literal notranslate"><span class="pre">02_fva.tsv</span></code> contains five columns with the headers <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">objective</span></code>, <code class="docutils literal notranslate"><span class="pre">reaction</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">minimum</span></code> and <code class="docutils literal notranslate"><span class="pre">maximum</span></code>. The <code class="docutils literal notranslate"><span class="pre">reaction</span></code> column stores the SBML reaction id. The <code class="docutils literal notranslate"><span class="pre">minimum</span></code> and <code class="docutils literal notranslate"><span class="pre">maximum</span></code> columns contain the minimum and maximum values of the FVA. The rows are sorted based on the SBML reaction identifier. The <code class="docutils literal notranslate"><span class="pre">status</span></code> contains the status of the optimization (<code class="docutils literal notranslate"><span class="pre">optimal</span></code> or <code class="docutils literal notranslate"><span class="pre">infeasible</span></code>). If the status is <code class="docutils literal notranslate"><span class="pre">infeasible</span></code> the value is empty.
+Flux variability is calculated with <code class="docutils literal notranslate"><span class="pre">fraction_of_optimum</span> <span class="pre">=</span> <span class="pre">1.0</span></code>, i.e. the objective of the model is set to its maximum in secondary optimization.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>	<span class="n">objective</span>	<span class="n">reaction</span>	<span class="n">status</span>	<span class="n">minimum</span>	<span class="n">maximum</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACALD</span>	<span class="n">optimal</span>	<span class="mf">0.0</span>	<span class="mf">0.0</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACALDt</span>	<span class="n">optimal</span>	<span class="mf">0.0</span>	<span class="mf">0.0</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACKr</span>	<span class="n">optimal</span>	<span class="mf">0.0</span>	<span class="mf">0.0</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACONTa</span>	<span class="n">optimal</span>	<span class="mf">6.00725</span>	<span class="mf">6.00725</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACONTb</span>	<span class="n">optimal</span>	<span class="mf">6.00725</span>	<span class="mf">6.00725</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACt2r</span>	<span class="n">optimal</span>	<span class="mf">0.0</span>	<span class="mf">0.0</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ADK1</span>	<span class="n">optimal</span>	<span class="mf">0.0</span>	<span class="mf">0.0</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">AKGDH</span>	<span class="n">optimal</span>	<span class="mf">5.064376</span>	<span class="mf">5.064376</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>See for instance: <a class="reference external" href="https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/02_fva.tsv"><code class="docutils literal notranslate"><span class="pre">e_coli_core/02_fva.tsv</span></code></a>. For more information: https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA</p>
+</div>
+<div class="section" id="gene-deletions">
+<h2>03 Gene deletions<a class="headerlink" href="#gene-deletions" title="Permalink to this headline">¶</a></h2>
+<p>The gene deletion file <code class="docutils literal notranslate"><span class="pre">03_gene_deletion.tsv</span></code> contains five columns with the headers <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">objective</span></code>, <code class="docutils literal notranslate"><span class="pre">gene</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code> and <code class="docutils literal notranslate"><span class="pre">value</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">gene</span></code> column contains the SBML gene identifiers. The <code class="docutils literal notranslate"><span class="pre">status</span></code> and <code class="docutils literal notranslate"><span class="pre">value</span></code> columns contain the status of the optimization (<code class="docutils literal notranslate"><span class="pre">optimal</span></code> or <code class="docutils literal notranslate"><span class="pre">infeasible</span></code>) and optimal value under the given gene deletion. If the status is <code class="docutils literal notranslate"><span class="pre">infeasible</span></code> the value is empty. The rows are sorted based on gene identifier.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>	<span class="n">objective</span>	<span class="n">gene</span>	<span class="n">status</span>	<span class="n">value</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">b0008</span>	<span class="n">optimal</span>	<span class="mf">0.873922</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">b0114</span>	<span class="n">optimal</span>	<span class="mf">0.796696</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">b0115</span>	<span class="n">optimal</span>	<span class="mf">0.796696</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">b0116</span>	<span class="n">optimal</span>	<span class="mf">0.782351</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">b0118</span>	<span class="n">optimal</span>	<span class="mf">0.873922</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">b0351</span>	<span class="n">optimal</span>	<span class="mf">0.873922</span>
+<span class="o">...</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">b2415</span>	<span class="n">infeasible</span>	
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">b2416</span>	<span class="n">infeasible</span>	
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>See for instance: <a class="reference external" href="https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/03_gene_deletion.tsv"><code class="docutils literal notranslate"><span class="pre">e_coli_core/03_gene_deletion.tsv</span></code></a>. For more information: https://cobrapy.readthedocs.io/en/latest/deletions.html</p>
+</div>
+<div class="section" id="reaction-deletions">
+<h2>04 Reaction deletions<a class="headerlink" href="#reaction-deletions" title="Permalink to this headline">¶</a></h2>
+<p>The reaction deletion file <code class="docutils literal notranslate"><span class="pre">04_reaction_deletion.tsv</span></code> contains five columns with the headers <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">objective</span></code>, <code class="docutils literal notranslate"><span class="pre">reaction</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code> and <code class="docutils literal notranslate"><span class="pre">value</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">reaction</span></code> column contains the SBML reaction identifiers. The <code class="docutils literal notranslate"><span class="pre">status</span></code> and <code class="docutils literal notranslate"><span class="pre">value</span></code> columns contain the status of the optimization (<code class="docutils literal notranslate"><span class="pre">optimal</span></code> or <code class="docutils literal notranslate"><span class="pre">infeasible</span></code>) and optimal value under the given reaction deletion. If the status is <code class="docutils literal notranslate"><span class="pre">infeasible</span></code> the value is empty. The rows are sorted based on reaction identifier.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>	<span class="n">objective</span>	<span class="n">reaction</span>	<span class="n">status</span>	<span class="n">value</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACALD</span>	<span class="n">optimal</span>	<span class="mf">0.873922</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACALDt</span>	<span class="n">optimal</span>	<span class="mf">0.873922</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACKr</span>	<span class="n">optimal</span>	<span class="mf">0.873922</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACONTa</span>	<span class="n">optimal</span>	<span class="mf">0.0</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACONTb</span>	<span class="n">optimal</span>	<span class="mf">0.0</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ACt2r</span>	<span class="n">optimal</span>	<span class="mf">0.873922</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">ADK1</span>	<span class="n">optimal</span>	<span class="mf">0.873922</span>
+<span class="n">e_coli_core</span>	<span class="n">obj</span>	<span class="n">AKGDH</span>	<span class="n">optimal</span>	<span class="mf">0.858307</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>See for instance: <a class="reference external" href="https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/04_reaction_deletion.tsv"><code class="docutils literal notranslate"><span class="pre">e_coli_core/04_reaction_deletion.tsv</span></code></a>. For more information: https://cobrapy.readthedocs.io/en/latest/deletions.html</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Matthias König
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
