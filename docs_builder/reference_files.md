@@ -1,5 +1,5 @@
 # Reference files
-In the following the four created reference files and the metadata file are described and examples provided for the [`e_coli_core.xml`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/models/e_coli_core.xml) model. All output files are tab separated files (TSV) with the first three columns being `model`, `objective`, and `status`. The column `model` encodes the SBML model id. The column `objective` encodes the SBML objective id, which is the objective which was optimized in the respective simulation. The column `status` encodes the status of the simulation. The status can be either `optimal` (optimization worked) or `infeasible` (no solution found or problem in simulation).  
+In the following the four created reference files and the metadata file are described and examples provided for the [`e_coli_core.xml`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/models/e_coli_core.xml) model. All output files are tab separated files (TSV) with the first three columns being `model`, `objective`, and `status`. The column `model` encodes the SBML model id. The column `objective` encodes the SBML objective id, which is the objective which was optimized in the respective simulation. The column `status` encodes the status of the simulation. The status can be either `optimal` (optimization worked) or `infeasible` (no solution found or problem in simulation).  
 
 ## Metadata file
 A required metadata file `metadata.json` encodes information about the curation run and the used software and library.
@@ -28,7 +28,7 @@ A concrete example of the metadata is shown below
 }
 ```
 
-For an example file see [`e_coli_core/metadata.json`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/metadata.json).
+For an example file see [`e_coli_core/metadata.json`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/results/e_coli_core/cobrapy/metadata.json).
 
 ## 01 Objective value
 The objective value file `01_objective.tsv` contains the four columns with the headers `model`, `objective`, `status`, and `value`. The `model` column stores the SBML model filename. 
@@ -37,7 +37,7 @@ The `value` is the optimal value of the respective objective function when the m
 model	objective	status	value
 e_coli_core.xml	obj	optimal	0.873922
 ```
-For an example file see [`e_coli_core/01_objective.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/01_objective.tsv). For more information on how to simulate the FBA see [https://cobrapy.readthedocs.io/en/latest/simulating.html](https://cobrapy.readthedocs.io/en/latest/simulating.html).
+For an example file see [`e_coli_core/01_objective.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/results/e_coli_core/cobrapy/01_objective.tsv). For more information on how to simulate the FBA see [https://cobrapy.readthedocs.io/en/latest/simulating.html](https://cobrapy.readthedocs.io/en/latest/simulating.html).
 
 ## 02 Flux variability analysis (FVA)
 The FVA file `02_fva.tsv` contains six columns with the headers `model`, `objective`, `reaction`, `flux`, `status`, `minimum` and `maximum`. The `model` column stores the SBML model filename. The `reaction` column stores the SBML reaction id. The `minimum` and `maximum` columns contain the minimum and maximum values of the FVA. The rows are sorted based on the SBML reaction identifier. The `status` contains the status of the optimization (`optimal` or `infeasible`). If the status is `infeasible` the value is empty.
@@ -60,7 +60,7 @@ e_coli_core.xml	obj	R_BIOMASS_Ecoli_core_w_GAM	0.873922	optimal	0.873922	0.87392
 e_coli_core.xml	obj	R_CO2t	-22.809833	optimal	-22.809833	-22.809833
 ...
 ```
-See for instance: [`e_coli_core/02_fva.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/02_fva.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA](https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA)
+See for instance: [`e_coli_core/02_fva.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/results/e_coli_core/cobrapy/02_fva.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA](https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA)
 
 ## 03 Gene deletions 
 The gene deletion file `03_gene_deletion.tsv` contains five columns with the headers `model`, `objective`, `gene`, `status` and `value`. The `model` column stores the SBML model filename.
@@ -79,7 +79,7 @@ e_coli_core.xml	obj	G_b2415	infeasible
 e_coli_core.xml	obj	G_b2416	infeasible	
 ...
 ```
-See for instance: [`e_coli_core/03_gene_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/03_gene_deletion.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/deletions.html](https://cobrapy.readthedocs.io/en/latest/deletions.html)
+See for instance: [`e_coli_core/03_gene_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/results/e_coli_core/cobrapy/03_gene_deletion.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/deletions.html](https://cobrapy.readthedocs.io/en/latest/deletions.html)
 
 ## 04 Reaction deletions 
 The reaction deletion file `04_reaction_deletion.tsv` contains five columns with the headers `model`, `objective`, `reaction`, `status` and `value`. The `model` column stores the SBML model filename. 
@@ -96,4 +96,4 @@ e_coli_core.xml	obj	R_ADK1	optimal	0.873922
 e_coli_core.xml	obj	R_AKGDH	optimal	0.858307
 ...
 ```
-See for instance: [`e_coli_core/04_reaction_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/examples/results/e_coli_core/cobrapy/04_reaction_deletion.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/deletions.html](https://cobrapy.readthedocs.io/en/latest/deletions.html).
+See for instance: [`e_coli_core/04_reaction_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/results/e_coli_core/cobrapy/04_reaction_deletion.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/deletions.html](https://cobrapy.readthedocs.io/en/latest/deletions.html).
