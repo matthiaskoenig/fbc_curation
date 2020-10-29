@@ -45,7 +45,7 @@ Currently two separate implementations of the reference files are included in th
 * ``cameo`` based on Cameo (Cameo—Computer Aided Metabolic Engineering and Optimization) available from `https://github.com/biosustain/cameo <https://github.com/biosustain/cameo>`_
 
 
-``fbc_curation`` is a python package which can be included in python applications. In addition a command line tool is provided which allows easy usage outside of python.
+``fbc_curation` is a python package which can be included in python applications. In addition a command line tool is provided which allows easy usage outside of python.
 
 The documentation is available on `https://fbc-curation.readthedocs.io <https://fbc-curation.readthedocs.io>`__.
 If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/fbc_curation/issues>`__.
