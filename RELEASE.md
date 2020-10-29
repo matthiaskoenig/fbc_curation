@@ -5,7 +5,7 @@
 * code formating (`black src/sbmlsim`)
 * make sure all tests run (`tox --`)
 * update release notes in `release-notes`
-* bump version (`bumpversion patch` or `bumpversion` minor)
+* bump version (`bumpversion patch` or `bumpversion minor`)
 * `git push --tags` (triggers release)
 * add release-notes for next version
 
