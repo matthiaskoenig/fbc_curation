@@ -176,7 +176,7 @@ class CuratorResults:
         print("=" * 40)
         print(f"Equal: {all_equal}")
         print("=" * 40)
-        return all_equal
+        return bool(all_equal)
 
     @staticmethod
     def analyse_df_differende(df1: pd.DataFrame, df2: pd.DataFrame):

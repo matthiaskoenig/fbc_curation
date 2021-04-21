@@ -113,7 +113,6 @@ class CuratorCobrapy(Curator):
         """
         model = self.read_model()
         df = single_gene_deletion(model, model.genes)
-        print(df)
         return pd.DataFrame(
             {
                 "model": self.model_path.name,
