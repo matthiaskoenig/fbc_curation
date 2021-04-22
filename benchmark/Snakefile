@@ -2,34 +2,31 @@
 Snakemake script for execution of models.
 """
 from snakemake.utils import min_version
-
-# FIXME: get all the files: https://snakemake.readthedocs.io/en/stable/project_info/faq.html?highlight=directory(#how-do-i-run-my-rule-on-all-files-of-a-certain-directory
+import re
+from pprint import pprint
 
 min_version("6.1.2")
 
-MODELS, = glob_wildcards("models/memote-meta-models/bigg/models/{model}.xml.gz")
-print("MODELS", MODELS)
+# Collect all models from all collections
+COLLECTIONS, MODELS, = glob_wildcards("models/memote-meta-models/{collection}/models/{model}.xml.gz")
+# pprint(list(zip(COLLECTIONS, MODELS)))
+print(len(COLLECTIONS), len(MODELS))
 
 # pseudo rule collecting the target files
 rule all:
-  input:  expand("results/bigg/{model}.json", model=MODELS)
+    input:  [f"results/{collection}/{model}.json" for (collection, model) in zip(COLLECTIONS, MODELS)]
 
 rule fbc_curation:
     input:
-        "models/memote-meta-models/bigg/models/{model}.xml.gz"
+        "models/memote-meta-models/{collection}/models/{model}.xml.gz"
         # "models/e_coli_core.xml"
     output:
-        "results/bigg/{model}.json",
-        directory("results/bigg/{model}")
+        "results/{collection}/{model}.json",
+        directory("results/{collection}/{model}")
         # "results/e_coli_core.json",
         # directory("results")
     log:
-        "logs/bigg/{model}.log"
+        "logs/{collection}/{model}.log"
         # "logs/e_coli_core.log"
     script:
         "scripts/run_fbc_curation.py"
-#     run:
-#         for f in input:
-#             with open(output[0], "w") as out:
-#                 out.write("test")
-

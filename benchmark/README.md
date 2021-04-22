@@ -1,6 +1,21 @@
-# Benchmark evaluation
-Use the following models:
+# FROG Benchmark evaluation
+FROG is systematically evaluated on the following model collection
 https://github.com/biosustain/memote-meta-models
+
+We are using version 1 containing overall 10591 models. The FROG analysis is implemented
+as a snakemake workflow allowing clean separation of the individual FROG execution.
+Currently run
+- 88/10591 (~2-3 [hr], 15 cores)
+
+Open issues
+- [ ] package fbc_curation (docker container & conda package) for cluster/reproducibility
+  - [ ] clean logging from individual processes 
+  - [ ] results/overview JSON for statistics (more fine grained); per FROG file; percentages, ....    
+- [ ] deactivate internal parallelization (cobrapy), fix single core & thread (blocking resources)
+- [ ] run on kubernetics/cluster
+- [~] results statistics and plots (interactive results)
+(- [ ] database of results)
+
 
 # snakemake installation
 
