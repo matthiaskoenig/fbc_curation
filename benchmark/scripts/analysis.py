@@ -42,7 +42,7 @@ def process_jsons(results_dir: Path) -> pd.DataFrame:
     print("-" * 80)
 
     # store processed results
-    df.to_csv(results_dir / "analysis.tsv", sep="ţ")
+    df.to_csv(results_dir / "analysis.tsv", sep="\t")
     return df
 
 
@@ -101,6 +101,7 @@ def results_plot(df: pd.DataFrame):
     ax.legend(legend_lines, collections)
 
     plt.show()
+
 
 if __name__ == "__main__":
     results_dir = Path(__file__).parent.parent / "results1"
