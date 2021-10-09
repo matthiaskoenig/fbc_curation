@@ -4,6 +4,8 @@ import os
 import platform
 from pathlib import Path
 
+from pymetadata.console import console
+
 from fbc_curation import __citation__, __software__, __version__
 
 
@@ -44,4 +46,4 @@ if __name__ == "__main__":
 
     ecoli_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
     d = create_metadata(path=ecoli_path)
-    print(d)
+    console.print(d)

@@ -1,14 +1,14 @@
 """Module creates FBC curation files."""
-import logging
 from pathlib import Path
 
-from pyfiglet import Figlet
+from pymetadata import log
+from pymetadata.console import console
 
 from fbc_curation import __citation__, __version__
 from fbc_curation.curator import Curator, CuratorResults
 
 
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 
 def main():
@@ -63,16 +63,20 @@ def main():
         help="(optional) directory path to reference output (comparison is performed)",
     )
 
-    f = Figlet(font="slant")
-    print(f.renderText("FBC CURATION"))
-    print(f"\tVersion {__version__} (https://github.com/matthiaskoenig/fbc_curation)")
-    print(f"\tCitation {__citation__}\n")
+    console.rule(style="white")
+    console.print("\tFBC CURATION")
+    console.print(
+        f"\tVersion {__version__} (https://github.com/matthiaskoenig/fbc_curation)"
+    )
+    console.print(f"\tCitation {__citation__}")
+    console.rule(style="white")
 
     options, args = parser.parse_args()
 
     def _parser_message(text):
-        print(text)
+        console.print(text)
         parser.print_help()
+        console.rule(style="white")
         sys.exit(1)
 
     if not options.model_path:

@@ -1,6 +1,5 @@
 """Curate fbc with cameo."""
 
-import logging
 from pathlib import Path
 from typing import Dict
 
@@ -13,12 +12,13 @@ from cameo.flux_analysis.analysis import (
 )
 from cobra.core import Model
 from cobra.io import read_sbml_model
+from pymetadata import log
 
 from fbc_curation.constants import CuratorConstants
 from fbc_curation.curator import Curator
 
 
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 
 class CuratorCameo(Curator):

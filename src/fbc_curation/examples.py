@@ -2,6 +2,8 @@
 from pathlib import Path
 from typing import Dict
 
+from pymetadata.console import console
+
 from fbc_curation import EXAMPLE_PATH
 from fbc_curation.curator import Curator, CuratorResults
 from fbc_curation.curator.cameo_curator import CuratorCameo
@@ -38,9 +40,7 @@ def example_iAB_AMO1410_SARS(results_path: Path) -> Dict:
 
 
 def _run_example(model_path: Path, results_path: Path) -> Dict:
-    print("#" * 80)
-    print(model_path)
-    print("#" * 80)
+    console.rule(str(model_path))
     obj_info = Curator.read_objective_information(model_path)
 
     curator_keys = ["cobrapy", "cameo"]
@@ -65,7 +65,7 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
         "valid": valid,
         "equal": equal,
     }
-    print(info)
+    console.print(info)
     return info
 
 

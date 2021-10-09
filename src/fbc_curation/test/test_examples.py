@@ -29,6 +29,7 @@ def test_e_coli_core(tmp_path):
     _check_example_results(res)
 
 
+@pytest.mark.skip(reason="Reduce runtime")
 def test_iJR904(tmp_path):
     """Test fbc_curation."""
     res = examples.example_iJR904(tmp_path)
@@ -36,7 +37,7 @@ def test_iJR904(tmp_path):
     _check_example_results(res)
 
 
-@pytest.mark.skip(reason="Failing test")
+@pytest.mark.skip(reason="reduce runtime")
 def test_iAB_AMO1410_SARS(tmp_path):
     """Test fbc_curation."""
     res = examples.example_iAB_AMO1410_SARS(tmp_path)

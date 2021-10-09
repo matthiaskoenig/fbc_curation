@@ -2,9 +2,9 @@
   "software.name": "fbc_curation",
   "software.version": "0.1.6",
   "software.url": "https://doi.org/10.5281/zenodo.3708271",
-  "environment": "posix, Linux, 5.11.0-36-generic",
+  "environment": "posix, Linux, 5.11.0-37-generic",
   "model.filename": "e_coli_core.xml",
   "model.md5": "4574760460afe9e1b3388dc15f354706",
   "solver.name": "cameo (glpk)",
-  "solver.version": "0.12.0"
+  "solver.version": "0.13.0+9.g286ea97"
 }

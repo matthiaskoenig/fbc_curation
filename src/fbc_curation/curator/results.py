@@ -1,16 +1,17 @@
 """Manage FBC curation results."""
 import json
-import logging
 from pathlib import Path
 from typing import Dict, List
 
 import numpy as np
 import pandas as pd
+from pymetadata import log
+from pymetadata.console import console
 
 from fbc_curation.constants import CuratorConstants
 
 
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 
 class CuratorResults:
@@ -103,7 +104,7 @@ class CuratorResults:
                 [self.objective, self.fva, self.gene_deletion, self.reaction_deletion],
             )
         ).items():
-            print(f"-> {path_out / filename}")
+            console.print(f"-> {path_out / filename}")
             df.to_csv(path_out / filename, sep="\t", index=False)
             # df.to_json(path_out / filename, sep="\t", index=False)
 
@@ -143,9 +144,7 @@ class CuratorResults:
         num_res = len(curator_results)
         # only comparing comparison between two data frames
 
-        print("=" * 40)
-        print("Comparison of results")
-        print("=" * 40)
+        console.rule("Comparison of results", style="white", align="left")
         all_equal = True
 
         for key in CuratorConstants.KEYS:
@@ -161,28 +160,30 @@ class CuratorResults:
                     mat_equal[p, q] = equal
 
                     if equal == 0:
-                        print(f"difference: '{curator_keys[p]}' vs '{curator_keys[q]}'")
+                        console.print(
+                            f"difference: '{curator_keys[p]}' vs '{curator_keys[q]}'"
+                        )
                         CuratorResults.analyse_df_differende(df1, df2)
 
             df_equal = pd.DataFrame(
                 mat_equal, columns=list(keys), index=list(keys), dtype=int
             )
-            print(f"--- {key} ---")
-            print(df_equal)
+            console.print(f"--- {key} ---")
+            console.print(df_equal)
             all_equal = (
                 all_equal and np.sum(np.sum(df_equal.values)) == num_res * num_res
             )
 
-        print("=" * 40)
-        print(f"Equal: {all_equal}")
-        print("=" * 40)
+        console.rule(style="white")
+        console.print(f"Equal: {all_equal}")
+        console.rule(style="white")
         return bool(all_equal)
 
     @staticmethod
     def analyse_df_differende(df1: pd.DataFrame, df2: pd.DataFrame):
         """Analyse DataFrame difference."""
         df_diff = pd.concat([df1, df2]).drop_duplicates(keep=False)
-        print(df_diff)
+        console.print(df_diff)
 
     def validate(self) -> bool:
         """Validate results."""

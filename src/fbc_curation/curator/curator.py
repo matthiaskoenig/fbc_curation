@@ -1,5 +1,4 @@
 """Base class for all FBC curators."""
-import logging
 from collections import defaultdict, namedtuple
 from pathlib import Path
 from typing import Dict, List
@@ -8,6 +7,8 @@ import cobra
 import libsbml
 import pandas as pd
 from cobra.io import read_sbml_model
+from pymetadata import log
+from pymetadata.console import console
 
 from fbc_curation.curator.metadata import create_metadata
 from fbc_curation.curator.results import CuratorResults
@@ -17,7 +18,7 @@ ObjectiveInformation = namedtuple(
     "ObjectiveInformation", "active_objective objective_ids"
 )
 
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 
 class Curator:
@@ -79,7 +80,7 @@ class Curator:
     def run(self) -> CuratorResults:
         """Run the curator and stores the results."""
 
-        print("-" * 80)
+        console.rule("CuratorResults", style="white")
         self._print_header(f"{self.__class__.__name__}: metadata")
         metadata = self.metadata()
 
@@ -106,7 +107,7 @@ class Curator:
 
     @staticmethod
     def _print_header(title):
-        print(f"* {title}")
+        console.print(f"* {title}")
 
     @staticmethod
     def knockout_reactions_for_genes(
@@ -138,8 +139,6 @@ class Curator:
                 if gene_essential:
                     knockout_reactions[gene.id].append(reaction.id)
 
-        # from pprint import pprint
-        # pprint(knockout_reactions)
         return knockout_reactions
 
     @staticmethod
