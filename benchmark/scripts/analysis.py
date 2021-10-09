@@ -1,15 +1,19 @@
 from pathlib import Path
 from pprint import pprint
+
+import bottle as bottle
 import pandas as pd
 import json
 import re
+
+import altair as alt
+
+alt.renderers.enable('mimetype')
 
 from matplotlib import pyplot as plt
 import seaborn as sns
 from matplotlib.gridspec import GridSpec
 from matplotlib.lines import Line2D
-
-
 
 
 def process_jsons(results_dir: Path) -> pd.DataFrame:
@@ -46,7 +50,7 @@ def process_jsons(results_dir: Path) -> pd.DataFrame:
     return df
 
 
-def results_plot(df: pd.DataFrame):
+def plot_results_matplotlib(df: pd.DataFrame):
     """Create overview plot of results."""
     # ax = sns.barplot(x="collection", y="status", data=df)
     # plt.show()
@@ -82,6 +86,9 @@ def results_plot(df: pd.DataFrame):
     legend_lines = [Line2D([0], [0], color=colors[c], marker="s", linestyle="") for c in
                     collections]
 
+    # ax1: plt.Axes = fig.add_subplot(gs[1, 1])
+    # sns.catplot(x="collection", y="success", data=df, ax=ax1)
+
     # execution time
     ax: plt.Axes = fig.add_subplot(gs[2, 0:2])
     for collection in collections:
@@ -103,9 +110,47 @@ def results_plot(df: pd.DataFrame):
     plt.show()
 
 
+def plot_results_altair(df: pd.DataFrame):
+    """Plot results with altair."""
+    print("creating altair plot")
+    alt.Chart(df).mark_circle(size=60).encode(
+        x='index',
+        y='time',
+        color='collection',
+        tooltip=['collection', 'mid', 'valid1', 'valid2']
+    ).interactive()
+
+# -----------------------
+
+from flask import Flask
+from flask import render_template
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello_world():
+    return render_template('analysis.html', plot="<b>plot 1</b>")
+
+
+# Flask
+# altair
+# lifereload
+# bottle
+
 if __name__ == "__main__":
+    from livereload import Server, shell
+
     results_dir = Path(__file__).parent.parent / "results1"
     df = process_jsons(results_dir=results_dir)
+    # plot_results_matplotlib(df)
+    plot_results_altair(df)
 
+    app.debug = True
+    # app.jinja_env.auto_reload = True
+    # app.config['TEMPLATES_AUTO_RELOAD'] = True
+    # app.run('0.0.0.0', 8085, debug=True, extra_files=["templates/analysis.html"])
+    server = Server(app.wsgi_app)
+    server.watch()
+    # server.serve()
 
 

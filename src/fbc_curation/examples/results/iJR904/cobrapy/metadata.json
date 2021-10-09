@@ -3,8 +3,8 @@
   "software.version": "0.1.6",
   "software.url": "https://doi.org/10.5281/zenodo.3708271",
   "environment": "posix, Linux, 5.11.0-36-generic",
-  "model.filename": "e_coli_core.xml",
-  "model.md5": "4574760460afe9e1b3388dc15f354706",
+  "model.filename": "iJR904.xml.gz",
+  "model.md5": "58bfd81ac3cf3f52ff27e4cf9b6780de",
   "solver.name": "cobrapy (glpk)",
   "solver.version": "0.20.0"
 }
