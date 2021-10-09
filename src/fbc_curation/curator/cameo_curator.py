@@ -87,6 +87,7 @@ class CuratorCameo(Curator):
                     "status": CuratorConstants.STATUS_OPTIMAL,
                     "minimum": df.lower_bound,
                     "maximum": df.upper_bound,
+                    "fraction_optimum": 1.0,
                 }
             )
         except Exception as e:
@@ -100,6 +101,7 @@ class CuratorCameo(Curator):
                     "status": CuratorConstants.STATUS_INFEASIBLE,
                     "minimum": CuratorConstants.VALUE_INFEASIBLE,
                     "maximum": CuratorConstants.VALUE_INFEASIBLE,
+                    "fraction_optimum": 1.0,
                 }
             )
         return df_out

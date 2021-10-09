@@ -40,6 +40,7 @@ class CuratorConstants:
         "status",
         "minimum",
         "maximum",
+        "fraction_optimum",
     ]
     GENE_DELETION_FIELDS = ["model", "objective", "gene", "status", "value"]
     REACTION_DELETION_FIELDS = ["model", "objective", "reaction", "status", "value"]

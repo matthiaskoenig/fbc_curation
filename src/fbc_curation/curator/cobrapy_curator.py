@@ -87,6 +87,7 @@ class CuratorCobrapy(Curator):
                     "status": CuratorConstants.STATUS_OPTIMAL,
                     "minimum": df.minimum,
                     "maximum": df.maximum,
+                    "fraction_optimum": 1.0,
                 }
             )
         except OptimizationError as e:
@@ -100,6 +101,7 @@ class CuratorCobrapy(Curator):
                     "status": CuratorConstants.STATUS_INFEASIBLE,
                     "minimum": CuratorConstants.VALUE_INFEASIBLE,
                     "maximum": CuratorConstants.VALUE_INFEASIBLE,
+                    "fraction_optimum": 1.0,
                 }
             )
 

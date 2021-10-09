@@ -104,7 +104,7 @@ class CuratorResults:
                 [self.objective, self.fva, self.gene_deletion, self.reaction_deletion],
             )
         ).items():
-            console.print(f"-> {path_out / filename}")
+            logger.debug(f"-> {path_out / filename}")
             df.to_csv(path_out / filename, sep="\t", index=False)
             # df.to_json(path_out / filename, sep="\t", index=False)
 
@@ -163,7 +163,7 @@ class CuratorResults:
                         console.print(
                             f"difference: '{curator_keys[p]}' vs '{curator_keys[q]}'"
                         )
-                        CuratorResults.analyse_df_differende(df1, df2)
+                        CuratorResults.analyse_df_difference(df1, df2)
 
             df_equal = pd.DataFrame(
                 mat_equal, columns=list(keys), index=list(keys), dtype=int
@@ -180,7 +180,7 @@ class CuratorResults:
         return bool(all_equal)
 
     @staticmethod
-    def analyse_df_differende(df1: pd.DataFrame, df2: pd.DataFrame):
+    def analyse_df_difference(df1: pd.DataFrame, df2: pd.DataFrame):
         """Analyse DataFrame difference."""
         df_diff = pd.concat([df1, df2]).drop_duplicates(keep=False)
         console.print(df_diff)
