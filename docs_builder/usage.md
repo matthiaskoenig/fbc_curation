@@ -41,7 +41,7 @@ fbc_curation --model ./fbc_curation/examples/models/e_coli_core.xml \
 This creates the FBC curation files for the `model` in the output `path`.
 
 ## Compare existing reference files
-In addition existing reference files can be compared with the solutions by `cobrapy` and `cameo`. The `--reference` argument can be used to provide the path to the reference files.
+In addition, existing reference files can be compared with the solutions by `cobrapy` and `cameo`. The `--reference` argument can be used to provide the path to the reference files.
 ```
 fbc_curation --model ./fbc_curation/examples/models/e_coli_core.xml \
 --path ./fbc_curation/examples/results/e_coli_core 

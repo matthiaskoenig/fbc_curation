@@ -11,6 +11,6 @@
 
 * test installation in virtualenv from pypi
 ```
-mkvirtualenv test --python=python3.7
+mkvirtualenv test --python=python3.8
 (test) pip install fbc_curation
 ```

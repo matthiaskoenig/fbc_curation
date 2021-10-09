@@ -1,0 +1,24 @@
+{
+  "upload_type": "software",
+  "title": "fbc_curation: Reproducibility of constraint-based models",
+  "creators": [
+    {
+      "orcid": "0000-0003-1725-179X",
+      "affiliation": "Humboldt-University Berlin, Institute for Theoretical Biology, Berlin",
+      "name": "König, Matthias"
+    }
+  ],
+  "description": "<p><code>fbc_curation</code> is a collection of python utilities for the reproducibility of constraint-based models in <a href=\"http://www.sbml.org\">SBML</a></p>\n<p>The documentation is available on <a href=\"https://fbc-curation.readthedocs.io\">https://sbmlutils.readthedocs.io</a></p>\n<p>If you have any questions or issues please <a href=\"https://github.com/matthiaskoenig/fbc_curation/issues\">open an issue</a></p>\n<h2>Funding</h2><p>Matthias König is supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (<strong>LiSyM</strong>, grant number 031L0054) and by the German Research Foundation (DFG) within the Research Unit Programme FOR 5151 <strong><a href=\"https://qualiperf.de\">QuaLiPerF</a></strong> (Quantifying Liver Perfusion-Function Relationship in Complex Resection - A Systems Medicine Approach)\" by grant number 436883643.</p>",
+  "access_right": "open",
+  "license": "LGPL-3.0",
+  "keywords": [
+    "SBML",
+    "constraint-based modeling",
+    "standardization",
+    "COMBINE",
+    "FBC"
+  ],
+  "contributors": [],
+  "communities": [],
+  "grants": []
+}
