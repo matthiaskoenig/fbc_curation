@@ -3,38 +3,65 @@ import hashlib
 import os
 import platform
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, Field
 from pymetadata.console import console
 
+from datetime import date
+
+
+class Creator(BaseModel):
+    """Creator/curator in ModelHistory and other COMBINE formats.
+
+    Extended by optional orcid.
+    """
+
+    familyName: str
+    givenName: str
+    email: Optional[str]
+    organization: Optional[str]
+    site: Optional[str]
+    orcid: Optional[str]
+
+
+class Tool(BaseModel):
+    name: str = Field(description="Name of tool/software/library.")
+    version: Optional[str] = Field(description="Version of tool/software/library.")
+    url: Optional[str] = Field(description="URL of tool/software/library.")
+
 
 class FROGMetaData(BaseModel):
     """FROG metadata."""
-    curator_name: str = Field(
-        alias="curator.name",
-        description="Name of curation tool used to create the FROG report.",
-    )
-    curator_version: Optional[str] = Field(
-        alias="curator.version",
-        description="Version of curation tool used to create the FROG report.",
-    )
-    curator_url: Optional[str] = Field(
-        alias="curator.url",
-        description="URL of curation tool used to create the FROG report.",
-    )
-    software_name: str = Field(alias="software.name")
-    software_version: str = Field(alias="software.version")
-    software_url: Optional[str] = Field(alias="software.url")
 
-    solver_name: str = Field(alias="solver.name")
-    solver_version: Optional[str] = Field(alias="solver.version")
-    solver_url: Optional[str] = Field(alias="solver.url")
-
+    frog_date: date = Field(
+        alias="frog.date",
+        description="Curators which executed the FROG analysis."
+    )
+    frog_version: str = Field(
+        title="FROG version",
+        alias="frog.version",
+        description="Version of FROG according to schema.",
+    )
+    frog_curators: List[Creator] = Field(
+        alias="frog.curators",
+        description="Curators which executed the FROG analysis."
+    )
+    frog_software: Tool = Field(
+        alias="frog.software",
+        description="Software used to run FROG",
+    )
+    software: Tool = Field(
+        description="Software used to run FBC."
+    )
+    solver: Tool = Field(
+        description="Solver used to solve LP problem (e.g. CPLEX, GUROBI, GLPK)."
+    )
     model_filename: str = Field(alias="model.filename")
     model_md5: str = Field(alias="model.md5")
-
-    environment: str
+    environment: Optional[str] = Field(
+        description="Execution environment such as Linux."
+    )
 
     class Config:
         allow_population_by_field_name = True
@@ -61,20 +88,37 @@ if __name__ == "__main__":
 
     ecoli_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
     metadata = FROGMetaData(
-        curator_name=__software__,
-        curator_version=__version__,
-        curator_url=__citation__,
-        software_name="cobrapy",
-        software_version=cobra_version,
-        software_url="https://github.com/opencobra/cobrapy",
+        frog_date=date(year=2021, month=10, day=11),
+        frog_version="1.0",
+        frog_curators=[
+            Creator(
+                givenName="Matthias",
+                familyName="König",
+                organization="Humboldt University Berlin",
+                site="https://livermetabolism.com",
+                orcid="0000-0003-1725-179X",
+            )
+        ],
+        frog_software=Tool(
+            name=__software__,
+            version=__version__,
+            url=__citation__,
+        ),
+        software=Tool(
+            name="cobrapy",
+            version=cobra_version,
+            url="https://github.com/opencobra/cobrapy",
+        ),
+        solver=Tool(
+            name="glpk",
+            version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}",
+            url=None
+        ),
         environment=f"{os.name}, {platform.system()}, {platform.release()}",
         model_filename=ecoli_path.name,
         model_md5=FROGMetaData.md5_for_path(ecoli_path),
-        solver_name="glpk",
-        solver_version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}",
     )
 
     console.print(metadata)
     console.print(metadata.dict(by_alias=True))
-
     console.print(FROGMetaData.schema_json(indent=2))
