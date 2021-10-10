@@ -26,7 +26,7 @@ from fbc_curation import EXAMPLE_PATH
 logger = log.get_logger(__name__)
 
 api = FastAPI(
-    title="frog-analysis",
+    title="FROG REST API",
     description="API for running FROG analysis",
     version="0.1.0",
     terms_of_service="https://github.com/matthiaskoenig/fbc_curation/blob/develop/privacy_notice.md",
@@ -41,13 +41,14 @@ api = FastAPI(
     },
     openapi_tags=[
         {
+            "name": "frog",
+            "description": "Create FROG report.",
+        },
+        {
             "name": "examples",
             "description": "Manage and query examples.",
         },
-        {
-            "name": "frog",
-            "description": "Create report data.",
-        },
+
     ],
 )
 
@@ -96,32 +97,22 @@ example_items: Dict[str, Example] = {
 }
 
 
-@api.get("/api/examples", tags=["examples"])
-def examples() -> Dict[Any, Any]:
-    """Get FROG examples."""
+@api.get("/api/url", tags=["frog"])
+def frog_from_url(url: str) -> Dict[Any, Any]:
+    """Get JSON FROG via URL."""
     try:
-        example: Example
-        return {"examples": [example.dict() for example in example_items.values()]}
+        response = requests.get(url)
+        response.raise_for_status()
+
+        with tempfile.TemporaryDirectory() as f_tmp:
+            path = Path(f_tmp) / "file"
+            with open(path, "w") as f:
+                f.write(response.text)
+
+            return json_for_omex(path)
 
     except Exception as e:
-        return _handle_error(e)
-
-
-@api.get("/api/examples/{example_id}", tags=["examples"])
-def example(example_id: str) -> Dict[Any, Any]:
-    """Get specific FROG example."""
-    try:
-        example: Optional[Example] = example_items.get(example_id, None)
-        content: Dict
-        if example:
-            source: Path = example.file  # type: ignore
-            content = json_for_omex(omex_path=source)
-        else:
-            content = {"error": f"example for id does not exist '{example_id}'"}
-
-        return content
-    except Exception as e:
-        return _handle_error(e)
+        return _handle_error(e, info={"url": url})
 
 
 @api.post("/api/file", tags=["frog"])
@@ -140,24 +131,6 @@ async def frog_from_file(request: Request) -> Dict[Any, Any]:
 
     except Exception as e:
         return _handle_error(e, info={})
-
-
-@api.get("/api/url", tags=["frog"])
-def frog_from_url(url: str) -> Dict[Any, Any]:
-    """Get JSON FROG via URL."""
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-
-        with tempfile.TemporaryDirectory() as f_tmp:
-            path = Path(f_tmp) / "file"
-            with open(path, "w") as f:
-                f.write(response.text)
-
-            return json_for_omex(path)
-
-    except Exception as e:
-        return _handle_error(e, info={"url": url})
 
 
 @api.post("/api/content", tags=["frog"])
@@ -263,6 +236,33 @@ def _handle_error(e: Exception, info: Optional[Dict] = None) -> Dict[Any, Any]:
 
     return res
 
+
+@api.get("/api/examples", tags=["examples"])
+def examples() -> Dict[Any, Any]:
+    """Get FROG examples."""
+    try:
+        example: Example
+        return {"examples": [example.dict() for example in example_items.values()]}
+
+    except Exception as e:
+        return _handle_error(e)
+
+
+@api.get("/api/examples/{example_id}", tags=["examples"])
+def example(example_id: str) -> Dict[Any, Any]:
+    """Get specific FROG example."""
+    try:
+        example: Optional[Example] = example_items.get(example_id, None)
+        content: Dict
+        if example:
+            source: Path = example.file  # type: ignore
+            content = json_for_omex(omex_path=source)
+        else:
+            content = {"error": f"example for id does not exist '{example_id}'"}
+
+        return content
+    except Exception as e:
+        return _handle_error(e)
 
 if __name__ == "__main__":
     # http://localhost:1555/api

@@ -36,6 +36,11 @@ export default defineComponent({
                     icon: "pi pi-fw pi-home",
                     to: "/",
                 },
+                {
+                    label: "REST API",
+                    icon: "pi pi-fw pi-sitemap",
+                    url: "http://localhost:1555/docs",
+                },
                 // {
                 //     label: "Examples",
                 //     icon: "pi pi-fw pi-list",
