@@ -1,8 +1,9 @@
-"""API for the sbmlreport web service.
+"""API for the frogrun web service.
 
-This provides basic functionality of
-parsing the model and returning the JSON representation based on fastAPI.
+This provides basic functionality of running the model
+and returning the JSON representation based on fastAPI.
 """
+
 import tempfile
 import time
 import traceback
@@ -14,21 +15,19 @@ import requests
 import uvicorn
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from pymetadata.core.annotation import RDFAnnotation, RDFAnnotationData
-from pymetadata.identifiers.miriam import BQB
+
+from pydantic import BaseModel, FilePath
+
 from pymetadata.omex import EntryFormat, Manifest, ManifestEntry, Omex
-
-from sbmlutils import log
-from sbmlutils.console import console
-from sbmlutils.report.api_examples import ExampleMetaData, examples_info
-from sbmlutils.report.sbmlinfo import SBMLDocumentInfo
-
+from pymetadata import log
+from pymetadata.console import console
+from fbc_curation import EXAMPLE_PATH
 
 logger = log.get_logger(__name__)
 
 api = FastAPI(
-    title="fbc_curation",
-    description="fbc_curation API",
+    title="frog-analysis",
+    description="API for running FROG analysis",
     version="0.1.0",
     terms_of_service="https://github.com/matthiaskoenig/fbc_curation/blob/develop/privacy_notice.md",
     contact={
@@ -46,11 +45,7 @@ api = FastAPI(
             "description": "Manage and query examples.",
         },
         {
-            "name": "metadata",
-            "description": "Manage and query metadata.",
-        },
-        {
-            "name": "reports",
+            "name": "frog",
             "description": "Create report data.",
         },
     ],
@@ -74,12 +69,39 @@ api.add_middleware(
 )
 
 
+class Example(BaseModel):
+    """Metadata for example model on sbml4humans."""
+
+    id: str
+    file: FilePath
+    description: Optional[str] = None
+
+
+example_items: Dict[str, Example] = {
+    "e_coli_core": Example(
+        id="e_coli_core",
+        file=EXAMPLE_PATH / "models" / "e_coli_core.xml",
+        description="E.coli core model from BiGG database."
+    ),
+    "iAB_AMO1410_SARS-CoV-2": Example(
+        id="iAB_AMO1410_SARS-CoV-2",
+        file=EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml",
+        description="iAB_AMO1410_SARS-CoV-2 model."
+    ),
+    "iJR904": Example(
+        id="iJR904",
+        file=EXAMPLE_PATH / "models" / "iJR904.xml.gz",
+        description="iJR904 model from BiGG database."
+    )
+}
+
+
 @api.get("/api/examples", tags=["examples"])
 def examples() -> Dict[Any, Any]:
-    """Get examples for reports."""
+    """Get FROG examples."""
     try:
-        example: ExampleMetaData
-        return {"examples": [example.dict() for example in examples_info.values()]}
+        example: Example
+        return {"examples": [example.dict() for example in example_items.values()]}
 
     except Exception as e:
         return _handle_error(e)
@@ -87,9 +109,9 @@ def examples() -> Dict[Any, Any]:
 
 @api.get("/api/examples/{example_id}", tags=["examples"])
 def example(example_id: str) -> Dict[Any, Any]:
-    """Get specific example."""
+    """Get specific FROG example."""
     try:
-        example: Optional[ExampleMetaData] = examples_info.get(example_id, None)
+        example: Optional[Example] = example_items.get(example_id, None)
         content: Dict
         if example:
             source: Path = example.file  # type: ignore
@@ -102,15 +124,13 @@ def example(example_id: str) -> Dict[Any, Any]:
         return _handle_error(e)
 
 
-@api.post("/api/file", tags=["reports"])
-async def report_from_file(request: Request) -> Dict[Any, Any]:
-    """Upload file and return JSON report."""
+@api.post("/api/file", tags=["frog"])
+async def frog_from_file(request: Request) -> Dict[Any, Any]:
+    """Upload file and return JSON FROG."""
     try:
         file_data = await request.form()
         file_content = await file_data["source"].read()  # type: ignore
 
-        # write in file; check if SBML; gzip SBML or OMEX,
-        # TODO: implement `is_omex` function
         with tempfile.TemporaryDirectory() as tmp_dir:
             path = Path(tmp_dir) / "file"
             with open(path) as f:
@@ -122,9 +142,9 @@ async def report_from_file(request: Request) -> Dict[Any, Any]:
         return _handle_error(e, info={})
 
 
-@api.get("/api/url", tags=["reports"])
-def report_from_url(url: str) -> Dict[Any, Any]:
-    """Get JSON report via URL."""
+@api.get("/api/url", tags=["frog"])
+def frog_from_url(url: str) -> Dict[Any, Any]:
+    """Get JSON FROG via URL."""
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -140,15 +160,16 @@ def report_from_url(url: str) -> Dict[Any, Any]:
         return _handle_error(e, info={"url": url})
 
 
-@api.post("/api/content", tags=["reports"])
-async def get_report_from_content(request: Request) -> Dict[Any, Any]:
-    """Get JSON report from file contents."""
+@api.post("/api/content", tags=["frog"])
+async def frog_from_content(request: Request) -> Dict[Any, Any]:
+    """Get JSON FROG from file contents."""
 
-    file_content: Optional[str] = None
+    file_content: Optional[str]
     try:
         file_content_bytes: bytes = await request.body()
         file_content = file_content_bytes.decode("utf-8")
 
+        # FIXME: get/use name
         with tempfile.TemporaryDirectory() as f_tmp:
             path = Path(f_tmp) / "file"
             with open(path, "w") as f:
@@ -161,7 +182,7 @@ async def get_report_from_content(request: Request) -> Dict[Any, Any]:
 
 
 def json_for_omex(omex_path: Path) -> Dict[str, Any]:
-    """Create json for omex path.
+    """Create FROG JSON for omex path.
 
     Path can be either Omex or an SBML file.
     """
@@ -179,14 +200,14 @@ def json_for_omex(omex_path: Path) -> Dict[str, Any]:
             ),
         )
 
-    content = {"uid": uid, "manifest": omex.manifest.dict(), "reports": {}}
+    content = {"uid": uid, "manifest": omex.manifest.dict(), "frogs": {}}
 
-    # Add report JSON for all SBML files
+    # Add FROG JSON for all SBML files
     entry: ManifestEntry
     for entry in omex.manifest.entries:
         if entry.is_sbml():
             sbml_path: Path = omex.get_path(entry.location)
-            content["reports"][entry.location] = json_for_sbml(  # type: ignore
+            content["frogs"][entry.location] = json_for_sbml(  # type: ignore
                 uid=uid, source=sbml_path
             )
 
@@ -194,7 +215,7 @@ def json_for_omex(omex_path: Path) -> Dict[str, Any]:
 
 
 def json_for_sbml(uid: str, source: Union[Path, str, bytes]) -> Dict:
-    """Create JSON content for given SBML source.
+    """Create FROG JSON content for given SBML source.
 
     Source is either path to SBML file or SBML string.
     """
@@ -203,23 +224,25 @@ def json_for_sbml(uid: str, source: Union[Path, str, bytes]) -> Dict:
         source = source.decode("utf-8")
 
     time_start = time.time()
-    info = SBMLDocumentInfo.from_sbml(source=source)
+    frog_json = frog_json_for_sbml(source=source)
     time_elapsed = round(time.time() - time_start, 3)
 
     debug = False
     if debug:
-        console.rule("Creating JSON content")
-        console.print(info.info)
+        console.rule("Creating JSON FROG")
+        console.print(frog_json)
         console.rule()
 
     logger.info(f"JSON created for '{uid}' in '{time_elapsed}'")
 
-    return {
-        "report": info.info,
-        "debug": {
-            "jsonReportTime": f"{time_elapsed} [s]",
-        },
-    }
+    return frog_json
+
+
+def frog_json_for_sbml(source: Union[Path, str]) -> Dict:
+    """Read model info from SBML."""
+    # doc: libsbml.SBMLDocument = read_sbml(source)
+    # return SBMLDocumentInfo(doc=doc)
+    return {"frog": {"frog": 1}}
 
 
 def _handle_error(e: Exception, info: Optional[Dict] = None) -> Dict[Any, Any]:
@@ -241,30 +264,14 @@ def _handle_error(e: Exception, info: Optional[Dict] = None) -> Dict[Any, Any]:
     return res
 
 
-@api.get("/api/annotation_resource", tags=["metadata"])
-def get_annotation_resource(resource: str) -> Dict[Any, Any]:
-    """Get information for annotation_resource.
-
-    Used to resolve annotation information.
-
-    :param resource: unique identifier of resource (url or miriam urn)
-    :return: Response
-    """
-    try:
-        annotation = RDFAnnotation(qualifier=BQB.IS, resource=resource)
-        data = RDFAnnotationData(annotation=annotation)
-        return data.to_dict()  # type: ignore
-
-    except Exception as e:
-        return _handle_error(e)
-
-
 if __name__ == "__main__":
-    # shell command: uvicorn sbmlutils.report.api:app --reload --port 1444
+    # http://localhost:1555/api
+    # http://localhost:1555/api/docs
+
     uvicorn.run(
-        "sbmlutils.report.api:api",
+        "fbc_curation.api:api",
         host="localhost",
-        port=1444,
+        port=1555,
         log_level="info",
         reload=True,
     )
