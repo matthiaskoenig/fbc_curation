@@ -5,7 +5,7 @@ import pandas as pd
 
 from fbc_curation import EXAMPLE_PATH
 from fbc_curation.constants import CuratorConstants
-from fbc_curation.curator import CuratorResults
+from fbc_curation.curator import FROGResults
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 
 
@@ -113,14 +113,14 @@ def test_reaction_deletion(tmp_path):
 def test_read_write_check1(tmp_path):
     """Test reading/writing of results."""
     results.write_results(tmp_path)
-    results2 = CuratorResults.read_results(tmp_path)
-    assert CuratorResults.compare({"res1": results, "res2": results2})
+    results2 = FROGResults.read_results(tmp_path)
+    assert FROGResults.compare({"res1": results, "res2": results2})
 
 
 def test_read_write_check2(tmp_path):
     """Test reading/writing of results."""
     results.write_results(tmp_path)
-    results2 = CuratorResults.read_results(tmp_path)
+    results2 = FROGResults.read_results(tmp_path)
     assert results2.validate_objective()
     assert results2.validate_fva()
     assert results2.validate_gene_deletion()

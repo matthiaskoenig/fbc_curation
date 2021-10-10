@@ -10,8 +10,8 @@ from cobra.io import read_sbml_model
 from pymetadata import log
 from pymetadata.console import console
 
-from fbc_curation.curator.metadata import create_metadata
-from fbc_curation.curator.results import CuratorResults
+from fbc_curation.metadata import create_metadata
+from fbc_curation.curator.results import FROGResults
 
 
 ObjectiveInformation = namedtuple(
@@ -77,7 +77,7 @@ class Curator:
     def reaction_deletion(self) -> pd.DataFrame:
         raise NotImplementedError
 
-    def run(self) -> CuratorResults:
+    def run(self) -> FROGResults:
         """Run the curator and stores the results."""
 
         console.rule("CuratorResults", style="white")
@@ -96,7 +96,7 @@ class Curator:
         self._print_header(f"{self.__class__.__name__}: reaction_deletion")
         reaction_deletion = self.reaction_deletion()
 
-        return CuratorResults(
+        return FROGResults(
             metadata=metadata,
             objective_id=self.objective_id,
             objective=objective,

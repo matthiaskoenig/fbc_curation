@@ -5,7 +5,7 @@ from pymetadata import log
 from pymetadata.console import console
 
 from fbc_curation import __citation__, __version__
-from fbc_curation.curator import Curator, CuratorResults
+from fbc_curation.curator import Curator, FROGResults
 
 
 logger = log.get_logger(__name__)
@@ -154,19 +154,19 @@ def main():
     # Reading reference solution
     res_dict = {}
     if reference_path:
-        reference_results = CuratorResults.read_results(reference_path)
+        reference_results = FROGResults.read_results(reference_path)
         res_dict["reference"] = reference_results
 
     for k, curator_class in enumerate(curator_classes):
         key = curator_keys[k]
         curator = curator_class(model_path=model_path, objective_id=objective_id)
-        results = curator.run()  # type: CuratorResults
+        results = curator.run()  # type: FROGResults
         results.write_results(output_path / key)
-        res_dict[key] = CuratorResults.read_results(output_path / key)
+        res_dict[key] = FROGResults.read_results(output_path / key)
 
     # perform comparison
     if len(res_dict) > 1:
-        CuratorResults.compare(res_dict)
+        FROGResults.compare(res_dict)
 
 
 if __name__ == "__main__":

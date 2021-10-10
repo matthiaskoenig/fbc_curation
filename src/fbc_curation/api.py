@@ -15,13 +15,13 @@ import requests
 import uvicorn
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-
 from pydantic import BaseModel, FilePath
-
-from pymetadata.omex import EntryFormat, Manifest, ManifestEntry, Omex
 from pymetadata import log
 from pymetadata.console import console
+from pymetadata.omex import EntryFormat, Manifest, ManifestEntry, Omex
+
 from fbc_curation import EXAMPLE_PATH
+
 
 logger = log.get_logger(__name__)
 
@@ -48,7 +48,6 @@ api = FastAPI(
             "name": "examples",
             "description": "Manage and query examples.",
         },
-
     ],
 )
 
@@ -82,18 +81,18 @@ example_items: Dict[str, Example] = {
     "e_coli_core": Example(
         id="e_coli_core",
         file=EXAMPLE_PATH / "models" / "e_coli_core.xml",
-        description="E.coli core model from BiGG database."
+        description="E.coli core model from BiGG database.",
     ),
     "iAB_AMO1410_SARS-CoV-2": Example(
         id="iAB_AMO1410_SARS-CoV-2",
         file=EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml",
-        description="iAB_AMO1410_SARS-CoV-2 model."
+        description="iAB_AMO1410_SARS-CoV-2 model.",
     ),
     "iJR904": Example(
         id="iJR904",
         file=EXAMPLE_PATH / "models" / "iJR904.xml.gz",
-        description="iJR904 model from BiGG database."
-    )
+        description="iJR904 model from BiGG database.",
+    ),
 }
 
 
@@ -263,6 +262,7 @@ def example(example_id: str) -> Dict[Any, Any]:
         return content
     except Exception as e:
         return _handle_error(e)
+
 
 if __name__ == "__main__":
     # http://localhost:1555/api

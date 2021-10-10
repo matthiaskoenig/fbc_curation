@@ -5,6 +5,7 @@ from typing import Dict, List
 
 import numpy as np
 import pandas as pd
+from pydantic import BaseModel
 from pymetadata import log
 from pymetadata.console import console
 
@@ -14,7 +15,23 @@ from fbc_curation.constants import CuratorConstants
 logger = log.get_logger(__name__)
 
 
-class CuratorResults:
+class Objective(BaseModel):
+    pass
+
+
+class FVA(BaseModel):
+    pass
+
+
+class ReactionDeletions(BaseModel):
+    pass
+
+
+class GeneDeletions(BaseModel):
+    pass
+
+
+class FROGResults(BaseModel):
     """Class for working with fbc curation results.
 
     CuratorResults can either be created by a Curator or read from file.
@@ -130,10 +147,10 @@ class CuratorResults:
             df_dict[CuratorConstants.METADATA_KEY] = json.load(fp=f_json)
         objective_id = df_dict["objective"].objective.values[0]
 
-        return CuratorResults(objective_id=objective_id, **df_dict)
+        return FROGResults(objective_id=objective_id, **df_dict)
 
     @staticmethod
-    def compare(results: Dict[str, "CuratorResults"]) -> bool:
+    def compare(results: Dict[str, "FROGResults"]) -> bool:
         """Compare results against each other.
 
         Returns True of all results are identical.
@@ -163,7 +180,7 @@ class CuratorResults:
                         console.print(
                             f"difference: '{curator_keys[p]}' vs '{curator_keys[q]}'"
                         )
-                        CuratorResults.analyse_df_difference(df1, df2)
+                        FROGResults.analyse_df_difference(df1, df2)
 
             df_equal = pd.DataFrame(
                 mat_equal, columns=list(keys), index=list(keys), dtype=int
@@ -200,7 +217,7 @@ class CuratorResults:
 
     def validate_objective(self) -> bool:
         """Validate objective."""
-        return CuratorResults._validate_df(
+        return FROGResults._validate_df(
             self.objective,
             name=CuratorConstants.OBJECTIVE_KEY,
             fields=CuratorConstants.OBJECTIVE_FIELDS,
@@ -208,13 +225,13 @@ class CuratorResults:
 
     def validate_fva(self) -> bool:
         """Validate FVA."""
-        return CuratorResults._validate_df(
+        return FROGResults._validate_df(
             self.fva, name=CuratorConstants.FVA_KEY, fields=CuratorConstants.FVA_FIELDS
         )
 
     def validate_gene_deletion(self) -> bool:
         """Validate gene deletion."""
-        return CuratorResults._validate_df(
+        return FROGResults._validate_df(
             self.gene_deletion,
             name=CuratorConstants.GENE_DELETION_KEY,
             fields=CuratorConstants.GENE_DELETION_FIELDS,
@@ -222,7 +239,7 @@ class CuratorResults:
 
     def validate_reaction_deletion(self) -> bool:
         """Validate reaction deletion."""
-        return CuratorResults._validate_df(
+        return FROGResults._validate_df(
             self.reaction_deletion,
             name=CuratorConstants.REACTION_DELETION_KEY,
             fields=CuratorConstants.REACTION_DELETION_FIELDS,
