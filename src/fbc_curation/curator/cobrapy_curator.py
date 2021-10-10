@@ -115,7 +115,7 @@ class CuratorCobrapy(Curator):
         """
         model = self.read_model()
         df = single_gene_deletion(model, model.genes)
-        return pd.DataFrame(
+        df = pd.DataFrame(
             {
                 "model": self.model_path.name,
                 "objective": self.objective_id,
@@ -125,15 +125,21 @@ class CuratorCobrapy(Curator):
             }
         )
 
+        df.loc[
+            df.status == CuratorConstants.STATUS_INFEASIBLE, "value"
+        ] = CuratorConstants.VALUE_INFEASIBLE
+        return df
+
     def reaction_deletion(self) -> pd.DataFrame:
-        """Create pd.DataFramewith results of reaction deletion.
+        """Create pd.DataFrame with results of reaction deletion.
 
         https://cobrapy.readthedocs.io/en/latest/deletions.html
         :return: pandas.
         """
         model = self.read_model()
         df = single_reaction_deletion(model, model.reactions)
-        return pd.DataFrame(
+
+        df = pd.DataFrame(
             {
                 "model": self.model_path.name,
                 "objective": self.objective_id,
@@ -142,3 +148,7 @@ class CuratorCobrapy(Curator):
                 "value": df.growth,
             }
         )
+        df.loc[
+            df.status == CuratorConstants.STATUS_INFEASIBLE, "value"
+        ] = CuratorConstants.VALUE_INFEASIBLE
+        return df

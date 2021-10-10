@@ -1,4 +1,5 @@
 """Reused constants."""
+import numpy as np
 
 
 class CuratorConstants:
