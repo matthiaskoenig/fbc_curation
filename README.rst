@@ -1,5 +1,9 @@
-fbc_curation
-=============
+.. image:: https://github.com/matthiaskoenig/fbc_curation/raw/json-webservice/icon/frog_100.png
+   :align: left
+   :alt: fbc_curation logo
+
+fbc_curation (FROG analysis)
+============================
 
 .. image:: https://github.com/matthiaskoenig/sbmlsim/workflows/CI-CD/badge.svg
    :target: https://github.com/matthiaskoenig/fbc_curation/workflows/CI-CD
@@ -38,7 +42,7 @@ fbc_curation
 available from 
 `https://github.com/matthiaskoenig/fbc_curation <https://github.com/matthiaskoenig/fbc_curation>`_.
 
-This repository creates standardized reference files for a given FBC model based on cobrapy and glpk. These files can be used in the model curation process for validating the model behavior. The format of the standardized reference files is described below. 
+This repository implements the FROG analysis and allows to create standardized reference files for a given FBC model based on cobrapy and glpk. These files can be used in the model curation process for validating the model behavior. The format of the standardized reference files is described below. 
 Currently two separate implementations of the reference files are included in the package:
 
 * ``cobrapy`` based on COBRApy (Constraint-Based Reconstruction and Analysis in Python) available from `https://github.com/opencobra/cobrapy <https://github.com/opencobra/cobrapy>`_
