@@ -15,20 +15,7 @@ from fbc_curation.constants import CuratorConstants
 logger = log.get_logger(__name__)
 
 
-class Objective(BaseModel):
-    pass
 
-
-class FVA(BaseModel):
-    pass
-
-
-class ReactionDeletions(BaseModel):
-    pass
-
-
-class GeneDeletions(BaseModel):
-    pass
 
 
 class FROGResults(BaseModel):

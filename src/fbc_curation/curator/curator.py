@@ -145,9 +145,9 @@ class Curator:
     def read_objective_information(model_path: Path) -> ObjectiveInformation:
         """Read objective information from SBML file structure."""
         # read objective information from sbml (multiple objectives)
-        doc = libsbml.readSBMLFromFile(str(model_path))  # type: libsbml.SBMLDocument
-        model = doc.getModel()  # type: libsbml.Model
-        fbc_model = model.getPlugin("fbc")  # type: libsbml.FbcModelPlugin
+        doc = libsbml.SBMLDocument = libsbml.readSBMLFromFile(str(model_path))
+        model: libsbml.Model = doc.getModel()
+        fbc_model: libsbml.FbcModelPlugin = model.getPlugin("fbc")
         if fbc_model is None:
             # model is an old SBML model without fbc information (use cobra default)
             # problems with the automatic up-conversions
@@ -156,7 +156,8 @@ class Curator:
         else:
             active_objective = fbc_model.getActiveObjective().getId()
             objective_ids = []
-            for objective in fbc_model.getListOfObjectives():  # type: libsbml.Objective
+            objective: libsbml.Objective
+            for objective in fbc_model.getListOfObjectives():
                 objective_ids.append(objective.getId())
 
         if len(objective_ids) > 1:

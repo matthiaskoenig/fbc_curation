@@ -31,7 +31,7 @@ class Tool(BaseModel):
     url: Optional[str] = Field(description="URL of tool/software/library.")
 
 
-class FROGMetaData(BaseModel):
+class FrogMetaData(BaseModel):
     """FROG metadata."""
 
     frog_date: date = Field(
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     from fbc_curation import __citation__, __software__, __version__
 
     ecoli_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
-    metadata = FROGMetaData(
+    metadata = FrogMetaData(
         frog_date=date(year=2021, month=10, day=11),
         frog_version="1.0",
         frog_curators=[
@@ -116,9 +116,9 @@ if __name__ == "__main__":
         ),
         environment=f"{os.name}, {platform.system()}, {platform.release()}",
         model_filename=ecoli_path.name,
-        model_md5=FROGMetaData.md5_for_path(ecoli_path),
+        model_md5=FrogMetaData.md5_for_path(ecoli_path),
     )
 
     console.print(metadata)
     console.print(metadata.dict(by_alias=True))
-    console.print(FROGMetaData.schema_json(indent=2))
+    console.print(FrogMetaData.schema_json(indent=2))

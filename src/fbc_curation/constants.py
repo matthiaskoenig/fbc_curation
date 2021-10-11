@@ -1,5 +1,30 @@
 """Reused constants."""
+from fbc_curation.metadata import FrogMetaData
+
+from pydantic import BaseModel
 import numpy as np
+
+
+
+class FrogObjective(BaseModel):
+    pass
+
+
+class FrogFVA(BaseModel):
+    pass
+
+
+class FrogReactionDeletion(BaseModel):
+    pass
+
+class FrogGeneDeletions(BaseModel):
+    pass
+
+
+class Frog(BaseModel):
+    metadata: FrogMetaData
+    objective: FrogObjective
+    fva: FrogFVA
 
 
 class CuratorConstants:
