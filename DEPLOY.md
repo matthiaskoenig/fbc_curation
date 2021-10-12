@@ -12,7 +12,7 @@ the docker containers.
 The page must be copied and activated. Make sure to **update the IP** of the server 
 in nginx configuration!
 ```
-cp <repo>/nginx/runfrog.de /etc/nginx/sites-available/runfrog.de
+sudo cp <repo>/nginx/runfrog.de /etc/nginx/sites-available/runfrog.de
 sudo ln -s /etc/nginx/sites-available/runfrog.de /etc/nginx/sites-enabled/
 ```
 
@@ -34,7 +34,7 @@ sudo certbot certonly --webroot
 
 ## Setup server
 On the actual server the containers are orchestrated using `docker-compose`.
-Login to server `denbi-node-2`.
+Login to server `denbi-node-4`.
 
 ### Initial setup
 ```
