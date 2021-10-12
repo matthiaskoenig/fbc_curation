@@ -10,7 +10,7 @@ from cobra.io import read_sbml_model
 from pymetadata import log
 from pymetadata.console import console
 
-from fbc_curation.metadata import create_metadata
+from fbc_curation.frog import Frog, FrogReactionDeletion, FrogGeneDeletion
 from fbc_curation.curator.results import FROGResults
 
 

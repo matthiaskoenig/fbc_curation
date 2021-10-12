@@ -1,30 +1,59 @@
 """Reused constants."""
+from typing import List
+
 from fbc_curation.metadata import FrogMetaData
 
+from pymetadata.console import console
 from pydantic import BaseModel
 import numpy as np
+from enum import Enum
 
+
+class StatusCode(str, Enum):
+    OPTIMAL = "optimal"
+    INFEASIBLE = "infeasible"
 
 
 class FrogObjective(BaseModel):
-    pass
+    model: str
+    objective: str
+    status: StatusCode
+    value: float
 
 
-class FrogFVA(BaseModel):
-    pass
+class FrogFVASingle(BaseModel):
+    model: str
+    objective: str
+    reaction: str
+    flux: float
+    status: StatusCode
+    minimum: float
+    maximum: float
+    fraction_optimum: float
 
 
 class FrogReactionDeletion(BaseModel):
-    pass
+    model: str
+    objective: str
+    gene: str
+    status: StatusCode
+    value: float
 
-class FrogGeneDeletions(BaseModel):
-    pass
+
+class FrogGeneDeletion(BaseModel):
+    model: str
+    objective: str
+    gene: str
+    status: StatusCode
+    value: float
 
 
 class Frog(BaseModel):
     metadata: FrogMetaData
     objective: FrogObjective
-    fva: FrogFVA
+    fva: List[FrogFVASingle]
+    reaction_deletions: List[FrogReactionDeletion]
+    gene_deletions: List[FrogGeneDeletion]
 
 
 class CuratorConstants:
@@ -49,6 +78,8 @@ class CuratorConstants:
     FVA_FILENAME = f"02_{FVA_KEY}.tsv"
     GENE_DELETION_FILENAME = f"03_{GENE_DELETION_KEY}.tsv"
     REACTION_DELETION_FILENAME = f"04_{REACTION_DELETION_KEY}.tsv"
+
+
     FILENAMES = [
         OBJECTIVE_FILENAME,
         FVA_FILENAME,
@@ -79,3 +110,7 @@ class CuratorConstants:
     # special settings for comparison
     VALUE_INFEASIBLE = ""  # pd.NA
     NUM_DECIMALS = 6  # decimals to write in the solution
+
+
+if __name__ == "__main__":
+    console.print(Frog.schema_json(indent=2))

@@ -1,4 +1,4 @@
-"""Create metadata information."""
+"""FROG schema definition."""
 import hashlib
 import os
 import platform
@@ -79,6 +79,60 @@ class FrogMetaData(BaseModel):
             return hashlib.md5(data).hexdigest()
 
 
+from pymetadata.console import console
+from pydantic import BaseModel
+import numpy as np
+from enum import Enum
+
+
+class StatusCode(str, Enum):
+    OPTIMAL = "optimal"
+    INFEASIBLE = "infeasible"
+
+
+class FrogObjective(BaseModel):
+    model: str
+    objective: str
+    status: StatusCode
+    value: float
+
+
+class FrogFVASingle(BaseModel):
+    model: str
+    objective: str
+    reaction: str
+    flux: float
+    status: StatusCode
+    minimum: float
+    maximum: float
+    fraction_optimum: float
+
+
+class FrogReactionDeletion(BaseModel):
+    model: str
+    objective: str
+    gene: str
+    status: StatusCode
+    value: float
+
+
+class FrogGeneDeletion(BaseModel):
+    model: str
+    objective: str
+    gene: str
+    status: StatusCode
+    value: float
+
+
+class Frog(BaseModel):
+    metadata: FrogMetaData
+    objective: FrogObjective
+    fva: List[FrogFVASingle]
+    reaction_deletions: List[FrogReactionDeletion]
+    gene_deletions: List[FrogGeneDeletion]
+
+
+
 if __name__ == "__main__":
 
     from fbc_curation import EXAMPLE_PATH
@@ -122,3 +176,4 @@ if __name__ == "__main__":
     console.print(metadata)
     console.print(metadata.dict(by_alias=True))
     console.print(FrogMetaData.schema_json(indent=2))
+    console.print(Frog.schema_json(indent=2))
