@@ -9,13 +9,14 @@ from pydantic import BaseModel
 from pymetadata import log
 from pymetadata.console import console
 
-from fbc_curation.constants import CuratorConstants
+from fbc_curation.frog import CuratorConstants, FrogReport
 
 
 logger = log.get_logger(__name__)
 
 
-class FROGResults(BaseModel):
+# FIXME: use pydantic model here with JSON
+class FROGResults:
     """Class for working with fbc curation results.
 
     CuratorResults can either be created by a Curator or read from file.
@@ -188,89 +189,6 @@ class FROGResults(BaseModel):
 
     def validate(self) -> bool:
         """Validate results."""
-        valid_objective = self.validate_objective()
-        valid_fva = self.validate_fva()
-        valid_gene_deletion = self.validate_gene_deletion()
-        valid_reaction_deletion = self.validate_reaction_deletion()
-        return (
-            valid_objective
-            and valid_fva
-            and valid_gene_deletion
-            and valid_reaction_deletion
-        )
-
-    def validate_objective(self) -> bool:
-        """Validate objective."""
-        return FROGResults._validate_df(
-            self.objective,
-            name=CuratorConstants.OBJECTIVE_KEY,
-            fields=CuratorConstants.OBJECTIVE_FIELDS,
-        )
-
-    def validate_fva(self) -> bool:
-        """Validate FVA."""
-        return FROGResults._validate_df(
-            self.fva, name=CuratorConstants.FVA_KEY, fields=CuratorConstants.FVA_FIELDS
-        )
-
-    def validate_gene_deletion(self) -> bool:
-        """Validate gene deletion."""
-        return FROGResults._validate_df(
-            self.gene_deletion,
-            name=CuratorConstants.GENE_DELETION_KEY,
-            fields=CuratorConstants.GENE_DELETION_FIELDS,
-        )
-
-    def validate_reaction_deletion(self) -> bool:
-        """Validate reaction deletion."""
-        return FROGResults._validate_df(
-            self.reaction_deletion,
-            name=CuratorConstants.REACTION_DELETION_KEY,
-            fields=CuratorConstants.REACTION_DELETION_FIELDS,
-        )
-
-    @staticmethod
-    def _validate_df(df: pd.DataFrame, name: str, fields: List[str]) -> bool:
-        valid = True
-        if not isinstance(df, pd.DataFrame):
-            logger.error(f"'{name}': Must be 'pd.DataFrame', but type '{type(df)}'.")
-            valid = False
-        if df.empty:
-            logger.error(f"'{name}': Can not be empty.")
-            valid = False
-        if len(df.columns) != len(fields):
-            logger.error(
-                f"'{name}': Incorrect number of columns: "
-                f"'{len(df.columns)} != {len(fields)}'."
-            )
-            valid = False
-        for field in fields:
-            if field not in df.columns:
-                logger.error(f"'{name}': Missing field '{field}'")
-                valid = False
-        for k, field in enumerate(fields):
-            if not df.columns[k] == field:
-                logger.error(
-                    f"'{name}': Field at position '{k}' must be {field}', "
-                    f"but is '{df.columns[k]}'."
-                )
-                valid = False
-
-        for status_code in df.status.unique():
-            if status_code not in CuratorConstants.STATUS_CODES:
-                logger.error(f"'{name}': Incorrect status code: '{status_code}'.")
-
-        if name == CuratorConstants.OBJECTIVE_KEY:
-            obj_value = df["value"].values[0]
-            if not obj_value > 0:
-                logger.error(
-                    f"'{name}': objective value must be > 0, but '{obj_value}'."
-                )
-                valid = False
-
-        if valid:
-            logger.info(f"'{name}': is VALID")
-        else:
-            logger.error(f"'{name}': is INVALID")
-
-        return valid
+        # Load the data and validate
+        # FIXME: implement
+        pass

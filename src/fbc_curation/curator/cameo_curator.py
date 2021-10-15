@@ -13,8 +13,10 @@ from cameo.flux_analysis.analysis import (
 from cobra.core import Model
 from cobra.io import read_sbml_model
 from pymetadata import log
+from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
 
-from fbc_curation.constants import CuratorConstants
+from fbc_curation.frog import CuratorConstants, FrogMetaData, Tool, StatusCode, \
+    FrogReactionDeletions, FrogGeneDeletions, FrogFVA, FrogObjective, SId
 from fbc_curation.curator import Curator
 
 
@@ -41,35 +43,39 @@ class CuratorCameo(Curator):
     def read_model(self) -> Model:
         return read_sbml_model(str(self.model_path), f_replace={})
 
-    def metadata(self) -> Dict:
+    def metadata(self) -> FrogMetaData:
         """Create metadata dictionary."""
-        d = super().metadata()
-        d["solver.name"] = "cameo (glpk)"
-        d["solver.version"] = f"{cameo_version}"
-        return d
+        software = Tool(
+            name="cameo",
+            version=cameo_version,
+            url="https://github.com/opencobra/cobrapy",
+        )
+        solver = Tool(
+            name="glpk", version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}",
+            url=None
+        )
+        return super().metadata(software=software, solver=solver)
 
-    def objective(self) -> pd.DataFrame:
+    def objective(self) -> FrogObjective:
         model = self.read_model()
         try:
             # fbc optimization
             result = fba(model)
             value = result.objective_value
-            status = CuratorConstants.STATUS_OPTIMAL
+            status = StatusCode.OPTIMAL
         except Exception as e:
             logger.error(f"{e}")
             value = CuratorConstants.VALUE_INFEASIBLE
-            status = CuratorConstants.STATUS_INFEASIBLE
+            status = StatusCode.INFEASIBLE
 
-        return pd.DataFrame(
-            {
-                "model": self.model_path.name,
-                "objective": [self.objective_id],
-                "status": [status],
-                "value": [value],
-            }
+        return FrogObjective(
+            model=SId(sid=self.model_path.name),
+            objective=SId(sid=self.objective_id),
+            status=status,
+            value=value,
         )
 
-    def fva(self) -> pd.DataFrame:
+    def fva(self) -> FrogFVA:
         model = self.read_model()
         result = fba(model)
         fluxes = result.fluxes
@@ -84,7 +90,7 @@ class CuratorCameo(Curator):
                     "objective": self.objective_id,
                     "reaction": df.index,
                     "flux": fluxes,
-                    "status": CuratorConstants.STATUS_OPTIMAL,
+                    "status": StatusCode.OPTIMAL,
                     "minimum": df.lower_bound,
                     "maximum": df.upper_bound,
                     "fraction_optimum": 1.0,
@@ -98,15 +104,17 @@ class CuratorCameo(Curator):
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
                     "flux": fluxes,
-                    "status": CuratorConstants.STATUS_INFEASIBLE,
+                    "status": StatusCode.INFEASIBLE,
                     "minimum": CuratorConstants.VALUE_INFEASIBLE,
                     "maximum": CuratorConstants.VALUE_INFEASIBLE,
                     "fraction_optimum": 1.0,
                 }
             )
-        return df_out
 
-    def gene_deletion(self) -> pd.DataFrame:
+        json = df_out.to_dict()
+        return FrogFVA(**json)
+
+    def gene_deletions(self) -> FrogGeneDeletions:
         model = self.read_model()
         gene_status = []
         gene_values = []
@@ -127,11 +135,11 @@ class CuratorCameo(Curator):
                 # run fba
                 result = fba(model)
                 value = result.objective_value
-                status = CuratorConstants.STATUS_OPTIMAL
+                status = StatusCode.OPTIMAL
             except Exception as e:
                 logger.error(f"{e}")
                 value = CuratorConstants.VALUE_INFEASIBLE
-                status = CuratorConstants.STATUS_INFEASIBLE
+                status = StatusCode.INFEASIBLE
             gene_status.append(status)
             gene_values.append(value)
 
@@ -139,7 +147,7 @@ class CuratorCameo(Curator):
             for rid, bounds in reaction_bounds.items():
                 model.reactions.get_by_id(rid).bounds = bounds[:]
 
-        return pd.DataFrame(
+        df = pd.DataFrame(
             {
                 "model": self.model_path.name,
                 "objective": self.objective_id,
@@ -148,8 +156,10 @@ class CuratorCameo(Curator):
                 "value": gene_values,
             }
         )
+        json = df.to_dict()
+        return FrogGeneDeletions(**json)
 
-    def reaction_deletion(self) -> pd.DataFrame:
+    def reaction_deletion(self) -> FrogReactionDeletions:
         model = self.read_model()
         reaction_status = []
         reaction_values = []
@@ -162,11 +172,11 @@ class CuratorCameo(Curator):
             try:
                 result = fba(model)
                 value = result.objective_value
-                status = CuratorConstants.STATUS_OPTIMAL
+                status = StatusCode.OPTIMAL
             except Exception as e:
                 logger.error(f"{e}")
                 value = CuratorConstants.VALUE_INFEASIBLE
-                status = CuratorConstants.STATUS_INFEASIBLE
+                status = StatusCode.STATUS_INFEASIBLE
 
             reaction_status.append(status)
             reaction_values.append(value)
@@ -174,7 +184,7 @@ class CuratorCameo(Curator):
             # restore bounds
             reaction.bounds = reaction_bounds[:]
 
-        return pd.DataFrame(
+        df = pd.DataFrame(
             {
                 "model": self.model_path.name,
                 "objective": self.objective_id,
@@ -183,3 +193,6 @@ class CuratorCameo(Curator):
                 "value": reaction_values,
             }
         )
+
+        json = df.to_dict()
+        return FrogReactionDeletions(**json)

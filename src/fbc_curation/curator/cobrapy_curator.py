@@ -14,8 +14,10 @@ from cobra.flux_analysis import (
 )
 from cobra.io import read_sbml_model
 from pymetadata import log
+from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
 
-from fbc_curation.constants import CuratorConstants
+from fbc_curation.frog import CuratorConstants, FrogMetaData, Tool, StatusCode, FrogFVA, \
+    FrogObjective, SId, FrogGeneDeletions, FrogReactionDeletions
 from fbc_curation.curator import Curator
 
 
@@ -33,14 +35,22 @@ class CuratorCobrapy(Curator):
         """Read the model."""
         return read_sbml_model(str(self.model_path), f_replace={})
 
-    def metadata(self) -> Dict:
+    def metadata(self) -> FrogMetaData:
         """Create metadata dictionary."""
-        d = super().metadata()
-        d["solver.name"] = "cobrapy (glpk)"
-        d["solver.version"] = f"{cobra_version}"
-        return d
 
-    def objective(self) -> pd.DataFrame:
+        software = Tool(
+            name="cobrapy",
+            version=cobra_version,
+            url="https://github.com/opencobra/cobrapy",
+        )
+        solver = Tool(
+            name="glpk", version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}",
+            url=None
+        )
+        md = super().metadata(solver=solver, software=software)
+        return md
+
+    def objective(self) -> FrogObjective:
         """Create pandas DataFrame with objective value.
 
         see https://cobrapy.readthedocs.io/en/latest/simulating.html
@@ -50,22 +60,20 @@ class CuratorCobrapy(Curator):
             # fbc optimization
             solution = model.optimize()
             value = solution.objective_value
-            status = CuratorConstants.STATUS_OPTIMAL
+            status = StatusCode.OPTIMAL
         except OptimizationError as e:
             logger.error(f"{e}")
             value = CuratorConstants.VALUE_INFEASIBLE
-            status = CuratorConstants.STATUS_INFEASIBLE
+            status = StatusCode.INFEASIBLE
 
-        return pd.DataFrame(
-            {
-                "model": self.model_path.name,
-                "objective": [self.objective_id],
-                "status": [status],
-                "value": [value],
-            }
+        return FrogObjective(
+            model=SId(sid=self.model_path.name),
+            objective=SId(sid=self.objective_id),
+            status=status,
+            value=value,
         )
 
-    def fva(self) -> pd.DataFrame:
+    def fva(self) -> FrogFVA:
         """Create DataFrame file with minimum and maximum value of FVA.
 
         Runs flux variability analysis.
@@ -84,7 +92,7 @@ class CuratorCobrapy(Curator):
                     "objective": self.objective_id,
                     "reaction": df.index,
                     "flux": fluxes,
-                    "status": CuratorConstants.STATUS_OPTIMAL,
+                    "status": StatusCode.OPTIMAL,
                     "minimum": df.minimum,
                     "maximum": df.maximum,
                     "fraction_optimum": 1.0,
@@ -105,9 +113,11 @@ class CuratorCobrapy(Curator):
                 }
             )
 
-        return df_out
+        # Convert DataFrame to json
+        json = df_out.to_dict()
+        return FrogFVA(**json)
 
-    def gene_deletion(self) -> pd.DataFrame:
+    def gene_deletions(self) -> FrogGeneDeletions:
         """Create pd.DataFrame with results of gene deletion.
 
         https://cobrapy.readthedocs.io/en/latest/deletions.html
@@ -124,13 +134,14 @@ class CuratorCobrapy(Curator):
                 "value": df.growth,
             }
         )
-
         df.loc[
-            df.status == CuratorConstants.STATUS_INFEASIBLE, "value"
+            df.status == StatusCode.INFEASIBLE, "value"
         ] = CuratorConstants.VALUE_INFEASIBLE
-        return df
 
-    def reaction_deletion(self) -> pd.DataFrame:
+        json = df.to_dict()
+        return FrogGeneDeletions(**json)
+
+    def reaction_deletions(self) -> FrogReactionDeletions:
         """Create pd.DataFrame with results of reaction deletion.
 
         https://cobrapy.readthedocs.io/en/latest/deletions.html
@@ -149,6 +160,9 @@ class CuratorCobrapy(Curator):
             }
         )
         df.loc[
-            df.status == CuratorConstants.STATUS_INFEASIBLE, "value"
+            df.status == StatusCode.INFEASIBLE, "value"
         ] = CuratorConstants.VALUE_INFEASIBLE
-        return df
+
+        json = df.to_dict()
+        return FrogReactionDeletions(**json)
+

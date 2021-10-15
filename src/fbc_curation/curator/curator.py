@@ -1,6 +1,9 @@
 """Base class for all FBC curators."""
+import os
 from collections import defaultdict, namedtuple
 from pathlib import Path
+# from sys import platform
+import platform
 from typing import Dict, List
 
 import cobra
@@ -9,9 +12,18 @@ import pandas as pd
 from cobra.io import read_sbml_model
 from pymetadata import log
 from pymetadata.console import console
+from datetime import date
+from fbc_curation.frog import (
+    FrogReport,
+    FrogMetaData,
+    FrogObjective,
+    Tool,
+    FrogFVA,
+    FrogReactionDeletions,
+    FrogGeneDeletions, SId,
+)
 
-from fbc_curation.frog import Frog, FrogReactionDeletion, FrogGeneDeletion
-from fbc_curation.curator.results import FROGResults
+from fbc_curation import __citation__, __software__, __version__
 
 
 ObjectiveInformation = namedtuple(
@@ -29,11 +41,12 @@ class Curator:
         if not model_path.exists():
             raise ValueError(f"model_path does not exist: '{model_path}'")
 
-        self.model_path = model_path
+        self.model_path: Path = model_path
         self.active_objective, self.objective_ids = Curator.read_objective_information(
             model_path
         )
 
+        self.objective_id: SId
         if objective_id is None:
             logger.warning(
                 f"No objective id provided, using the active objective: "
@@ -62,22 +75,39 @@ class Curator:
     def read_model(self):
         raise NotImplementedError
 
-    def metadata(self) -> Dict:
-        return create_metadata(path=self.model_path)
+    def metadata(self, software: Tool, solver: Tool) -> FrogMetaData:
+        today = date.today()
+        md = FrogMetaData(
+            frog_date=date(year=today.year, month=today.month, day=today.day),
+            frog_version="1.0",
+            frog_curators=[],
+            frog_software=Tool(
+                name=__software__,
+                version=__version__,
+                url=__citation__,
+            ),
+            environment=f"{os.name}, {platform.system()}, {platform.release()}",
+            model_filename=self.model_path.name,
+            model_md5=FrogMetaData.md5_for_path(self.model_path),
+            software=software,
+            solver=solver,
+        )
 
-    def objective(self) -> pd.DataFrame:
+        return md
+
+    def objective(self) -> FrogObjective:
         raise NotImplementedError
 
-    def fva(self) -> pd.DataFrame:
+    def fva(self) -> FrogFVA:
         raise NotImplementedError
 
-    def gene_deletion(self) -> pd.DataFrame:
+    def gene_deletions(self) -> FrogGeneDeletions:
         raise NotImplementedError
 
-    def reaction_deletion(self) -> pd.DataFrame:
+    def reaction_deletions(self) -> FrogReactionDeletions:
         raise NotImplementedError
 
-    def run(self) -> FROGResults:
+    def run(self) -> FrogReport:
         """Run the curator and stores the results."""
 
         console.rule("CuratorResults", style="white")
@@ -91,18 +121,17 @@ class Curator:
         fva = self.fva()
 
         self._print_header(f"{self.__class__.__name__}: gene_deletion")
-        gene_deletion = self.gene_deletion()
+        gene_deletions = self.gene_deletions()
 
         self._print_header(f"{self.__class__.__name__}: reaction_deletion")
-        reaction_deletion = self.reaction_deletion()
+        reaction_deletions = self.reaction_deletions()
 
-        return FROGResults(
+        return FrogReport(
             metadata=metadata,
-            objective_id=self.objective_id,
             objective=objective,
             fva=fva,
-            gene_deletion=gene_deletion,
-            reaction_deletion=reaction_deletion,
+            gene_deletions=gene_deletions,
+            reaction_deletions=reaction_deletions,
         )
 
     @staticmethod
@@ -172,7 +201,7 @@ class Curator:
 
 
 if __name__ == "__main__":
-    from fbc_curation import EXAMPLE_PATH
+    from fbc_curation import EXAMPLE_PATH, __software__, __version__, __citation__
 
     model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
     Curator.knockout_reactions_for_genes(model_path=model_path)

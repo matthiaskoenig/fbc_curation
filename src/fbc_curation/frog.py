@@ -173,12 +173,24 @@ class FrogMetaData(BaseModel):
             return hashlib.md5(data).hexdigest()
 
 
-class Frog(BaseModel):
+class FrogFVA(BaseModel):
+    fva: List[FrogFVASingle]
+
+
+class FrogReactionDeletions(BaseModel):
+    deletions: List[FrogReactionDeletion]
+
+
+class FrogGeneDeletions(BaseModel):
+    deletions: List[FrogGeneDeletion]
+
+
+class FrogReport(BaseModel):
     """Definition of the FROG standard."""
     metadata: FrogMetaData
     objective: FrogObjective
-    fva: List[FrogFVASingle]
-    reaction_deletions: List[FrogReactionDeletion]
+    fva: FrogFVA
+    reaction_deletions: FrogReactionDeletions
     gene_deletions: List[FrogGeneDeletion]
 
 
@@ -219,10 +231,11 @@ if __name__ == "__main__":
         model_filename=ecoli_path.name,
         model_md5=FrogMetaData.md5_for_path(ecoli_path),
     )
-
     console.print(metadata)
     console.print(metadata.dict(by_alias=True))
     console.print(FrogMetaData.schema_json(indent=2))
     console.rule(style="white")
-    console.print(Frog.schema_json(indent=2))
+    console.print(FrogReport.schema_json(indent=2))
     console.rule(style="white")
+    with open("frog-schema-version1.json", "w") as f_schema:
+        f_schema.write(FrogReport.schema_json(indent=2))

@@ -48,7 +48,7 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
         curator = curator_class(
             model_path=model_path, objective_id=obj_info.active_objective
         )
-        results = curator.run()  # type: FROGResults
+        results: FROGResults = curator.run()
         results.write_results(results_path / curator_keys[k])
 
     all_results = {}
