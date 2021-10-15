@@ -16,7 +16,7 @@ from pymetadata import log
 from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
 
 from fbc_curation.frog import CuratorConstants, FrogMetaData, Tool, StatusCode, \
-    FrogReactionDeletions, FrogGeneDeletions, FrogFVA, FrogObjective, SId
+    FrogReactionDeletions, FrogGeneDeletions, FrogFVA, FrogObjective
 from fbc_curation.curator import Curator
 
 
@@ -69,8 +69,8 @@ class CuratorCameo(Curator):
             status = StatusCode.INFEASIBLE
 
         return FrogObjective(
-            model=SId(sid=self.model_path.name),
-            objective=SId(sid=self.objective_id),
+            model=self.model_path.name,
+            objective=self.objective_id,
             status=status,
             value=value,
         )
@@ -80,9 +80,9 @@ class CuratorCameo(Curator):
         result = fba(model)
         fluxes = result.fluxes
         try:
-            fva_result = flux_variability_analysis(
+            fva_result: FluxVariabilityResult = flux_variability_analysis(
                 model, reactions=model.reactions, fraction_of_optimum=1.0
-            )  # type: FluxVariabilityResult
+            )
             df = fva_result.data_frame
             df_out = pd.DataFrame(
                 {
@@ -111,8 +111,8 @@ class CuratorCameo(Curator):
                 }
             )
 
-        json = df_out.to_dict()
-        return FrogFVA(**json)
+        json = df_out.to_dict(orient="records")
+        return FrogFVA(fva=json)
 
     def gene_deletions(self) -> FrogGeneDeletions:
         model = self.read_model()
@@ -156,8 +156,8 @@ class CuratorCameo(Curator):
                 "value": gene_values,
             }
         )
-        json = df.to_dict()
-        return FrogGeneDeletions(**json)
+        json = df.to_dict(orient="records")
+        return FrogGeneDeletions(deletions=json)
 
     def reaction_deletion(self) -> FrogReactionDeletions:
         model = self.read_model()
@@ -194,5 +194,5 @@ class CuratorCameo(Curator):
             }
         )
 
-        json = df.to_dict()
+        json = df.to_dict(orient="records")
         return FrogReactionDeletions(**json)

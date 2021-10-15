@@ -43,6 +43,7 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
     console.rule(str(model_path))
     obj_info = Curator.read_objective_information(model_path)
 
+    # Create files
     curator_keys = ["cobrapy", "cameo"]
     for k, curator_class in enumerate([CuratorCobrapy, CuratorCameo]):
         curator = curator_class(

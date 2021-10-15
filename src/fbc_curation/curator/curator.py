@@ -20,7 +20,7 @@ from fbc_curation.frog import (
     Tool,
     FrogFVA,
     FrogReactionDeletions,
-    FrogGeneDeletions, SId,
+    FrogGeneDeletions,
 )
 
 from fbc_curation import __citation__, __software__, __version__
@@ -46,7 +46,7 @@ class Curator:
             model_path
         )
 
-        self.objective_id: SId
+        self.objective_id: str
         if objective_id is None:
             logger.warning(
                 f"No objective id provided, using the active objective: "
@@ -133,6 +133,48 @@ class Curator:
             gene_deletions=gene_deletions,
             reaction_deletions=reaction_deletions,
         )
+
+    def _round_and_sort(self):
+        """Round and sort."""
+        # FIXME: processing must be done on creating the files ?!
+        # round and sort objective value
+        for key in ["value"]:
+            self.objective[key] = self.objective[key].apply(self._round)
+        self.objective.sort_values(by=["objective"], inplace=True)
+
+        # round and sort fva
+        for key in ["flux", "minimum", "maximum"]:
+            self.fva[key] = self.fva[key].apply(self._round)
+        self.fva.sort_values(by=["reaction"], inplace=True)
+        self.fva.index = range(len(self.fva))
+
+        # round and sort gene_deletion
+        for key in ["value"]:
+            self.gene_deletion[key] = self.gene_deletion[key].apply(self._round)
+        self.gene_deletion.sort_values(by=["gene"], inplace=True)
+        self.gene_deletion.index = range(len(self.gene_deletion))
+
+        # round and sort reaction deletion
+        for key in ["value"]:
+            self.reaction_deletion[key] = self.reaction_deletion[key].apply(self._round)
+        self.reaction_deletion.sort_values(by=["reaction"], inplace=True)
+        self.reaction_deletion.index = range(len(self.reaction_deletion))
+
+        # validate
+        self.validate()
+
+    def _round(self, x):
+        """Round the float and sets small values positive.
+
+        Ensuring positivity removes -0.0, 0.0 changes to files.
+        """
+        if x == CuratorConstants.VALUE_INFEASIBLE:
+            return x
+        else:
+            x = round(x, self.num_decimals)
+            if abs(x) < 1e-10:
+                x = abs(x)
+            return x
 
     @staticmethod
     def _print_header(title):

@@ -4,12 +4,17 @@ import os
 import platform
 from pathlib import Path
 from typing import Optional, List
+
+import numpy as np
 from pydantic import BaseModel, Field
 from datetime import date
 
 from pymetadata.console import console
 
 from enum import Enum
+from pymetadata import log
+
+logger = log.get_logger(__name__)
 
 
 # ----------------------------------------------
@@ -56,7 +61,7 @@ class CuratorConstants:
     REACTION_DELETION_FIELDS = ["model", "objective", "reaction", "status", "value"]
 
     # special settings for comparison
-    VALUE_INFEASIBLE = ""  # pd.NA
+    VALUE_INFEASIBLE = np.NaN
     NUM_DECIMALS = 6  # decimals to write in the solution
 
 
@@ -69,23 +74,17 @@ class StatusCode(str, Enum):
     INFEASIBLE = "infeasible"
 
 
-class SId(BaseModel):
-    """FIXME: validate the SIds against SId pattern."""
-
-    sid: str
-
-
 class FrogObjective(BaseModel):
-    model: SId
-    objective: SId
+    model: str
+    objective: str
     status: StatusCode
     value: float
 
 
 class FrogFVASingle(BaseModel):
-    model: SId
-    objective: SId
-    reaction: SId
+    model: str
+    objective: str
+    reaction: str
     flux: float
     status: StatusCode
     minimum: float
@@ -94,17 +93,17 @@ class FrogFVASingle(BaseModel):
 
 
 class FrogReactionDeletion(BaseModel):
-    model: SId
-    objective: SId
-    reaction: SId
+    model: str
+    objective: str
+    reaction: str
     status: StatusCode
     value: float
 
 
 class FrogGeneDeletion(BaseModel):
-    model: SId
-    objective: SId
-    gene: SId
+    model: str
+    objective: str
+    gene: str
     status: StatusCode
     value: float
 
@@ -191,49 +190,64 @@ class FrogReport(BaseModel):
     objective: FrogObjective
     fva: FrogFVA
     reaction_deletions: FrogReactionDeletions
-    gene_deletions: List[FrogGeneDeletion]
+    gene_deletions: FrogGeneDeletions
+
+
+    # FIXME: update the reading & writing of files
+
+    def write_results(self, path_out: Path):
+        """Write results to path."""
+        if not path_out.exists():
+            logger.warning(f"Creating results path: {path_out}")
+            path_out.mkdir(parents=True)
+
+        # write metadata file
+        with open(path_out / CuratorConstants.METADATA_FILENAME, "w") as f_json:
+            json.dump(self.metadata, fp=f_json, indent=2)
+
+        # write reference files
+        for filename, df in dict(
+            zip(
+                [
+                    CuratorConstants.OBJECTIVE_FILENAME,
+                    CuratorConstants.FVA_FILENAME,
+                    CuratorConstants.GENE_DELETION_FILENAME,
+                    CuratorConstants.REACTION_DELETION_FILENAME,
+                ],
+                [self.objective, self.fva, self.gene_deletion, self.reaction_deletion],
+            )
+        ).items():
+            logger.debug(f"-> {path_out / filename}")
+            df.to_csv(path_out / filename, sep="\t", index=False)
+            # df.to_json(path_out / filename, sep="\t", index=False)
+
+    @classmethod
+    def read_results(cls, path_in: Path):
+        """Read fbc curation files from given directory."""
+        path_metadata = path_in / CuratorConstants.METADATA_FILENAME
+        path_objective = path_in / CuratorConstants.OBJECTIVE_FILENAME
+        path_fva = path_in / CuratorConstants.FVA_FILENAME
+        path_gene_deletion = path_in / CuratorConstants.GENE_DELETION_FILENAME
+        path_reaction_deletion = path_in / CuratorConstants.REACTION_DELETION_FILENAME
+        df_dict = dict()
+
+        for k, path in enumerate(
+            [path_objective, path_fva, path_gene_deletion, path_reaction_deletion]
+        ):
+            if not path_objective.exists():
+                logger.error(f"Required file for fbc curation does not exist: '{path}'")
+            else:
+                df_dict[CuratorConstants.KEYS[k]] = pd.read_csv(path, sep="\t")
+
+        with open(path_metadata, "r") as f_json:
+            df_dict[CuratorConstants.METADATA_KEY] = json.load(fp=f_json)
+        objective_id = df_dict["objective"].objective.values[0]
+
+        return FROGResults(objective_id=objective_id, **df_dict)
 
 
 if __name__ == "__main__":
 
-    from fbc_curation import EXAMPLE_PATH
-    from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
-    from cobra import __version__ as cobra_version
-    from fbc_curation import __citation__, __software__, __version__
-
-    ecoli_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
-    metadata = FrogMetaData(
-        frog_date=date(year=2021, month=10, day=11),
-        frog_version="1.0",
-        frog_curators=[
-            Creator(
-                givenName="Matthias",
-                familyName="König",
-                organization="Humboldt University Berlin",
-                site="https://livermetabolism.com",
-                orcid="0000-0003-1725-179X",
-            )
-        ],
-        frog_software=Tool(
-            name=__software__,
-            version=__version__,
-            url=__citation__,
-        ),
-        software=Tool(
-            name="cobrapy",
-            version=cobra_version,
-            url="https://github.com/opencobra/cobrapy",
-        ),
-        solver=Tool(
-            name="glpk", version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}", url=None
-        ),
-        environment=f"{os.name}, {platform.system()}, {platform.release()}",
-        model_filename=ecoli_path.name,
-        model_md5=FrogMetaData.md5_for_path(ecoli_path),
-    )
-    console.print(metadata)
-    console.print(metadata.dict(by_alias=True))
-    console.print(FrogMetaData.schema_json(indent=2))
     console.rule(style="white")
     console.print(FrogReport.schema_json(indent=2))
     console.rule(style="white")

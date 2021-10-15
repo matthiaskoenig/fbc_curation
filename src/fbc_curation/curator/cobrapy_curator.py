@@ -3,6 +3,8 @@
 from pathlib import Path
 from typing import Dict
 
+from pydantic import ValidationError
+from rich import print
 import pandas as pd
 from cobra import __version__ as cobra_version
 from cobra.core import Model
@@ -17,7 +19,8 @@ from pymetadata import log
 from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
 
 from fbc_curation.frog import CuratorConstants, FrogMetaData, Tool, StatusCode, FrogFVA, \
-    FrogObjective, SId, FrogGeneDeletions, FrogReactionDeletions
+    FrogObjective, FrogGeneDeletions, FrogReactionDeletions, FrogFVASingle, \
+    FrogGeneDeletion, FrogReactionDeletion
 from fbc_curation.curator import Curator
 
 
@@ -67,8 +70,8 @@ class CuratorCobrapy(Curator):
             status = StatusCode.INFEASIBLE
 
         return FrogObjective(
-            model=SId(sid=self.model_path.name),
-            objective=SId(sid=self.objective_id),
+            model=self.model_path.name,
+            objective=self.objective_id,
             status=status,
             value=value,
         )
@@ -114,8 +117,15 @@ class CuratorCobrapy(Curator):
             )
 
         # Convert DataFrame to json
-        json = df_out.to_dict()
-        return FrogFVA(**json)
+        fva = []
+        for item in df_out.to_dict(orient="records"):
+            try:
+                fva.append(FrogFVASingle(**item))
+            except ValidationError as e:
+                print(item)
+                print(e.json())
+
+        return FrogFVA(fva=fva)
 
     def gene_deletions(self) -> FrogGeneDeletions:
         """Create pd.DataFrame with results of gene deletion.
@@ -138,8 +148,18 @@ class CuratorCobrapy(Curator):
             df.status == StatusCode.INFEASIBLE, "value"
         ] = CuratorConstants.VALUE_INFEASIBLE
 
-        json = df.to_dict()
-        return FrogGeneDeletions(**json)
+        json = df.to_dict(orient="records")
+        deletions = []
+        for item in json:
+            try:
+                deletions.append(
+                    FrogGeneDeletion(**item)
+                )
+            except ValidationError as e:
+                print(item)
+                print(e.json())
+
+        return FrogGeneDeletions(deletions=deletions)
 
     def reaction_deletions(self) -> FrogReactionDeletions:
         """Create pd.DataFrame with results of reaction deletion.
@@ -163,6 +183,16 @@ class CuratorCobrapy(Curator):
             df.status == StatusCode.INFEASIBLE, "value"
         ] = CuratorConstants.VALUE_INFEASIBLE
 
-        json = df.to_dict()
-        return FrogReactionDeletions(**json)
+        json = df.to_dict(orient="records")
+        deletions = []
+        for item in json:
+            try:
+                deletions.append(
+                    FrogReactionDeletion(**item)
+                )
+            except ValidationError as e:
+                print(item)
+                print(e.json())
+
+        return FrogReactionDeletions(deletions=deletions)
 
