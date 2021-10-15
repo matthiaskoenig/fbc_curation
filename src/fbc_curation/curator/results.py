@@ -15,9 +15,6 @@ from fbc_curation.constants import CuratorConstants
 logger = log.get_logger(__name__)
 
 
-
-
-
 class FROGResults(BaseModel):
     """Class for working with fbc curation results.
 

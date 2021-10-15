@@ -37,9 +37,7 @@ def test_frog_metadata() -> None:
             url="https://github.com/opencobra/cobrapy",
         ),
         solver=Tool(
-            name="glpk",
-            version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}",
-            url=None
+            name="glpk", version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}", url=None
         ),
         environment=f"{os.name}, {platform.system()}, {platform.release()}",
         model_filename=ecoli_path.name,

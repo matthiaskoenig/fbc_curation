@@ -8,7 +8,7 @@ import re
 
 import altair as alt
 
-alt.renderers.enable('mimetype')
+alt.renderers.enable("mimetype")
 
 from matplotlib import pyplot as plt
 import seaborn as sns
@@ -18,8 +18,8 @@ from matplotlib.lines import Line2D
 
 def process_jsons(results_dir: Path) -> pd.DataFrame:
     """Processes the results JSON in the results folder."""
-    json_paths = list(results_dir.glob('**/*.json'))
-    json_paths = [p for p in json_paths if not str(p).endswith('metadata.json')]
+    json_paths = list(results_dir.glob("**/*.json"))
+    json_paths = [p for p in json_paths if not str(p).endswith("metadata.json")]
     # pprint(json_paths)
     # pprint(len(json_paths))
 
@@ -83,8 +83,9 @@ def plot_results_matplotlib(df: pd.DataFrame):
     )
     gs = GridSpec(nrows=3, ncols=2, figure=fig)
     collections = df.collection.unique()
-    legend_lines = [Line2D([0], [0], color=colors[c], marker="s", linestyle="") for c in
-                    collections]
+    legend_lines = [
+        Line2D([0], [0], color=colors[c], marker="s", linestyle="") for c in collections
+    ]
 
     # ax1: plt.Axes = fig.add_subplot(gs[1, 1])
     # sns.catplot(x="collection", y="success", data=df, ax=ax1)
@@ -94,8 +95,8 @@ def plot_results_matplotlib(df: pd.DataFrame):
     for collection in collections:
         ax.plot(
             df.time[df.collection == collection] / 1000,
-            marker='s',
-            color=colors[collection]
+            marker="s",
+            color=colors[collection],
         )
     ax.set_xlabel("model index")
     ax.set_ylabel("execution time [s]")
@@ -114,22 +115,24 @@ def plot_results_altair(df: pd.DataFrame):
     """Plot results with altair."""
     print("creating altair plot")
     alt.Chart(df).mark_circle(size=60).encode(
-        x='index',
-        y='time',
-        color='collection',
-        tooltip=['collection', 'mid', 'valid1', 'valid2']
+        x="index",
+        y="time",
+        color="collection",
+        tooltip=["collection", "mid", "valid1", "valid2"],
     ).interactive()
+
 
 # -----------------------
 
 from flask import Flask
 from flask import render_template
+
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def hello_world():
-    return render_template('analysis.html', plot="<b>plot 1</b>")
+    return render_template("analysis.html", plot="<b>plot 1</b>")
 
 
 # Flask
@@ -152,5 +155,3 @@ if __name__ == "__main__":
     server = Server(app.wsgi_app)
     server.watch()
     # server.serve()
-
-

@@ -4,11 +4,109 @@ import os
 import platform
 from pathlib import Path
 from typing import Optional, List
-
 from pydantic import BaseModel, Field
+from datetime import date
+
 from pymetadata.console import console
 
-from datetime import date
+from enum import Enum
+
+
+# ----------------------------------------------
+# FIXME: get rid of this information !!!
+
+
+class CuratorConstants:
+    """Class storing constants for curation and file format."""
+
+    # keys of outputs
+    METADATA_KEY = "metadata"
+    OBJECTIVE_KEY = "objective"
+    FVA_KEY = "fva"
+    GENE_DELETION_KEY = "gene_deletion"
+    REACTION_DELETION_KEY = "reaction_deletion"
+
+    # output filenames
+    METADATA_FILENAME = "metadata.json"
+    OBJECTIVE_FILENAME = f"01_{OBJECTIVE_KEY}.tsv"
+    FVA_FILENAME = f"02_{FVA_KEY}.tsv"
+    GENE_DELETION_FILENAME = f"03_{GENE_DELETION_KEY}.tsv"
+    REACTION_DELETION_FILENAME = f"04_{REACTION_DELETION_KEY}.tsv"
+
+    FILENAMES = [
+        OBJECTIVE_FILENAME,
+        FVA_FILENAME,
+        GENE_DELETION_FILENAME,
+        REACTION_DELETION_FILENAME,
+    ]
+
+    # fields
+
+    FVA_FIELDS = [
+        "model",
+        "objective",
+        "reaction",
+        "flux",
+        "status",
+        "minimum",
+        "maximum",
+        "fraction_optimum",
+    ]
+    GENE_DELETION_FIELDS = ["model", "objective", "gene", "status", "value"]
+    REACTION_DELETION_FIELDS = ["model", "objective", "reaction", "status", "value"]
+
+    # special settings for comparison
+    VALUE_INFEASIBLE = ""  # pd.NA
+    NUM_DECIMALS = 6  # decimals to write in the solution
+
+
+# ----------------------------------------------
+
+
+# FIXME: how to define an enum
+class StatusCode(str, Enum):
+    OPTIMAL = "optimal"
+    INFEASIBLE = "infeasible"
+
+
+class SId(BaseModel):
+    """FIXME: validate the SIds against SId pattern."""
+
+    sid: str
+
+
+class FrogObjective(BaseModel):
+    model: SId
+    objective: SId
+    status: StatusCode
+    value: float
+
+
+class FrogFVASingle(BaseModel):
+    model: SId
+    objective: SId
+    reaction: SId
+    flux: float
+    status: StatusCode
+    minimum: float
+    maximum: float
+    fraction_optimum: float
+
+
+class FrogReactionDeletion(BaseModel):
+    model: SId
+    objective: SId
+    reaction: SId
+    status: StatusCode
+    value: float
+
+
+class FrogGeneDeletion(BaseModel):
+    model: SId
+    objective: SId
+    gene: SId
+    status: StatusCode
+    value: float
 
 
 class Creator(BaseModel):
@@ -35,8 +133,7 @@ class FrogMetaData(BaseModel):
     """FROG metadata."""
 
     frog_date: date = Field(
-        alias="frog.date",
-        description="Curators which executed the FROG analysis."
+        alias="frog.date", description="Curators which executed the FROG analysis."
     )
     frog_version: str = Field(
         title="FROG version",
@@ -44,16 +141,13 @@ class FrogMetaData(BaseModel):
         description="Version of FROG according to schema.",
     )
     frog_curators: List[Creator] = Field(
-        alias="frog.curators",
-        description="Curators which executed the FROG analysis."
+        alias="frog.curators", description="Curators which executed the FROG analysis."
     )
     frog_software: Tool = Field(
         alias="frog.software",
         description="Software used to run FROG",
     )
-    software: Tool = Field(
-        description="Software used to run FBC."
-    )
+    software: Tool = Field(description="Software used to run FBC.")
     solver: Tool = Field(
         description="Solver used to solve LP problem (e.g. CPLEX, GUROBI, GLPK)."
     )
@@ -79,58 +173,13 @@ class FrogMetaData(BaseModel):
             return hashlib.md5(data).hexdigest()
 
 
-from pymetadata.console import console
-from pydantic import BaseModel
-import numpy as np
-from enum import Enum
-
-
-class StatusCode(str, Enum):
-    OPTIMAL = "optimal"
-    INFEASIBLE = "infeasible"
-
-
-class FrogObjective(BaseModel):
-    model: str
-    objective: str
-    status: StatusCode
-    value: float
-
-
-class FrogFVASingle(BaseModel):
-    model: str
-    objective: str
-    reaction: str
-    flux: float
-    status: StatusCode
-    minimum: float
-    maximum: float
-    fraction_optimum: float
-
-
-class FrogReactionDeletion(BaseModel):
-    model: str
-    objective: str
-    gene: str
-    status: StatusCode
-    value: float
-
-
-class FrogGeneDeletion(BaseModel):
-    model: str
-    objective: str
-    gene: str
-    status: StatusCode
-    value: float
-
-
 class Frog(BaseModel):
+    """Definition of the FROG standard."""
     metadata: FrogMetaData
     objective: FrogObjective
     fva: List[FrogFVASingle]
     reaction_deletions: List[FrogReactionDeletion]
     gene_deletions: List[FrogGeneDeletion]
-
 
 
 if __name__ == "__main__":
@@ -164,9 +213,7 @@ if __name__ == "__main__":
             url="https://github.com/opencobra/cobrapy",
         ),
         solver=Tool(
-            name="glpk",
-            version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}",
-            url=None
+            name="glpk", version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}", url=None
         ),
         environment=f"{os.name}, {platform.system()}, {platform.release()}",
         model_filename=ecoli_path.name,
@@ -176,4 +223,6 @@ if __name__ == "__main__":
     console.print(metadata)
     console.print(metadata.dict(by_alias=True))
     console.print(FrogMetaData.schema_json(indent=2))
+    console.rule(style="white")
     console.print(Frog.schema_json(indent=2))
+    console.rule(style="white")

@@ -29,7 +29,6 @@ from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 def run_fbc_curation(model_path: Path, results_path: Path, json_path: Path):
     """Run fbc curation on given model and store results in JSON."""
 
-
     time0 = default_timer()
     info = {
         "model_path": str(model_path),
