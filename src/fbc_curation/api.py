@@ -14,13 +14,15 @@ from typing import Any, Dict, Optional, Union
 import libsbml
 import requests
 import uvicorn
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, FilePath
 from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, Manifest, ManifestEntry, Omex
+from starlette.responses import JSONResponse
 
+from fbc_curation.worker import create_task
 from fbc_curation import EXAMPLE_PATH
 from fbc_curation.curator import Curator
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
@@ -97,6 +99,13 @@ example_items: Dict[str, Example] = {
         description="iJR904 model from BiGG database.",
     ),
 }
+
+
+@api.post("/tasks", status_code=201)
+def run_task(payload=Body(...)):
+    task_type = payload["type"]
+    task = create_task.delay(int(task_type))
+    return JSONResponse({"task_id": task.id})
 
 
 @api.get("/api/url", tags=["frog"])
@@ -215,20 +224,23 @@ def json_for_sbml(uid: str, source: Union[Path, str, bytes]) -> Dict:
 
 def frog_json_for_sbml(source: Union[Path, str]) -> Dict:
     """Read model info from SBML."""
-    doc: libsbml.SBMLDocument = libsbml.readSBML(str(source))
+
     with tempfile.TemporaryDirectory() as f_tmp:
-        sbml_path = Path(f_tmp) / "model.sbml"
-        libsbml.writeSBMLToFile(doc, str(sbml_path))
+        if isinstance(source, Path):
+            sbml_path = source
+        elif isinstance(source, str):
+            sbml_path = Path(f_tmp) / "model.sbml"
+            with open(sbml_path, "w") as f_sbml:
+                f_sbml.write(source)
 
-    # return SBMLDocumentInfo(doc=doc)
-    curator_keys = ["cobrapy", "cameo"]
-    obj_info = Curator._read_objective_information(sbml_path)
-    curator = CuratorCobrapy(
-            model_path=sbml_path, objective_id=obj_info.active_objective
-    )
-    report: FrogReport = curator.run()
-
-    return {"frog": report.dict()}
+        # return SBMLDocumentInfo(doc=doc)
+        # curator_keys = ["cobrapy", "cameo"]
+        obj_info = Curator._read_objective_information(sbml_path)
+        curator = CuratorCobrapy(
+                model_path=sbml_path, objective_id=obj_info.active_objective
+        )
+        report: FrogReport = curator.run()
+        return report
 
 
 def _handle_error(e: Exception, info: Optional[Dict] = None) -> Dict[Any, Any]:
@@ -238,6 +250,7 @@ def _handle_error(e: Exception, info: Optional[Dict] = None) -> Dict[Any, Any]:
 
     :param info: optional dictionary with information.
     """
+
     res = {
         "errors": [
             f"{e.__str__()}",
@@ -246,6 +259,7 @@ def _handle_error(e: Exception, info: Optional[Dict] = None) -> Dict[Any, Any]:
         "warnings": [],
         "info": info,
     }
+    logger.error(res)
 
     return res
 

@@ -1,5 +1,5 @@
 <template>
-   <div>Report Tables</div>
+    <div>Report Tables</div>
 </template>
 
 <script>

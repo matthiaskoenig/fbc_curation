@@ -1,6 +1,10 @@
 <template>
     <Splitter>
-        <SplitterPanel :size="20" :min-size="10" style="background-color: #f6f6f6; overflow-y: scroll">
+        <SplitterPanel
+            :size="20"
+            :min-size="10"
+            style="background-color: #f6f6f6; overflow-y: scroll"
+        >
             <OMEXTree />
 
             <div class="p-ml-2 p-mt-4 menuheader">SEARCH</div>
@@ -21,6 +25,7 @@
             style="background-color: white"
         >
             <div>FROG Report Tables</div>
+            {{ rawData }}
         </SplitterPanel>
     </Splitter>
 </template>
@@ -43,6 +48,9 @@ export default defineComponent({
     computed: {
         coreComponents(): Array<Record<string, unknown>> {
             return store.getters.reportBasics;
+        },
+        rawData(): Array<Record<string, unknown>> {
+            return store.getters.rawData;
         },
     },
     methods: {

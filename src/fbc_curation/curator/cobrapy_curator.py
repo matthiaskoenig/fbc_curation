@@ -3,6 +3,7 @@
 from pathlib import Path
 from typing import Dict
 
+import cobra
 from pydantic import ValidationError
 from rich import print
 import pandas as pd
@@ -23,9 +24,12 @@ from fbc_curation.frog import CuratorConstants, FrogMetaData, Tool, StatusCode, 
     FrogGeneDeletion, FrogReactionDeletion
 from fbc_curation.curator import Curator
 
+# use a single core
+configuration = cobra.Configuration()
+configuration.processes = 1
 
 logger = log.get_logger(__name__)
-
+logger.info(f"cobrapy processes: {configuration.processes}")
 
 class CuratorCobrapy(Curator):
     """FBC curator based on cobrapy."""

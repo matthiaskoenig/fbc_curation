@@ -20,17 +20,6 @@ volumes:
 
 services:
 
-  backend:
-    restart: always
-    build: .
-    volumes:
-      - .:/code
-    expose:
-      - "80"
-    ports:
-      - "1556:80"
-    command: ["/start.sh"]
-
   frontend:
     restart: always
     build:
@@ -42,3 +31,35 @@ services:
       - ./frog-site:/app
       - node_modules:/app/node_modules/
       - vue_dist:/usr/share/nginx/html
+
+  backend:
+    restart: always
+    build: .
+    volumes:
+      - .:/code
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    expose:
+      - "80"
+    ports:
+      - "1556:1556"
+    command: ["/start.sh"]
+    depends_on:
+      - redis
+
+  worker:
+    build: .
+    command: celery worker --app=src.fbc_curation.worker.celery --loglevel=info
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - backend
+      - redis
+    volumes:
+      - ./src/fbc_curation/:/usr/src/app
+
+
+  redis:
+    image: redis:6-alpine

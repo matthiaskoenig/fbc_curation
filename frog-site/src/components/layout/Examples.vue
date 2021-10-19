@@ -42,7 +42,6 @@
                             {{ props.data.description }}
                         </template>
                     </Column>
-
                 </DataTable>
                 <loading parent="example" message="Loading FROG examples" />
             </TabPanel>

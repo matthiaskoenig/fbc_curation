@@ -71,9 +71,6 @@ export default createStore({
         SET_SEARCH_QUERY(state, payload) {
             state.searchQuery = payload;
         },
-        SET_CONTEXTS(state, payload) {
-            state.contexts = payload;
-        },
         SET_OMEX_TREE(state, payload) {
             state.OMEXTree = payload;
         },
@@ -160,8 +157,9 @@ export default createStore({
             if (res.status === 200) {
                 checkAPIResponse(res);
                 res.data.examples.forEach((example) => {
-                    example["searchUtilField"] =
-                        [example.id, example.description].join(",");
+                    example["searchUtilField"] = [example.id, example.description].join(
+                        ","
+                    );
                 });
                 context.commit("SET_EXAMPLES", res.data.examples);
             } else {

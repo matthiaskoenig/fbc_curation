@@ -12,9 +12,9 @@
                     </a>
                     <p>
                         The objective of the FROG analysis is to provide reproducible
-                        output for FBC curation in the form of a FROG report.
-
-                        If you use <a href="https://runfrog.de">https://runfrog.de</a> in your work cite<br />
+                        output for FBC curation in the form of a FROG report. If you use
+                        <a href="https://runfrog.de">https://runfrog.de</a> in your work
+                        cite<br />
                         <a
                             href="https://zenodo.org/badge/latestdoi/3708271"
                             target="_blank"

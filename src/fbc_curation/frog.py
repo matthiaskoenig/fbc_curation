@@ -21,6 +21,17 @@ logger = log.get_logger(__name__)
 
 # ----------------------------------------------
 # FIXME: get rid of this information !!!
+# Handling NaNs via https://github.com/samuelcolvin/pydantic/issues/1779
+from math import isnan
+from pydantic import BaseModel as PydanticBaseModel, validator
+
+
+class BaseModel(PydanticBaseModel):
+    @validator('*')
+    def change_nan_to_none(cls, v, field):
+        if field.outer_type_ is float and isnan(v):
+            return None
+        return v
 
 
 class CuratorConstants:
