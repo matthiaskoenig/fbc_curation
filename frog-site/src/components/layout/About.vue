@@ -2,17 +2,17 @@
     <div class="p-px-2">
         <ScrollPanel style="width: 100%">
             <h1>About</h1>
-            <Panel header="FROG">
+            <Panel header="FROG Analysis">
                 <div class="p-d-flex content">
                     <a href="https://runfrog.de" class="image">
                         <img
-                            src="@/assets/images/frog-192x192.png"
+                            src="@/assets/images/FROG_analysis_white_BG_outline.svg"
                             height="50"
                         />
                     </a>
                     <p>
                         The objective of the FROG analysis is to provide reproducible
-                        output for FBC curation.
+                        output for FBC curation in the form of a FROG report.
 
                         If you use <a href="https://runfrog.de">https://runfrog.de</a> in your work cite<br />
                         <a
