@@ -1,12 +1,12 @@
-.. image:: ../icon/frog_icon_mirrored.svg
+.. image:: https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/version-0.2.0/icon/frog_icon_mirrored.svg
    :align: left
    :alt: FROG logo
 
-.. image:: ../icon/frog_analysis_white_BG_outline.svg
+.. image:: https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/version-0.2.0/icon/frog_analysis_white_BG_outline.svg
    :align: left
    :alt: FROG analysis logo
 
-.. image:: ../icon/frog_report_white_BG_outline.svg
+.. image:: https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/version-0.2.0/icon/frog_report_white_BG_outline.svg
    :align: left
    :alt: FROG report logo
 
