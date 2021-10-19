@@ -5,7 +5,8 @@ from typing import Dict
 from pymetadata.console import console
 
 from fbc_curation import EXAMPLE_PATH
-from fbc_curation.curator import Curator, FROGResults
+from fbc_curation.frog import FrogReport
+from fbc_curation.curator import Curator
 from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 
@@ -49,18 +50,18 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
         curator = curator_class(
             model_path=model_path, objective_id=obj_info.active_objective
         )
-        results: FROGResults = curator.run()
+        results: FrogReport = curator.run()
         results.write_results(results_path / curator_keys[k])
 
     all_results = {}
     for curator_key in curator_keys:
-        all_results[curator_key] = FROGResults.read_results(
+        all_results[curator_key] = FrogReport.read_results(
             path_in=results_path / curator_key
         )
 
     # comparison
     valid = [r.validate() for r in all_results.values()]
-    equal = FROGResults.compare(all_results)
+    equal = FrogReport.compare(all_results)
     info = {
         "model_path": model_path,
         "valid": valid,

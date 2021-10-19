@@ -4,42 +4,43 @@ import sys
 
 import pytest
 
-from fbc_curation import EXAMPLE_PATH, curation
-from fbc_curation.constants import CuratorConstants
+from fbc_curation import EXAMPLE_PATH
+from fbc_curation import runfrog
 
 
 @pytest.mark.parametrize("filename", ["e_coli_core.xml", "iJR904.xml.gz"])
-def test_curation1(monkeypatch, tmp_path, filename):
+def test_runfrog1(monkeypatch, tmp_path, filename):
     """First example via command line tool.
 
-    curation --model ../examples/models/e_coli_core.xml
-    --path ../examples/results/e_coli_core
+    runfrog --model resources/examples/models/e_coli_core.xml
+    --path resources/examples/results/e_coli_core
     """
     with monkeypatch.context() as m:
         args = [
-            "curation",
+            "runfrog",
             "--model",
             f"{EXAMPLE_PATH / 'models' / filename}",
             "--path",
             str(tmp_path),
         ]
         m.setattr(sys, "argv", args)
-        curation.main()
-        for out_fname in CuratorConstants.FILENAMES:
+        runfrog.main()
+        # FIXME: check results files
+        for out_fname in ["frogreport.json"]:
             assert (tmp_path / "cobrapy" / out_fname).exists()
             assert (tmp_path / "cameo" / out_fname).exists()
 
 
-def test_curation2(monkeypatch, tmp_path):
+def test_runfrog2(monkeypatch, tmp_path):
     """Second example via command line tool.
 
-    curation --model examples/models/e_coli_core.xml
-    --path examples/results/e_coli_core
-    --reference ../examples/results/e_coli_core/cobrapy
+    runfrog --model resources/examples/models/e_coli_core.xml
+    --path resources/examples/results/e_coli_core
+    --reference resources/examples/results/e_coli_core/cobrapy
     """
     with monkeypatch.context() as m:
         args = [
-            "curation",
+            "runfrog",
             "--model",
             f"{EXAMPLE_PATH / 'models' / 'e_coli_core.xml'}",
             "--path",
@@ -48,7 +49,7 @@ def test_curation2(monkeypatch, tmp_path):
             f"{EXAMPLE_PATH / 'results' / 'e_coli_core' / 'cobrapy'}",
         ]
         m.setattr(sys, "argv", args)
-        curation.main()
-        for out_fname in CuratorConstants.FILENAMES:
+        runfrog.main()
+        for out_fname in ["frogreport.json"]:
             assert (tmp_path / "cobrapy" / out_fname).exists()
             assert (tmp_path / "cameo" / out_fname).exists()

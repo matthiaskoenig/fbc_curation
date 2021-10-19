@@ -1,24 +1,29 @@
 """Module creates FBC curation files."""
 from pathlib import Path
+from typing import Dict
 
 from pymetadata import log
 from pymetadata.console import console
 
 from fbc_curation import __citation__, __version__
-from fbc_curation.curator import Curator, FROGResults
-
+from fbc_curation.curator import Curator
+from fbc_curation.frog import FrogReport
 
 logger = log.get_logger(__name__)
 
 
 def main():
-    """Entry point which runs fbc_curation script.
+    """Entry point which runs FROG report script.
+
+    The script is registered as `runfrog`.
 
     Example:
-        python curation.py --model ../examples/models/e_coli_core.xml
-          --path ../examples/results/e_coli_core
-        fbc_curation --model examples/models/e_coli_core.xml
-          --path examples/results/e_coli_core
+        runfrog --model resources/examples/models/e_coli_core.xml
+          --path resources/examples/results/e_coli_core
+
+        python curation.py --model resources/examples/models/e_coli_core.xml
+          --path resources/examples/results/e_coli_core
+
     """
 
     import optparse
@@ -64,11 +69,11 @@ def main():
     )
 
     console.rule(style="white")
-    console.print("\tFBC CURATION")
+    console.print(":frog: FBC CURATION FROG ANALYSIS :frog:", style="white on black")
     console.print(
-        f"\tVersion {__version__} (https://github.com/matthiaskoenig/fbc_curation)"
+        f"Version {__version__} (https://github.com/matthiaskoenig/fbc_curation)"
     )
-    console.print(f"\tCitation {__citation__}")
+    console.print(f"Citation {__citation__}")
     console.rule(style="white")
 
     options, args = parser.parse_args()
@@ -152,9 +157,9 @@ def main():
         curator_keys = ["cobrapy", "cameo"]
 
     # Reading reference solution
-    res_dict = {}
+    res_dict: Dict[str, FrogReport] = {}
     if reference_path:
-        reference_results = FROGResults.read_results(reference_path)
+        reference_results = FrogReport.read_results(reference_path)
         res_dict["reference"] = reference_results
 
     for k, curator_class in enumerate(curator_classes):
@@ -162,11 +167,11 @@ def main():
         curator = curator_class(model_path=model_path, objective_id=objective_id)
         results = curator.run()  # type: FROGResults
         results.write_results(output_path / key)
-        res_dict[key] = FROGResults.read_results(output_path / key)
+        res_dict[key] = FrogReport.read_results(output_path / key)
 
     # perform comparison
     if len(res_dict) > 1:
-        FROGResults.compare(res_dict)
+        FrogReport.compare(res_dict)
 
 
 if __name__ == "__main__":
