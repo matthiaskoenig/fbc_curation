@@ -1,11 +1,13 @@
 """FROG schema definition."""
 import hashlib
+import json
 import os
 import platform
 from pathlib import Path
 from typing import Optional, List
 
 import numpy as np
+import pandas as pd
 from pydantic import BaseModel, Field
 from datetime import date
 
@@ -32,6 +34,7 @@ class CuratorConstants:
     REACTION_DELETION_KEY = "reaction_deletion"
 
     # output filenames
+    REPORT_FILENAME = "frog.json"
     METADATA_FILENAME = "metadata.json"
     OBJECTIVE_FILENAME = f"01_{OBJECTIVE_KEY}.tsv"
     FVA_FILENAME = f"02_{FVA_KEY}.tsv"
@@ -39,6 +42,8 @@ class CuratorConstants:
     REACTION_DELETION_FILENAME = f"04_{REACTION_DELETION_KEY}.tsv"
 
     FILENAMES = [
+        REPORT_FILENAME,
+        METADATA_FILENAME,
         OBJECTIVE_FILENAME,
         FVA_FILENAME,
         GENE_DELETION_FILENAME,
@@ -46,19 +51,18 @@ class CuratorConstants:
     ]
 
     # fields
-
-    FVA_FIELDS = [
-        "model",
-        "objective",
-        "reaction",
-        "flux",
-        "status",
-        "minimum",
-        "maximum",
-        "fraction_optimum",
-    ]
-    GENE_DELETION_FIELDS = ["model", "objective", "gene", "status", "value"]
-    REACTION_DELETION_FIELDS = ["model", "objective", "reaction", "status", "value"]
+    # FVA_FIELDS = [
+    #     "model",
+    #     "objective",
+    #     "reaction",
+    #     "flux",
+    #     "status",
+    #     "minimum",
+    #     "maximum",
+    #     "fraction_optimum",
+    # ]
+    # GENE_DELETION_FIELDS = ["model", "objective", "gene", "status", "value"]
+    # REACTION_DELETION_FIELDS = ["model", "objective", "reaction", "status", "value"]
 
     # special settings for comparison
     VALUE_INFEASIBLE = np.NaN
@@ -195,31 +199,36 @@ class FrogReport(BaseModel):
 
     # FIXME: update the reading & writing of files
 
+
     def write_results(self, path_out: Path):
         """Write results to path."""
         if not path_out.exists():
             logger.warning(f"Creating results path: {path_out}")
             path_out.mkdir(parents=True)
 
+        # write FROG
+        with open(path_out / CuratorConstants.REPORT_FILENAME, "w") as f_json:
+            f_json.write(self.json())
+
         # write metadata file
         with open(path_out / CuratorConstants.METADATA_FILENAME, "w") as f_json:
-            json.dump(self.metadata, fp=f_json, indent=2)
+            f_json.write(self.metadata.json())
 
-        # write reference files
-        for filename, df in dict(
-            zip(
-                [
-                    CuratorConstants.OBJECTIVE_FILENAME,
-                    CuratorConstants.FVA_FILENAME,
-                    CuratorConstants.GENE_DELETION_FILENAME,
-                    CuratorConstants.REACTION_DELETION_FILENAME,
-                ],
-                [self.objective, self.fva, self.gene_deletion, self.reaction_deletion],
-            )
-        ).items():
-            logger.debug(f"-> {path_out / filename}")
-            df.to_csv(path_out / filename, sep="\t", index=False)
-            # df.to_json(path_out / filename, sep="\t", index=False)
+        # write reference files (CSV files)
+        # for filename, df in dict(
+        #     zip(
+        #         [
+        #             CuratorConstants.OBJECTIVE_FILENAME,
+        #             CuratorConstants.FVA_FILENAME,
+        #             CuratorConstants.GENE_DELETION_FILENAME,
+        #             CuratorConstants.REACTION_DELETION_FILENAME,
+        #         ],
+        #         [self.objective, self.fva, self.gene_deletion, self.reaction_deletion],
+        #     )
+        # ).items():
+        #     logger.debug(f"-> {path_out / filename}")
+        #     df.to_csv(path_out / filename, sep="\t", index=False)
+        #     # df.to_json(path_out / filename, sep="\t", index=False)
 
     @classmethod
     def read_results(cls, path_in: Path):
