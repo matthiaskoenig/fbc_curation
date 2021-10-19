@@ -1,6 +1,14 @@
-.. image:: https://github.com/matthiaskoenig/fbc_curation/raw/json-webservice/icon/frog_100.png
+.. image:: ../icon/frog_icon_mirrored.svg
    :align: left
-   :alt: fbc_curation logo
+   :alt: FROG logo
+
+.. image:: ../icon/frog_analysis_white_BG_outline.svg
+   :align: left
+   :alt: FROG analysis logo
+
+.. image:: ../icon/frog_report_white_BG_outline.svg
+   :align: left
+   :alt: FROG report logo
 
 fbc_curation (FROG analysis)
 ============================
