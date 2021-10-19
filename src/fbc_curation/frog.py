@@ -196,23 +196,39 @@ class FrogReport(BaseModel):
     reaction_deletions: FrogReactionDeletions
     gene_deletions: FrogGeneDeletions
 
+    @staticmethod
+    def read_json(path: Path) -> 'FrogReport':
+        """Read FrogReport from JSON format.
 
-    # FIXME: update the reading & writing of files
+        raises ValidationError
 
+        :path: path to JSON report file
+        """
+        with open(path, "r") as f_json:
+            d = json.load(fp=f_json)
+            return FrogReport(**d)
 
-    def write_results(self, path_out: Path):
+    def write_json(self, path: Path):
+        """Write FrogReport to JSON format."""
+        if not path.parent.exists():
+            logger.warning(f"Creating results path: {path.parent}")
+            path.mkdir(parents=True)
+
+        # write FROG
+        with open(path, "w") as f_json:
+            f_json.write(self.json())
+
+    # FIXME: update the reading & writing of TSV files
+
+    def write_tsvs(self, path_out: Path):
         """Write results to path."""
         if not path_out.exists():
             logger.warning(f"Creating results path: {path_out}")
             path_out.mkdir(parents=True)
 
-        # write FROG
-        with open(path_out / CuratorConstants.REPORT_FILENAME, "w") as f_json:
-            f_json.write(self.json())
-
         # write metadata file
-        with open(path_out / CuratorConstants.METADATA_FILENAME, "w") as f_json:
-            f_json.write(self.metadata.json())
+        # with open(path_out / CuratorConstants.METADATA_FILENAME, "w") as f_json:
+        #     f_json.write(self.metadata.json())
 
         # write reference files (CSV files)
         # for filename, df in dict(
@@ -230,8 +246,10 @@ class FrogReport(BaseModel):
         #     df.to_csv(path_out / filename, sep="\t", index=False)
         #     # df.to_json(path_out / filename, sep="\t", index=False)
 
+
+
     @classmethod
-    def read_results(cls, path_in: Path):
+    def read_tsvs(cls, path_in: Path) -> 'FrogReport':
         """Read fbc curation files from given directory."""
         path_metadata = path_in / CuratorConstants.METADATA_FILENAME
         path_objective = path_in / CuratorConstants.OBJECTIVE_FILENAME
@@ -252,7 +270,7 @@ class FrogReport(BaseModel):
             df_dict[CuratorConstants.METADATA_KEY] = json.load(fp=f_json)
         objective_id = df_dict["objective"].objective.values[0]
 
-        return FROGResults(objective_id=objective_id, **df_dict)
+        return FrogReport(objective_id=objective_id, **df_dict)
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ import uuid
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
 
+import libsbml
 import requests
 import uvicorn
 from fastapi import FastAPI, Request, Response
@@ -21,7 +22,9 @@ from pymetadata.console import console
 from pymetadata.omex import EntryFormat, Manifest, ManifestEntry, Omex
 
 from fbc_curation import EXAMPLE_PATH
-
+from fbc_curation.curator import Curator
+from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
+from fbc_curation.frog import FrogReport
 
 logger = log.get_logger(__name__)
 
@@ -212,9 +215,20 @@ def json_for_sbml(uid: str, source: Union[Path, str, bytes]) -> Dict:
 
 def frog_json_for_sbml(source: Union[Path, str]) -> Dict:
     """Read model info from SBML."""
-    # doc: libsbml.SBMLDocument = read_sbml(source)
+    doc: libsbml.SBMLDocument = libsbml.readSBML(str(source))
+    with tempfile.TemporaryDirectory() as f_tmp:
+        sbml_path = Path(f_tmp) / "model.sbml"
+        libsbml.writeSBMLToFile(doc, str(sbml_path))
+
     # return SBMLDocumentInfo(doc=doc)
-    return {"frog": {"frog": 1}}
+    curator_keys = ["cobrapy", "cameo"]
+    obj_info = Curator._read_objective_information(sbml_path)
+    curator = CuratorCobrapy(
+            model_path=sbml_path, objective_id=obj_info.active_objective
+    )
+    report: FrogReport = curator.run()
+
+    return {"frog": report.dict()}
 
 
 def _handle_error(e: Exception, info: Optional[Dict] = None) -> Dict[Any, Any]:

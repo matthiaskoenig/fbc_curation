@@ -120,7 +120,7 @@ def main():
             f"curators: {supported_curators}"
         )
 
-    obj_info = Curator.read_objective_information(model_path)
+    obj_info = Curator._read_objective_information(model_path)
     if not options.objective:
         objective_id = obj_info.active_objective
     else:

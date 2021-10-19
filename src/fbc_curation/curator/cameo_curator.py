@@ -135,7 +135,7 @@ class CuratorCameo(Curator):
         gene_status = []
         gene_values = []
 
-        knockout_reactions = self.knockout_reactions_for_genes(self.model_path)
+        knockout_reactions = self._knockout_reactions_for_genes(self.model_path)
 
         for gene in model.genes:
             reaction_bounds = dict()

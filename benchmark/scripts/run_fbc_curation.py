@@ -39,7 +39,7 @@ def run_fbc_curation(model_path: Path, results_path: Path, json_path: Path):
         print("#" * 80)
         print(model_path)
         print("#" * 80)
-        obj_info = Curator.read_objective_information(model_path)
+        obj_info = Curator._read_objective_information(model_path)
 
         curator_keys = ["cobrapy", "cameo"]
         for k, curator_class in enumerate([CuratorCobrapy, CuratorCameo]):

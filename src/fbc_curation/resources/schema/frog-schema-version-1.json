@@ -16,11 +16,7 @@
       "$ref": "#/definitions/FrogReactionDeletions"
     },
     "gene_deletions": {
-      "title": "Gene Deletions",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/FrogGeneDeletion"
-      }
+      "$ref": "#/definitions/FrogGeneDeletions"
     }
   },
   "required": [
@@ -166,20 +162,6 @@
         "model.md5"
       ]
     },
-    "SId": {
-      "title": "SId",
-      "description": "FIXME: validate the SIds against SId pattern.",
-      "type": "object",
-      "properties": {
-        "sid": {
-          "title": "Sid",
-          "type": "string"
-        }
-      },
-      "required": [
-        "sid"
-      ]
-    },
     "StatusCode": {
       "title": "StatusCode",
       "description": "An enumeration.",
@@ -194,10 +176,12 @@
       "type": "object",
       "properties": {
         "model": {
-          "$ref": "#/definitions/SId"
+          "title": "Model",
+          "type": "string"
         },
         "objective": {
-          "$ref": "#/definitions/SId"
+          "title": "Objective",
+          "type": "string"
         },
         "status": {
           "$ref": "#/definitions/StatusCode"
@@ -219,13 +203,16 @@
       "type": "object",
       "properties": {
         "model": {
-          "$ref": "#/definitions/SId"
+          "title": "Model",
+          "type": "string"
         },
         "objective": {
-          "$ref": "#/definitions/SId"
+          "title": "Objective",
+          "type": "string"
         },
         "reaction": {
-          "$ref": "#/definitions/SId"
+          "title": "Reaction",
+          "type": "string"
         },
         "flux": {
           "title": "Flux",
@@ -279,13 +266,16 @@
       "type": "object",
       "properties": {
         "model": {
-          "$ref": "#/definitions/SId"
+          "title": "Model",
+          "type": "string"
         },
         "objective": {
-          "$ref": "#/definitions/SId"
+          "title": "Objective",
+          "type": "string"
         },
         "reaction": {
-          "$ref": "#/definitions/SId"
+          "title": "Reaction",
+          "type": "string"
         },
         "status": {
           "$ref": "#/definitions/StatusCode"
@@ -324,13 +314,16 @@
       "type": "object",
       "properties": {
         "model": {
-          "$ref": "#/definitions/SId"
+          "title": "Model",
+          "type": "string"
         },
         "objective": {
-          "$ref": "#/definitions/SId"
+          "title": "Objective",
+          "type": "string"
         },
         "gene": {
-          "$ref": "#/definitions/SId"
+          "title": "Gene",
+          "type": "string"
         },
         "status": {
           "$ref": "#/definitions/StatusCode"
@@ -346,6 +339,22 @@
         "gene",
         "status",
         "value"
+      ]
+    },
+    "FrogGeneDeletions": {
+      "title": "FrogGeneDeletions",
+      "type": "object",
+      "properties": {
+        "deletions": {
+          "title": "Deletions",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FrogGeneDeletion"
+          }
+        }
+      },
+      "required": [
+        "deletions"
       ]
     }
   }

@@ -5,7 +5,7 @@ from typing import Dict
 from pymetadata.console import console
 
 from fbc_curation import EXAMPLE_PATH
-from fbc_curation.frog import FrogReport
+from fbc_curation.frog import FrogReport, CuratorConstants
 from fbc_curation.curator import Curator
 from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
@@ -42,33 +42,34 @@ def example_iAB_AMO1410_SARS(results_path: Path) -> Dict:
 
 def _run_example(model_path: Path, results_path: Path) -> Dict:
     console.rule(str(model_path))
-    obj_info = Curator.read_objective_information(model_path)
+    obj_info = Curator._read_objective_information(model_path)
 
-    # Create files
+    # Create FROG reports
     curator_keys = ["cobrapy", "cameo"]
     for k, curator_class in enumerate([CuratorCobrapy, CuratorCameo]):
         curator = curator_class(
             model_path=model_path, objective_id=obj_info.active_objective
         )
-        results: FrogReport = curator.run()
-        results.write_results(results_path / curator_keys[k])
+        report: FrogReport = curator.run()
+        report.write_json(results_path / curator_keys[k] / CuratorConstants.REPORT_FILENAME)
 
-    all_results = {}
+    # Read all reports
+    all_results: Dict[str: FrogReport] = {}
     for curator_key in curator_keys:
-        all_results[curator_key] = FrogReport.read_results(
-            path_in=results_path / curator_key
+        all_results[curator_key] = FrogReport.read_json(
+            path=results_path / curator_key / CuratorConstants.REPORT_FILENAME
         )
 
     # comparison
-    valid = [r.validate() for r in all_results.values()]
-    equal = FrogReport.compare(all_results)
-    info = {
-        "model_path": model_path,
-        "valid": valid,
-        "equal": equal,
-    }
-    console.print(info)
-    return info
+    # valid = [r.validate() for r in all_results.values()]
+    # equal = FrogReport.compare(all_results)
+    # info = {
+    #     "model_path": model_path,
+    #     "valid": valid,
+    #     "equal": equal,
+    # }
+    # console.print(info)
+    # return info
 
 
 if __name__ == "__main__":
