@@ -306,8 +306,19 @@ class FrogReport(BaseModel):
                     df.sort_values(by=["gene"], inplace=True)
                     df.index = range(len(df))
 
+            if filename in [
+                CuratorConstants.OBJECTIVE_FILENAME,
+                CuratorConstants.REACTION_DELETION_FILENAME,
+                CuratorConstants.GENE_DELETION_FILENAME,
+            ]:
+                df[df.status == StatusCode.INFEASIBLE.value].value = CuratorConstants.VALUE_INFEASIBLE
+                print(df[df.status == StatusCode.INFEASIBLE.value])
+            elif filename == CuratorConstants.FVA_FILENAME:
+                df[df.status == StatusCode.INFEASIBLE.value].minimum = CuratorConstants.VALUE_INFEASIBLE
+                df[df.status == StatusCode.INFEASIBLE.value].maximum = CuratorConstants.VALUE_INFEASIBLE
+
             # print(df.head())
-            df.to_csv(path_out / filename, sep="\t", index=False)
+            df.to_csv(path_out / filename, sep="\t", index=False, na_rep="NaN")
 
             # df.to_json(path_out / filename, sep="\t", index=False)
 

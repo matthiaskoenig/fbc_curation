@@ -76,8 +76,8 @@ model	objective	gene	status	value
 ./e_coli_core.xml	obj	G_b2288	optimal	0.21166294973531022
 ./e_coli_core.xml	obj	G_b2296	optimal	0.8739215069684373
 ./e_coli_core.xml	obj	G_b2297	optimal	0.8739215069684309
-./e_coli_core.xml	obj	G_b2415	infeasible	
-./e_coli_core.xml	obj	G_b2416	infeasible	
+./e_coli_core.xml	obj	G_b2415	infeasible	NaN
+./e_coli_core.xml	obj	G_b2416	infeasible	NaN
 ./e_coli_core.xml	obj	G_b2417	optimal	0.8739215069684322
 ./e_coli_core.xml	obj	G_b2458	optimal	0.8739215069684309
 ./e_coli_core.xml	obj	G_b2463	optimal	0.8739215069684302

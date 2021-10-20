@@ -26,7 +26,7 @@ model	objective	reaction	status	value
 ./e_coli_core.xml	obj	R_EX_for_e	optimal	0.8739215069684306
 ./e_coli_core.xml	obj	R_EX_fru_e	optimal	0.8739215069684306
 ./e_coli_core.xml	obj	R_EX_fum_e	optimal	0.8739215069684306
-./e_coli_core.xml	obj	R_EX_glc__D_e	infeasible	
+./e_coli_core.xml	obj	R_EX_glc__D_e	infeasible	NaN
 ./e_coli_core.xml	obj	R_EX_gln__L_e	optimal	0.8739215069684306
 ./e_coli_core.xml	obj	R_EX_glu__L_e	optimal	0.8739215069684306
 ./e_coli_core.xml	obj	R_EX_h2o_e	optimal	0.38351544929678116
@@ -48,7 +48,7 @@ model	objective	reaction	status	value
 ./e_coli_core.xml	obj	R_FUMt2_2	optimal	0.8739215069684305
 ./e_coli_core.xml	obj	R_G6PDH2r	optimal	0.8638133095039997
 ./e_coli_core.xml	obj	R_GAPD	optimal	-5.007549237857418e-16
-./e_coli_core.xml	obj	R_GLCpts	infeasible	
+./e_coli_core.xml	obj	R_GLCpts	infeasible	NaN
 ./e_coli_core.xml	obj	R_GLNS	optimal	3.6871003362789205e-31
 ./e_coli_core.xml	obj	R_GLNabc	optimal	0.8739215069684296
 ./e_coli_core.xml	obj	R_GLUDy	optimal	0.8513885233462073
