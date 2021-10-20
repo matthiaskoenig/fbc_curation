@@ -4,8 +4,10 @@ from typing import Dict
 
 from pymetadata.console import console
 
+from pymetadata.omex import Omex, EntryFormat, ManifestEntry
+
 from fbc_curation import EXAMPLE_PATH
-from fbc_curation.frog import FrogReport, CuratorConstants
+from fbc_curation.frog import FrogReport, CuratorConstants, FrogFormat
 from fbc_curation.curator import Curator
 from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
@@ -51,14 +53,42 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
             model_path=model_path, objective_id=obj_info.active_objective
         )
         report: FrogReport = curator.run()
-        report.write_json(results_path / curator_keys[k] / CuratorConstants.REPORT_FILENAME)
+        json_path = results_path / curator_keys[k] / CuratorConstants.REPORT_FILENAME
+        report.write_json(json_path)
+
+        # write tsv
+        report.write_tsvs(results_path / curator_keys[k])
+
+    # create omex
+    omex = Omex()
+    omex.add_entry(
+        entry_path=model_path,
+        entry=ManifestEntry(
+            location=f"./{model_path.name}",
+            format=EntryFormat.SBML,
+        )
+    )
+    for curator_key in curator_keys:
+        omex.add_entry(
+            entry_path=json_path,
+            entry=ManifestEntry(
+                location=f"./FROG/{curator_key}/{CuratorConstants.REPORT_FILENAME}",
+                format=FrogFormat.FROG_JSON_VERSION_1,
+            )
+        )
+
+    omex_path = results_path / f"{model_path.stem}_FROG.omex"
+    omex.to_omex(omex_path)
+    console.print(f"FROG OMEX written: 'file://{omex_path}'")
+
 
     # Read all reports
-    all_results: Dict[str: FrogReport] = {}
-    for curator_key in curator_keys:
-        all_results[curator_key] = FrogReport.read_json(
-            path=results_path / curator_key / CuratorConstants.REPORT_FILENAME
-        )
+    # FIXME: JSON
+    # all_results: Dict[str: FrogReport] = {}
+    # for curator_key in curator_keys:
+    #     all_results[curator_key] = FrogReport.read_json(
+    #         path=results_path / curator_key / CuratorConstants.REPORT_FILENAME
+    #     )
 
     # comparison
     # valid = [r.validate() for r in all_results.values()]

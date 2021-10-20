@@ -78,7 +78,7 @@ class CuratorCameo(Curator):
             status = StatusCode.INFEASIBLE
 
         return FrogObjective(
-            model=self.model_path.name,
+            model=self.model_location,
             objective=self.objective_id,
             status=status,
             value=value,
@@ -95,7 +95,7 @@ class CuratorCameo(Curator):
             df = fva_result.data_frame
             df_out = pd.DataFrame(
                 {
-                    "model": self.model_path.name,
+                    "model": self.model_location,
                     "objective": self.objective_id,
                     "reaction": df.index,
                     "flux": fluxes,
@@ -109,7 +109,7 @@ class CuratorCameo(Curator):
             logger.error(f"{e}")
             df_out = pd.DataFrame(
                 {
-                    "model": self.model_path.name,
+                    "model": self.model_location,
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
                     "flux": fluxes,
@@ -165,7 +165,7 @@ class CuratorCameo(Curator):
 
         df = pd.DataFrame(
             {
-                "model": self.model_path.name,
+                "model": self.model_location,
                 "objective": self.objective_id,
                 "gene": [gene.id for gene in model.genes],
                 "status": gene_status,
@@ -212,7 +212,7 @@ class CuratorCameo(Curator):
 
         df = pd.DataFrame(
             {
-                "model": self.model_path.name,
+                "model": self.model_location,
                 "objective": self.objective_id,
                 "reaction": [r.id for r in model.reactions],
                 "status": reaction_status,

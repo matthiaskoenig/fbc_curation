@@ -7,6 +7,7 @@ and returning the JSON representation based on fastAPI.
 import tempfile
 import time
 import traceback
+import typing
 import uuid
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
@@ -30,7 +31,14 @@ from fbc_curation.frog import FrogReport
 
 logger = log.get_logger(__name__)
 
+class ORJSONResponse(JSONResponse):
+    media_type = "application/json"
+
+    def render(self, content: typing.Any) -> bytes:
+        return orjson.dumps(content)
+
 api = FastAPI(
+    default_response_class=ORJSONResponse
     title="FROG REST API",
     description="API for running FROG analysis",
     version="0.1.0",

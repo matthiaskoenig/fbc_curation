@@ -74,7 +74,7 @@ class CuratorCobrapy(Curator):
             status = StatusCode.INFEASIBLE
 
         return FrogObjective(
-            model=self.model_path.name,
+            model=self.model_location,
             objective=self.objective_id,
             status=status,
             value=value,
@@ -95,7 +95,7 @@ class CuratorCobrapy(Curator):
             )
             df_out = pd.DataFrame(
                 {
-                    "model": self.model_path.name,
+                    "model": self.model_location,
                     "objective": self.objective_id,
                     "reaction": df.index,
                     "flux": fluxes,
@@ -109,7 +109,7 @@ class CuratorCobrapy(Curator):
             logger.error(f"{e}")
             df_out = pd.DataFrame(
                 {
-                    "model": self.model_path.name,
+                    "model": self.model_location,
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
                     "flux": fluxes,
@@ -141,7 +141,7 @@ class CuratorCobrapy(Curator):
         df = single_gene_deletion(model, model.genes)
         df = pd.DataFrame(
             {
-                "model": self.model_path.name,
+                "model": self.model_location,
                 "objective": self.objective_id,
                 "gene": [set(ids).pop() for ids in df.ids],
                 "status": df.status,
@@ -176,7 +176,7 @@ class CuratorCobrapy(Curator):
 
         df = pd.DataFrame(
             {
-                "model": self.model_path.name,
+                "model": self.model_location,
                 "objective": self.objective_id,
                 "reaction": [set(ids).pop() for ids in df.ids],
                 "status": df.status,

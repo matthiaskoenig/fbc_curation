@@ -34,6 +34,15 @@ class BaseModel(PydanticBaseModel):
         return v
 
 
+class FrogFormat(str, Enum):
+    FROG_JSON_VERSION_1 = "https://identifiers.org/combine.specifications:frog-json-version-1"
+    FROG_METADATA_VERSION_1 = "https://identifiers.org/combine.specifications:frog-metadata-version-1"
+    FROG_OBJECTIVE_VERSION_1 = "https://identifiers.org/combine.specifications:frog-objective-version-1"
+    FROG_FVA_VERSION_1 = "https://identifiers.org/combine.specifications:frog-fva-version-1"
+    FROG_GENEDELETION_VERSION_1 = "https://identifiers.org/combine.specifications:frog-genedeletion-version-1"
+    FROG_REACTIONDELETION_VERSION_1 = "https://identifiers.org/combine.specifications:frog-reactiondeletion-version-1"
+
+
 class CuratorConstants:
     """Class storing constants for curation and file format."""
 
@@ -229,8 +238,6 @@ class FrogReport(BaseModel):
         with open(path, "w") as f_json:
             f_json.write(self.json())
 
-    # FIXME: update the reading & writing of TSV files
-
     def write_tsvs(self, path_out: Path):
         """Write results to path."""
         if not path_out.exists():
@@ -238,26 +245,47 @@ class FrogReport(BaseModel):
             path_out.mkdir(parents=True)
 
         # write metadata file
-        # with open(path_out / CuratorConstants.METADATA_FILENAME, "w") as f_json:
-        #     f_json.write(self.metadata.json())
+        with open(path_out / CuratorConstants.METADATA_FILENAME, "w") as f_json:
+            f_json.write(self.metadata.json())
 
         # write reference files (CSV files)
-        # for filename, df in dict(
-        #     zip(
-        #         [
-        #             CuratorConstants.OBJECTIVE_FILENAME,
-        #             CuratorConstants.FVA_FILENAME,
-        #             CuratorConstants.GENE_DELETION_FILENAME,
-        #             CuratorConstants.REACTION_DELETION_FILENAME,
-        #         ],
-        #         [self.objective, self.fva, self.gene_deletion, self.reaction_deletion],
-        #     )
-        # ).items():
-        #     logger.debug(f"-> {path_out / filename}")
-        #     df.to_csv(path_out / filename, sep="\t", index=False)
-        #     # df.to_json(path_out / filename, sep="\t", index=False)
+        for filename, object in dict(
+            zip(
+                [
+                    CuratorConstants.OBJECTIVE_FILENAME,
+                    CuratorConstants.FVA_FILENAME,
+                    CuratorConstants.GENE_DELETION_FILENAME,
+                    CuratorConstants.REACTION_DELETION_FILENAME,
+                ],
+                [self.objective, self.fva, self.gene_deletions, self.reaction_deletions],
+            )
+        ).items():
+            logger.info(f"-> {path_out / filename}")
 
+            d = object.dict()
+            # print(d)
+            if filename == CuratorConstants.OBJECTIVE_FILENAME:
+                d = [d]
+                df = pd.DataFrame.from_records(d)
+                df.sort_values(by=["objective"], inplace=True)
+                df.index = range(len(df))
+            else:
+                d = list(d.values())[0]
+                df = pd.DataFrame(d)
+                if filename in {
+                    CuratorConstants.FVA_FILENAME,
+                    CuratorConstants.REACTION_DELETION_FILENAME
+                }:
+                    df.sort_values(by=["reaction"], inplace=True)
+                    df.index = range(len(df))
+                elif filename == CuratorConstants.GENE_DELETION_FILENAME:
+                    df.sort_values(by=["gene"], inplace=True)
+                    df.index = range(len(df))
 
+            print(df.head())
+            df.to_csv(path_out / filename, sep="\t", index=False)
+
+            # df.to_json(path_out / filename, sep="\t", index=False)
 
     @classmethod
     def read_tsvs(cls, path_in: Path) -> 'FrogReport':

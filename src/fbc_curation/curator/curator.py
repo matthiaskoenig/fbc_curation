@@ -42,6 +42,7 @@ class Curator:
             raise ValueError(f"model_path does not exist: '{model_path}'")
 
         self.model_path: Path = model_path
+        self.model_location: str = f"./{self.model_path.name}"
         self.active_objective, self.objective_ids = Curator._read_objective_information(
             model_path
         )
