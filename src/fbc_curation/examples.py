@@ -76,6 +76,20 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
                 format=FrogFormat.FROG_JSON_VERSION_1,
             )
         )
+        for filename, format in [
+            (CuratorConstants.METADATA_FILENAME, FrogFormat.FROG_METADATA_VERSION_1),
+            (CuratorConstants.OBJECTIVE_FILENAME, FrogFormat.FROG_OBJECTIVE_VERSION_1),
+            (CuratorConstants.FVA_FILENAME, FrogFormat.FROG_FVA_VERSION_1),
+            (CuratorConstants.REACTION_DELETION_FILENAME, FrogFormat.FROG_REACTIONDELETION_VERSION_1),
+            (CuratorConstants.GENE_DELETION_FILENAME, FrogFormat.FROG_GENEDELETION_VERSION_1),
+        ]:
+            omex.add_entry(
+                entry_path=results_path / curator_keys[k] / filename,
+                entry=ManifestEntry(
+                    location=f"./FROG/{curator_key}/{filename}",
+                    format=format,
+                )
+            )
 
     omex_path = results_path / f"{model_path.stem}_FROG.omex"
     omex.to_omex(omex_path)

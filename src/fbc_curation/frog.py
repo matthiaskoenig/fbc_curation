@@ -89,13 +89,9 @@ class CuratorConstants:
     NUM_DECIMALS = 6  # decimals to write in the solution
 
 
-# ----------------------------------------------
-
-
-# FIXME: how to define an enum
 class StatusCode(str, Enum):
-    OPTIMAL = "optimal"
-    INFEASIBLE = "infeasible"
+    OPTIMAL: str = "optimal"
+    INFEASIBLE: str = "infeasible"
 
 
 class FrogObjective(BaseModel):
@@ -103,6 +99,9 @@ class FrogObjective(BaseModel):
     objective: str
     status: StatusCode
     value: float
+
+    class Config:
+        use_enum_values = True
 
 
 class FrogFVASingle(BaseModel):
@@ -115,6 +114,9 @@ class FrogFVASingle(BaseModel):
     maximum: float
     fraction_optimum: float
 
+    class Config:
+        use_enum_values = True
+
 
 class FrogReactionDeletion(BaseModel):
     model: str
@@ -123,6 +125,9 @@ class FrogReactionDeletion(BaseModel):
     status: StatusCode
     value: float
 
+    class Config:
+        use_enum_values = True
+
 
 class FrogGeneDeletion(BaseModel):
     model: str
@@ -130,6 +135,9 @@ class FrogGeneDeletion(BaseModel):
     gene: str
     status: StatusCode
     value: float
+
+    class Config:
+        use_enum_values = True
 
 
 class Creator(BaseModel):
@@ -145,12 +153,16 @@ class Creator(BaseModel):
     site: Optional[str]
     orcid: Optional[str]
 
+    class Config:
+        use_enum_values = True
 
 class Tool(BaseModel):
     name: str = Field(description="Name of tool/software/library.")
     version: Optional[str] = Field(description="Version of tool/software/library.")
     url: Optional[str] = Field(description="URL of tool/software/library.")
 
+    class Config:
+        use_enum_values = True
 
 class FrogMetaData(BaseModel):
     """FROG metadata."""
@@ -199,13 +211,22 @@ class FrogMetaData(BaseModel):
 class FrogFVA(BaseModel):
     fva: List[FrogFVASingle]
 
+    class Config:
+        use_enum_values = True
+
 
 class FrogReactionDeletions(BaseModel):
     deletions: List[FrogReactionDeletion]
 
+    class Config:
+        use_enum_values = True
+
 
 class FrogGeneDeletions(BaseModel):
     deletions: List[FrogGeneDeletion]
+
+    class Config:
+        use_enum_values = True
 
 
 class FrogReport(BaseModel):
@@ -215,6 +236,9 @@ class FrogReport(BaseModel):
     fva: FrogFVA
     reaction_deletions: FrogReactionDeletions
     gene_deletions: FrogGeneDeletions
+
+    class Config:
+        use_enum_values = True
 
     @staticmethod
     def read_json(path: Path) -> 'FrogReport':
@@ -236,7 +260,7 @@ class FrogReport(BaseModel):
 
         # write FROG
         with open(path, "w") as f_json:
-            f_json.write(self.json())
+            f_json.write(self.json(indent=2))
 
     def write_tsvs(self, path_out: Path):
         """Write results to path."""
@@ -246,7 +270,7 @@ class FrogReport(BaseModel):
 
         # write metadata file
         with open(path_out / CuratorConstants.METADATA_FILENAME, "w") as f_json:
-            f_json.write(self.metadata.json())
+            f_json.write(self.metadata.json(indent=2))
 
         # write reference files (CSV files)
         for filename, object in dict(
@@ -282,7 +306,7 @@ class FrogReport(BaseModel):
                     df.sort_values(by=["gene"], inplace=True)
                     df.index = range(len(df))
 
-            print(df.head())
+            # print(df.head())
             df.to_csv(path_out / filename, sep="\t", index=False)
 
             # df.to_json(path_out / filename, sep="\t", index=False)
