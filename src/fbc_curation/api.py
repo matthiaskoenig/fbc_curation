@@ -22,23 +22,20 @@ from fastapi import FastAPI, Request, Response, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, FilePath
 from pymetadata import log
-from pymetadata.console import console
-from pymetadata.omex import EntryFormat, Manifest, ManifestEntry, Omex
 from starlette.responses import JSONResponse
 
-from fbc_curation.worker import create_task
+from fbc_curation.worker import create_task, frog_task
 from fbc_curation import EXAMPLE_PATH
-from fbc_curation.curator import Curator
-from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
-from fbc_curation.frog import FrogReport
 
 logger = log.get_logger(__name__)
+
 
 class ORJSONResponse(JSONResponse):
     media_type = "application/json"
 
     def render(self, content: typing.Any) -> bytes:
         return orjson.dumps(content)
+
 
 api = FastAPI(
     default_response_class=ORJSONResponse,
@@ -154,7 +151,8 @@ def frog_from_url(url: str) -> Dict[Any, Any]:
             with open(path, "w") as f:
                 f.write(response.text)
 
-            return json_for_omex(path)
+            task = frog_task.delay(str(path))
+            return {"task_id": task.id}
 
     except Exception as e:
         return _handle_error(e, info={"url": url})
@@ -172,7 +170,8 @@ async def frog_from_file(request: Request) -> Dict[Any, Any]:
             with open(path) as f:
                 f.write(file_content)
 
-            return json_for_omex(path)
+            task = frog_task.delay(str(path))
+            return {"task_id": task.id}
 
     except Exception as e:
         return _handle_error(e, info={})
@@ -193,88 +192,11 @@ async def frog_from_content(request: Request) -> Dict[Any, Any]:
             with open(path, "w") as f:
                 f.write(file_content)
 
-            return json_for_omex(path)
+            task = frog_task.delay(str(path))
+            return {"task_id": task.id}
 
     except Exception as e:
         return _handle_error(e, info={})
-
-
-def json_for_omex(omex_path: Path) -> Dict[str, Any]:
-    """Create FROG JSON for omex path.
-
-    Path can be either Omex or an SBML file.
-    """
-    uid: str = uuid.uuid4().hex
-
-    if Omex.is_omex(omex_path):
-        omex = Omex().from_omex(omex_path)
-    else:
-        # Path is SBML we create a new archive
-        omex = Omex()
-        omex.add_entry(
-            entry_path=omex_path,
-            entry=ManifestEntry(
-                location="./model.xml", format=EntryFormat.SBML, master=True
-            ),
-        )
-
-    content = {"uid": uid, "manifest": omex.manifest.dict(), "frogs": {}}
-
-    # Add FROG JSON for all SBML files
-    entry: ManifestEntry
-    for entry in omex.manifest.entries:
-        if entry.is_sbml():
-            sbml_path: Path = omex.get_path(entry.location)
-            content["frogs"][entry.location] = json_for_sbml(  # type: ignore
-                uid=uid, source=sbml_path
-            )
-
-    return content
-
-
-def json_for_sbml(uid: str, source: Union[Path, str, bytes]) -> Dict:
-    """Create FROG JSON content for given SBML source.
-
-    Source is either path to SBML file or SBML string.
-    """
-
-    if isinstance(source, bytes):
-        source = source.decode("utf-8")
-
-    time_start = time.time()
-    frog_json = frog_json_for_sbml(source=source)
-    time_elapsed = round(time.time() - time_start, 3)
-
-    debug = False
-    if debug:
-        console.rule("Creating JSON FROG")
-        console.print(frog_json)
-        console.rule()
-
-    logger.info(f"JSON created for '{uid}' in '{time_elapsed}'")
-
-    return frog_json
-
-
-def frog_json_for_sbml(source: Union[Path, str]) -> Dict:
-    """Read model info from SBML."""
-
-    with tempfile.TemporaryDirectory() as f_tmp:
-        if isinstance(source, Path):
-            sbml_path = source
-        elif isinstance(source, str):
-            sbml_path = Path(f_tmp) / "model.sbml"
-            with open(sbml_path, "w") as f_sbml:
-                f_sbml.write(source)
-
-        # return SBMLDocumentInfo(doc=doc)
-        # curator_keys = ["cobrapy", "cameo"]
-        obj_info = Curator._read_objective_information(sbml_path)
-        curator = CuratorCobrapy(
-                model_path=sbml_path, objective_id=obj_info.active_objective
-        )
-        report: FrogReport = curator.run()
-        return report
 
 
 def _handle_error(e: Exception, info: Optional[Dict] = None) -> Dict[Any, Any]:
@@ -317,7 +239,8 @@ def example(example_id: str) -> Dict[Any, Any]:
         content: Dict
         if example:
             source: Path = example.file  # type: ignore
-            content = json_for_omex(omex_path=source)
+            task = frog_task.delay(str(source))
+            return {"task_id": task.id}
         else:
             content = {"error": f"example for id does not exist '{example_id}'"}
 

@@ -22,6 +22,7 @@ export default defineComponent({
     name: "TaskQueue",
     data() {
         return {
+            response: {},
             task_id: "-",
             status: "-",
             running: false,
@@ -29,7 +30,7 @@ export default defineComponent({
     },
     methods: {
         submitTask() {
-            const url = "http://0.0.0.0:1556/api" + "/tasks/";
+            const url = VUE_APP_APIURL + "/tasks/";
             //const response = await axios.get(url);
             this.task_id = "-";
             this.status = "-";
@@ -51,12 +52,13 @@ export default defineComponent({
             this.queryTaskStatus();
         },
         queryTaskStatus() {
-            const url = "http://0.0.0.0:1556/api" + "/tasks/" + this.task_id;
+            const url = VUE_APP_APIURL + "/tasks/" + this.task_id;
             //const response = await axios.get(url);
             axios.get(url)
                 .then((res) => {
                     console.log(res);
                     this.status = res.data.task_status;
+                    this.response = res
                 })
                 .catch((error) => {
                     console.log(error);

@@ -16,8 +16,8 @@ export let VUE_APP_FRONTENDURL = process.env.VUE_APP_FRONTENDURL;
 if (!VUE_APP_BASEURL) {
     // running in develop, no environment variable set
     VUE_APP_BASEURL = "http://0.0.0.0";
-    VUE_APP_APIURL = "http://0.0.0.0:1556";
-    VUE_APP_FRONTENDURL = "http://0.0.0.0:3456";
+    VUE_APP_APIURL = "http://0.0.0.0:1556/api";
+    VUE_APP_FRONTENDURL = "http://0.0.0.0:8085";
 }
 
 console.log("URL: " + VUE_APP_FRONTENDURL + " | " + VUE_APP_APIURL);
