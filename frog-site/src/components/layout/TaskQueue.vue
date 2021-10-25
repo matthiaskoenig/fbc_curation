@@ -1,12 +1,13 @@
 <template>
     <div>
         <h1>Task Queue</h1>
+        <ProgressBar v-if="running" class="p-my-5" mode="indeterminate" style="height: 0.5em" />
         Task Id: {{ task_id }}<br />
         Status: {{ status }}<br />
         <Button class="p-mt-2" type="button" @click="submitTask($event)"
             >Submit Task</Button>
-        <Button class="p-mt-2" type="button" @click="queryTaskStatus($event)"
-            >Query Status</Button>
+        <!--<Button class="p-mt-2" type="button" @click="queryTaskStatus($event)"
+            >Query Status</Button>-->
     </div>
 </template>
 
@@ -23,12 +24,15 @@ export default defineComponent({
         return {
             task_id: "-",
             status: "-",
+            running: false,
         };
     },
     methods: {
         submitTask() {
             const url = "http://0.0.0.0:1556/api" + "/tasks/";
             //const response = await axios.get(url);
+            this.task_id = "-";
+            this.status = "-";
             axios
                 .post(url,
                     {
@@ -42,6 +46,9 @@ export default defineComponent({
                 .catch((error) => {
                     console.log(error);
                 });
+            this.running = true;
+
+            this.queryTaskStatus();
         },
         queryTaskStatus() {
             const url = "http://0.0.0.0:1556/api" + "/tasks/" + this.task_id;
@@ -49,11 +56,19 @@ export default defineComponent({
             axios.get(url)
                 .then((res) => {
                     console.log(res);
-                    this.status = res.data;
+                    this.status = res.data.task_status;
                 })
                 .catch((error) => {
                     console.log(error);
                 });
+            if (this.status === "SUCCESS"){
+                this.running = false
+                return null;
+            }
+
+            setTimeout(() => {
+              this.queryTaskStatus();
+            }, 1000);
         },
     },
 });
