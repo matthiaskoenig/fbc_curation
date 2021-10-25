@@ -15,6 +15,9 @@ from typing import Any, Dict, Optional, Union
 import libsbml
 import requests
 import uvicorn
+import orjson
+from celery.result import AsyncResult
+
 from fastapi import FastAPI, Request, Response, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, FilePath
@@ -38,7 +41,7 @@ class ORJSONResponse(JSONResponse):
         return orjson.dumps(content)
 
 api = FastAPI(
-    default_response_class=ORJSONResponse
+    default_response_class=ORJSONResponse,
     title="FROG REST API",
     description="API for running FROG analysis",
     version="0.1.0",
@@ -108,12 +111,30 @@ example_items: Dict[str, Example] = {
     ),
 }
 
+'''
+curl http://localhost:1556/tasks -H "Content-Type: application/json" --data '{"type": 1}'
+curl http://localhost:1556/tasks/d5404acb-c576-45df-a661-bbbeae2260f1
+docker container logs --follow frog_worker
+
+'''
 
 @api.post("/tasks", status_code=201)
 def run_task(payload=Body(...)):
     task_type = payload["type"]
     task = create_task.delay(int(task_type))
     return JSONResponse({"task_id": task.id})
+
+
+@api.get("/tasks/{task_id}")
+def get_status(task_id):
+    task_result = AsyncResult(task_id)
+    result = {
+        "task_id": task_id,
+        "task_status": task_result.status,
+        "task_result": task_result.result
+    }
+    return JSONResponse(result)
+
 
 
 @api.get("/api/url", tags=["frog"])

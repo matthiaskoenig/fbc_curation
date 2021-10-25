@@ -21,6 +21,7 @@ volumes:
 services:
 
   frontend:
+    container_name: frog_frontend
     restart: always
     build:
       context: ./frog-site
@@ -33,6 +34,7 @@ services:
       - vue_dist:/usr/share/nginx/html
 
   backend:
+    container_name: frog_backend
     restart: always
     build: .
     volumes:
@@ -49,6 +51,7 @@ services:
       - redis
 
   worker:
+    container_name: frog_worker
     build: .
     command: celery worker --app=src.fbc_curation.worker.celery --loglevel=info
     environment:
@@ -62,4 +65,5 @@ services:
 
 
   redis:
+    container_name: frog_redis
     image: redis:6-alpine
