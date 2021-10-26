@@ -71,6 +71,7 @@ services:
 
   worker:
     container_name: frog_worker
+    restart: always
     build: .
     command: celery worker --app=src.fbc_curation.worker.celery --loglevel=info
     environment:
@@ -83,10 +84,12 @@ services:
       - ./src/fbc_curation/:/usr/src/app
 
   redis:
+    restart: always
     container_name: frog_redis
     image: redis:6-alpine
 
   dashboard:
+    restart: always
     container_name: frog_dashboard
     build: .
     command: flower --app=src.fbc_curation.worker.celery --port=5555 --broker=redis://redis:6379/0
