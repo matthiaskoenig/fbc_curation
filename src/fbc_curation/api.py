@@ -24,7 +24,7 @@ from pydantic import BaseModel, FilePath
 from pymetadata import log
 from starlette.responses import JSONResponse
 
-from fbc_curation.worker import create_task, frog_task
+from fbc_curation.worker import create_task, frog_task, celery_tmp_dir
 from fbc_curation import EXAMPLE_PATH
 
 logger = log.get_logger(__name__)
@@ -92,7 +92,7 @@ class Example(BaseModel):
 
 example_items: Dict[str, Example] = {
     "e_coli_core_sbml": Example(
-        id="e_coli_core",
+        id="e_coli_core_sbml",
         file=EXAMPLE_PATH / "models" / "e_coli_core.xml",
         description="E.coli core model from BiGG database as SBML.",
     ),
@@ -151,13 +151,12 @@ def frog_from_url(url: str) -> Dict[Any, Any]:
         response = requests.get(url)
         response.raise_for_status()
 
-        with tempfile.TemporaryDirectory() as f_tmp:
-            path = Path(f_tmp) / "file"
-            with open(path, "w") as f:
-                f.write(response.text)
+        path = celery_tmp_dir / "file"
+        with open(path, "w") as f:
+            f.write(response.text)
 
-            task = frog_task.delay(str(path))
-            return {"task_id": task.id}
+        task = frog_task.delay(str(path), True)
+        return {"task_id": task.id}
 
     except Exception as e:
         return _handle_error(e, info={"url": url})
@@ -170,13 +169,12 @@ async def frog_from_file(request: Request) -> Dict[Any, Any]:
         file_data = await request.form()
         file_content = await file_data["source"].read()  # type: ignore
 
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            path = Path(tmp_dir) / "file"
-            with open(path) as f:
-                f.write(file_content)
+        path = celery_tmp_dir / "file"
+        with open(path, 'w') as f:
+            f.write(file_content.decode("utf-8"))
 
-            task = frog_task.delay(str(path))
-            return {"task_id": task.id}
+        task = frog_task.delay(str(path), True)
+        return {"task_id": task.id}
 
     except Exception as e:
         return _handle_error(e, info={})
@@ -191,14 +189,12 @@ async def frog_from_content(request: Request) -> Dict[Any, Any]:
         file_content_bytes: bytes = await request.body()
         file_content = file_content_bytes.decode("utf-8")
 
-        # FIXME: get/use name
-        with tempfile.TemporaryDirectory() as f_tmp:
-            path = Path(f_tmp) / "file"
-            with open(path, "w") as f:
-                f.write(file_content)
+        path = celery_tmp_dir / "file"
+        with open(path, "w") as f:
+            f.write(file_content)
 
-            task = frog_task.delay(str(path))
-            return {"task_id": task.id}
+        task = frog_task.delay(str(path), True)
+        return {"task_id": task.id}
 
     except Exception as e:
         return _handle_error(e, info={})
@@ -244,7 +240,7 @@ def example(example_id: str) -> Dict[Any, Any]:
         content: Dict
         if example:
             source: Path = example.file  # type: ignore
-            task = frog_task.delay(str(source))
+            task = frog_task.delay(str(source), False)
             return {"task_id": task.id}
         else:
             content = {"error": f"example for id does not exist '{example_id}'"}

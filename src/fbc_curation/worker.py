@@ -21,6 +21,9 @@ celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
 celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
 
+# FIXME: ensure the tmp dir is deleted afterwards
+celery_tmp_dir = Path(tempfile.mkdtemp())
+
 
 @celery.task(name="create_task")
 def create_task(task_type):
@@ -29,34 +32,39 @@ def create_task(task_type):
 
 
 @celery.task(name="frog_task")
-def frog_task(omex_path_str: str) -> Dict[str, Any]:
+def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
     """Run FROG task and create JSON for omex path.
 
     Path can be either Omex or an SBML file.
     """
-    omex_path = Path(omex_path_str)
-    if Omex.is_omex(omex_path):
-        omex = Omex().from_omex(omex_path)
-    else:
-        # Path is SBML we create a new archive
-        omex = Omex()
-        omex.add_entry(
-            entry_path=omex_path,
-            entry=ManifestEntry(
-                location="./model.xml", format=EntryFormat.SBML, master=True
-            ),
-        )
-
-    content = {"manifest": omex.manifest.dict(), "frogs": {}}
-
-    # Add FROG JSON for all SBML files
-    entry: ManifestEntry
-    for entry in omex.manifest.entries:
-        if entry.is_sbml():
-            sbml_path: Path = omex.get_path(entry.location)
-            content["frogs"][entry.location] = json_for_sbml(
-                source=sbml_path
+    try:
+        omex_path = Path(omex_path_str)
+        if Omex.is_omex(omex_path):
+            omex = Omex().from_omex(omex_path)
+        else:
+            # Path is SBML we create a new archive
+            omex = Omex()
+            omex.add_entry(
+                entry_path=omex_path,
+                entry=ManifestEntry(
+                    location="./model.xml", format=EntryFormat.SBML, master=True
+                ),
             )
+
+        content = {"manifest": omex.manifest.dict(), "frogs": {}}
+
+        # Add FROG JSON for all SBML files
+        entry: ManifestEntry
+        for entry in omex.manifest.entries:
+            if entry.is_sbml():
+                sbml_path: Path = omex.get_path(entry.location)
+                content["frogs"][entry.location] = json_for_sbml(
+                    source=sbml_path
+                )
+    finally:
+        # cleanup temporary files for celery
+        if tmp_path:
+            os.remove(omex_path_str)
 
     return content
 

@@ -6,7 +6,7 @@ By using the Online FROG facilities of [runfrog.de](https://runfrog.de), you agr
 
 ## Can you avoid submitting any information?
 
-If you prefer to have greater privacy, you can avoid using the Online FROG by downloading [sbmlutils](https://github.com/matthiaskoenig/sbmlutils) (which contains the report engine) and running [sbmlutils](https://github.com/matthiaskoenig/sbmlutils) on your own private computer. This avoids the need to enter any information to this online service or uploading any models to [runfrog.de](https://runfrog.de). 
+If you prefer to have greater privacy, you can avoid using the Online FROG by downloading [fbc_curation](https://github.com/matthiaskoenig/fbc_curation) (which contains the report engine) and running [fbc_curation](https://github.com/matthiaskoenig/fbc_curation) on your own private computer. This avoids the need to enter any information to this online service or uploading any models to [runfrog.de](https://runfrog.de). 
 
 ## What information does this service gather?
 

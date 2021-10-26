@@ -1,6 +1,7 @@
 <template>
     <div class="p-p-4">
     <ProgressBar v-if="running" class="p-my-5" mode="indeterminate" style="height: 0.5em" />
+        {{ error }}
     <h1>FROG report</h1>
     <h2>{{ $route.params.id }}</h2>
 
@@ -29,6 +30,7 @@ export default defineComponent({
     },
     data() {
         return {
+            error: null,
             response: {},
             status: "-",
             result: null,
@@ -37,7 +39,8 @@ export default defineComponent({
     },
     methods: {
         queryTaskStatus() {
-            this.running = true
+            this.running = true;
+
             const url = VUE_APP_APIURL + "/tasks/" + this.task_id;
             console.log(url)
             axios.get(url)
@@ -49,12 +52,18 @@ export default defineComponent({
                 })
                 .catch((error) => {
                     console.log(error);
+                    this.error = error
                 });
             if (this.status === "SUCCESS"){
-                this.running = false
-
+                this.running = false;
                 return null;
             }
+            if (this.task_id === "undefined"){
+                this.running = false;
+                this.status = "NO_TASK_ID"
+                return null;
+            }
+
 
             setTimeout(() => {
               this.queryTaskStatus();
