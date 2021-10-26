@@ -15,6 +15,8 @@ volumes:
     driver: local
   node_modules:
     driver: local
+  frog_data:
+    driver: local
 
 services:
 
@@ -37,6 +39,7 @@ services:
     build: .
     volumes:
       - .:/code
+      - frog_data:/frog_data
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -82,6 +85,7 @@ services:
       - redis
     volumes:
       - ./src/fbc_curation/:/usr/src/app
+      - frog_data:/frog_data
 
   redis:
     restart: always
@@ -92,7 +96,7 @@ services:
     restart: always
     container_name: frog_dashboard
     build: .
-    command: flower --app=src.fbc_curation.worker.celery --port=5555 --broker=redis://redis:6379/0
+    command: celery flower --app=src.fbc_curation.worker.celery --port=5555 --broker=redis://redis:6379/0
     expose:
       - "5556"
     ports:

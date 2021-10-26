@@ -1,7 +1,9 @@
 FROM node:14.11.0 as build-stage
 WORKDIR /app
 COPY package*.json /app/
-RUN npm install
+RUN --mount=type=cache,target=/app/.npm \
+    npm set cache /app/.npm && \
+    npm install
 COPY . /app/
 EXPOSE 4567
 CMD npm run serve

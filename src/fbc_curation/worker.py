@@ -22,7 +22,6 @@ celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:
 celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
 
 # FIXME: ensure the tmp dir is deleted afterwards
-celery_tmp_dir = Path(tempfile.mkdtemp())
 
 
 @celery.task(name="create_task")
@@ -37,8 +36,15 @@ def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
 
     Path can be either Omex or an SBML file.
     """
+    logger.error(f"Loading content from: {omex_path_str}")
+
     try:
         omex_path = Path(omex_path_str)
+        if not omex_path.exists():
+            raise IOError(f"Path does not exist: '{omex_path}'")
+        if not omex_path.is_file():
+            raise IOError(f"Path is not a file: '{omex_path}'")
+
         if Omex.is_omex(omex_path):
             omex = Omex().from_omex(omex_path)
         else:

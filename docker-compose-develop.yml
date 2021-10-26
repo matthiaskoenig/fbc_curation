@@ -70,7 +70,7 @@ services:
   dashboard:
     container_name: frog_dashboard
     build: .
-    command: flower --app=src.fbc_curation.worker.celery --port=5555 --broker=redis://redis:6379/0
+    command: celery flower --app=src.fbc_curation.worker.celery --port=5555 --broker=redis://redis:6379/0
     ports:
       - 5556:5555
     environment:

@@ -29,7 +29,8 @@ COPY ./LICENSE /code/LICENSE
 WORKDIR /code
 
 # Install sbmlutils
-RUN pip install -e .
+RUN --mount=type=cache,target=/root/.cache \
+    pip install -e .
 
 ENV MODULE_NAME="fbc_curation.api"
 ENV VARIABLE_NAME="api"

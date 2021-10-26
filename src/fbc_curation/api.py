@@ -24,8 +24,9 @@ from pydantic import BaseModel, FilePath
 from pymetadata import log
 from starlette.responses import JSONResponse
 
-from fbc_curation.worker import create_task, frog_task, celery_tmp_dir
+from fbc_curation.worker import frog_task
 from fbc_curation import EXAMPLE_PATH
+from fbc_curation import FROG_DATA_DIR
 
 logger = log.get_logger(__name__)
 
@@ -98,7 +99,7 @@ example_items: Dict[str, Example] = {
     ),
     "e_coli_core_omex": Example(
         id="e_coli_core_omex",
-        file=EXAMPLE_PATH / "models" / "e_coli_core.xml",
+        file=EXAMPLE_PATH / "models" / "e_coli_core.omex",
         description="E.coli core model from BiGG database as OMEX.",
     ),
     "iAB_AMO1410_SARS-CoV-2": Example(
@@ -127,12 +128,6 @@ class TaskInfo(BaseModel):
     type: int
 
 
-@api.post("/api/tasks/", status_code=201)
-def run_task(info: TaskInfo):
-    task = create_task.delay(info.type)
-    return JSONResponse({"task_id": task.id})
-
-
 @api.get("/api/tasks/{task_id}")
 def get_status(task_id):
     task_result = AsyncResult(task_id)
@@ -147,57 +142,40 @@ def get_status(task_id):
 @api.get("/api/url", tags=["frog"])
 def frog_from_url(url: str) -> Dict[Any, Any]:
     """Get JSON FROG via URL."""
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-
-        path = celery_tmp_dir / "file"
-        with open(path, "w") as f:
-            f.write(response.text)
-
-        task = frog_task.delay(str(path), True)
-        return {"task_id": task.id}
-
-    except Exception as e:
-        return _handle_error(e, info={"url": url})
+    response = requests.get(url)
+    response.raise_for_status()
+    return frog_from_bytes(response.content)
 
 
 @api.post("/api/file", tags=["frog"])
 async def frog_from_file(request: Request) -> Dict[Any, Any]:
     """Upload file and return JSON FROG."""
-    try:
-        file_data = await request.form()
-        file_content = await file_data["source"].read()  # type: ignore
-
-        path = celery_tmp_dir / "file"
-        with open(path, 'w') as f:
-            f.write(file_content.decode("utf-8"))
-
-        task = frog_task.delay(str(path), True)
-        return {"task_id": task.id}
-
-    except Exception as e:
-        return _handle_error(e, info={})
+    file_data = await request.form()
+    file_content = await file_data["source"].read()  # type: ignore
+    return frog_from_bytes(file_content)
 
 
 @api.post("/api/content", tags=["frog"])
 async def frog_from_content(request: Request) -> Dict[Any, Any]:
     """Get JSON FROG from file contents."""
+    content: bytes = await request.body()
+    return frog_from_bytes(content)
 
-    file_content: Optional[str]
+
+def frog_from_bytes(content: bytes) -> Dict[Any, Any]:
+    """Start FROG task for given content."""
     try:
-        file_content_bytes: bytes = await request.body()
-        file_content = file_content_bytes.decode("utf-8")
+        # persistent temporary file cleaned up by task
+        _, path = tempfile.mkstemp(dir="/frog_data")
 
-        path = celery_tmp_dir / "file"
-        with open(path, "w") as f:
-            f.write(file_content)
-
+        with open(path, "wb") as f_tmp:
+            f_tmp.write(content)
+        logger.error(f"Saving content in: {str(path)}")
         task = frog_task.delay(str(path), True)
         return {"task_id": task.id}
 
     except Exception as e:
-        return _handle_error(e, info={})
+        return _handle_error(e)
 
 
 def _handle_error(e: Exception, info: Optional[Dict] = None) -> Dict[Any, Any]:
@@ -235,19 +213,17 @@ def examples() -> Dict[Any, Any]:
 @api.get("/api/examples/{example_id}", tags=["examples"])
 def example(example_id: str) -> Dict[Any, Any]:
     """Get specific FROG example."""
-    try:
-        example: Optional[Example] = example_items.get(example_id, None)
-        content: Dict
-        if example:
-            source: Path = example.file  # type: ignore
-            task = frog_task.delay(str(source), False)
-            return {"task_id": task.id}
-        else:
-            content = {"error": f"example for id does not exist '{example_id}'"}
 
-        return content
-    except Exception as e:
-        return _handle_error(e)
+    example: Optional[Example] = example_items.get(example_id, None)
+    content: Dict
+    if example:
+        source: Path = example.file  # type: ignore
+        with open(source, "wb") as f:
+            content = f.read()
+            return frog_from_bytes(content)
+
+    else:
+        return {"error": f"example for id does not exist '{example_id}'"}
 
 
 if __name__ == "__main__":

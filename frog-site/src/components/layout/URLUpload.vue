@@ -3,7 +3,7 @@
         <p>
             Type the URL of an SBML file with FBC information. Example:
             <code style="font-size: small"
-                >https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/models/e_coli_core.xml</code
+                >https://github.com/matthiaskoenig/fbc_curation/raw/version-0.2.0/src/fbc_curation/resources/examples/models/e_coli_core.omex</code
             >
         </p>
         <div class="card">
@@ -74,7 +74,7 @@ export default defineComponent({
         example_url(): string {
             return (
                 VUE_APP_FRONTENDURL +
-                "/model_url?url=https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/models/e_coli_core.xml"
+                "/model_url?url=https://github.com/matthiaskoenig/fbc_curation/raw/version-0.2.0/src/fbc_curation/resources/examples/models/e_coli_core.omex"
             );
         },
     },
