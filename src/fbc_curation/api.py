@@ -91,20 +91,25 @@ class Example(BaseModel):
 
 
 example_items: Dict[str, Example] = {
-    "e_coli_core": Example(
+    "e_coli_core_sbml": Example(
         id="e_coli_core",
         file=EXAMPLE_PATH / "models" / "e_coli_core.xml",
-        description="E.coli core model from BiGG database.",
+        description="E.coli core model from BiGG database as SBML.",
+    ),
+    "e_coli_core_omex": Example(
+        id="e_coli_core_omex",
+        file=EXAMPLE_PATH / "models" / "e_coli_core.xml",
+        description="E.coli core model from BiGG database as OMEX.",
     ),
     "iAB_AMO1410_SARS-CoV-2": Example(
         id="iAB_AMO1410_SARS-CoV-2",
-        file=EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml",
-        description="iAB_AMO1410_SARS-CoV-2 model.",
+        file=EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.omex",
+        description="iAB_AMO1410_SARS-CoV-2 model as OMEX.",
     ),
     "iJR904": Example(
         id="iJR904",
-        file=EXAMPLE_PATH / "models" / "iJR904.xml.gz",
-        description="iJR904 model from BiGG database.",
+        file=EXAMPLE_PATH / "models" / "iJR904.omex",
+        description="iJR904 model from BiGG database as OMEX.",
     ),
 }
 

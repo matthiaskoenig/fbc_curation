@@ -1,9 +1,8 @@
 <template>
     <div>
         <p class="p-pb-3">
-            Select an SBML file with FBC information located on your computer. The file
-            can be uncompressed, or compressed using zip, gzip or bzip2. OMEX archives
-            are supported.
+            Select an SBML file with FBC information located on your computer.
+            SBML file or SBML files in a COMBINE archive (OMEX) are supported.
         </p>
         <FileUpload
             :customUpload="true"
@@ -22,7 +21,7 @@
         <p class="p-pt-3" style="font-size: smaller">
             By using any part of this service, you agree to the terms of the
             <a
-                href="https://github.com/matthiaskoenig/sbmlutils/blob/develop/frog-site/privacy_notice.md"
+                href="https://github.com/matthiaskoenig/fbc_curation/blob/version-0.2.0/frog-site/privacy_notice.md"
                 target="_blank"
                 >privacy notice</a
             >.

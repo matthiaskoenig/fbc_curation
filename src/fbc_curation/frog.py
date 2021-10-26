@@ -34,15 +34,6 @@ class BaseModel(PydanticBaseModel):
         return v
 
 
-class FrogFormat(str, Enum):
-    FROG_JSON_VERSION_1 = "https://identifiers.org/combine.specifications:frog-json-version-1"
-    FROG_METADATA_VERSION_1 = "https://identifiers.org/combine.specifications:frog-metadata-version-1"
-    FROG_OBJECTIVE_VERSION_1 = "https://identifiers.org/combine.specifications:frog-objective-version-1"
-    FROG_FVA_VERSION_1 = "https://identifiers.org/combine.specifications:frog-fva-version-1"
-    FROG_GENEDELETION_VERSION_1 = "https://identifiers.org/combine.specifications:frog-genedeletion-version-1"
-    FROG_REACTIONDELETION_VERSION_1 = "https://identifiers.org/combine.specifications:frog-reactiondeletion-version-1"
-
-
 class CuratorConstants:
     """Class storing constants for curation and file format."""
 
@@ -252,7 +243,7 @@ class FrogReport(BaseModel):
             d = json.load(fp=f_json)
             return FrogReport(**d)
 
-    def write_json(self, path: Path):
+    def to_json(self, path: Path):
         """Write FrogReport to JSON format."""
         if not path.parent.exists():
             logger.warning(f"Creating results path: {path.parent}")
@@ -262,14 +253,14 @@ class FrogReport(BaseModel):
         with open(path, "w") as f_json:
             f_json.write(self.json(indent=2))
 
-    def write_tsvs(self, path_out: Path):
-        """Write results to path."""
-        if not path_out.exists():
-            logger.warning(f"Creating results path: {path_out}")
-            path_out.mkdir(parents=True)
+    def to_tsvs_with_metadata(self, output_dir: Path):
+        """Write Report TSV and metadata to directory"""
+        if not output_dir.exists():
+            logger.warning(f"Creating results path: {output_dir}")
+            output_dir.mkdir(parents=True)
 
         # write metadata file
-        with open(path_out / CuratorConstants.METADATA_FILENAME, "w") as f_json:
+        with open(output_dir / CuratorConstants.METADATA_FILENAME, "w") as f_json:
             f_json.write(self.metadata.json(indent=2))
 
         # write reference files (CSV files)
@@ -284,7 +275,7 @@ class FrogReport(BaseModel):
                 [self.objective, self.fva, self.gene_deletions, self.reaction_deletions],
             )
         ).items():
-            logger.info(f"-> {path_out / filename}")
+            logger.info(f"-> {output_dir / filename}")
 
             d = object.dict()
             # print(d)
@@ -318,7 +309,7 @@ class FrogReport(BaseModel):
                 df[df.status == StatusCode.INFEASIBLE.value].maximum = CuratorConstants.VALUE_INFEASIBLE
 
             # print(df.head())
-            df.to_csv(path_out / filename, sep="\t", index=False, na_rep="NaN")
+            df.to_csv(output_dir / filename, sep="\t", index=False, na_rep="NaN")
 
             # df.to_json(path_out / filename, sep="\t", index=False)
 

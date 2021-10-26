@@ -21,25 +21,48 @@ def run_examples(results_path: Path = EXAMPLE_PATH / "results"):
 
 
 def example_ecoli_core(results_path: Path) -> Dict:
-    """Create example files for ecoli core."""
+    """Create FROG report for ecoli core."""
     return _run_example(
         EXAMPLE_PATH / "models" / "e_coli_core.xml", results_path=results_path
     )
 
 
-def example_iJR904(results_path: Path) -> Dict:
-    """Create example files for iJR904."""
+def example_ecoli_core_omex(results_path: Path) -> Dict:
+    """Create FROG report for ecoli core."""
     return _run_example(
-        EXAMPLE_PATH / "models" / "iJR904.xml.gz", results_path=results_path
+        EXAMPLE_PATH / "models" / "e_coli_core.omex", results_path=results_path
+    )
+
+
+def example_iJR904(results_path: Path) -> Dict:
+    """Create FROG report for iJR904."""
+    return _run_example(
+        EXAMPLE_PATH / "models" / "iJR904.xml", results_path=results_path
+    )
+
+
+def example_iJR904_omex(results_path: Path) -> Dict:
+    """Create FROG report for iJR904."""
+    return _run_example(
+        EXAMPLE_PATH / "models" / "iJR904.omex", results_path=results_path
     )
 
 
 def example_iAB_AMO1410_SARS(results_path: Path) -> Dict:
-    """Create example files for iAB_AMO1410_SARS."""
+    """Create FROG report for iAB_AMO1410_SARS."""
     return _run_example(
         EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml",
         results_path=results_path,
     )
+
+
+def example_iAB_AMO1410_SARS_omex(results_path: Path) -> Dict:
+    """Create FROG report for iAB_AMO1410_SARS."""
+    return _run_example(
+        EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.omex",
+        results_path=results_path,
+    )
+
 
 
 def _run_example(model_path: Path, results_path: Path) -> Dict:
@@ -54,50 +77,55 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
         )
         report: FrogReport = curator.run()
         json_path = results_path / curator_keys[k] / CuratorConstants.REPORT_FILENAME
-        report.write_json(json_path)
+        report.to_json(json_path)
 
         # write tsv
-        report.write_tsvs(results_path / curator_keys[k])
+        report.to_tsvs_with_metadata(results_path / curator_keys[k])
 
-    # create omex
-    omex = Omex()
-    omex.add_entry(
-        entry_path=model_path,
-        entry=ManifestEntry(
-            location=f"./{model_path.name}",
-            format=EntryFormat.SBML,
-        )
-    )
-    for curator_key in curator_keys:
+        # create omex
+        omex = Omex()
         omex.add_entry(
-            entry_path=json_path,
+            entry_path=model_path,
             entry=ManifestEntry(
-                location=f"./FROG/{curator_key}/{CuratorConstants.REPORT_FILENAME}",
-                format=FrogFormat.FROG_JSON_VERSION_1,
+                location=f"./{model_path.name}",
+                format=EntryFormat.SBML,
             )
         )
-        for filename, format in [
-            (CuratorConstants.METADATA_FILENAME, FrogFormat.FROG_METADATA_VERSION_1),
-            (CuratorConstants.OBJECTIVE_FILENAME, FrogFormat.FROG_OBJECTIVE_VERSION_1),
-            (CuratorConstants.FVA_FILENAME, FrogFormat.FROG_FVA_VERSION_1),
-            (CuratorConstants.REACTION_DELETION_FILENAME, FrogFormat.FROG_REACTIONDELETION_VERSION_1),
-            (CuratorConstants.GENE_DELETION_FILENAME, FrogFormat.FROG_GENEDELETION_VERSION_1),
-        ]:
+        for curator_key in curator_keys:
             omex.add_entry(
-                entry_path=results_path / curator_keys[k] / filename,
+                entry_path=json_path,
                 entry=ManifestEntry(
-                    location=f"./FROG/{curator_key}/{filename}",
-                    format=format,
+                    location=f"./FROG/{curator_key}/{CuratorConstants.REPORT_FILENAME}",
+                    format=FrogFormat.FROG_JSON_VERSION_1,
                 )
             )
+            for filename, format in [
+                (
+                    CuratorConstants.METADATA_FILENAME,
+                    FrogFormat.FROG_METADATA_VERSION_1),
+                (CuratorConstants.OBJECTIVE_FILENAME,
+                 FrogFormat.FROG_OBJECTIVE_VERSION_1),
+                (CuratorConstants.FVA_FILENAME, FrogFormat.FROG_FVA_VERSION_1),
+                (CuratorConstants.REACTION_DELETION_FILENAME,
+                 FrogFormat.FROG_REACTIONDELETION_VERSION_1),
+                (CuratorConstants.GENE_DELETION_FILENAME,
+                 FrogFormat.FROG_GENEDELETION_VERSION_1),
+            ]:
+                omex.add_entry(
+                    entry_path=results_path / curator_keys[k] / filename,
+                    entry=ManifestEntry(
+                        location=f"./FROG/{curator_key}/{filename}",
+                        format=format,
+                    )
+                )
 
     omex_path = results_path / f"{model_path.stem}_FROG.omex"
     omex.to_omex(omex_path)
     console.print(f"FROG OMEX written: 'file://{omex_path}'")
 
 
+    # FIXME: reading and comparison
     # Read all reports
-    # FIXME: JSON
     # all_results: Dict[str: FrogReport] = {}
     # for curator_key in curator_keys:
     #     all_results[curator_key] = FrogReport.read_json(

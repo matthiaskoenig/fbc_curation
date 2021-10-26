@@ -5,14 +5,15 @@
                 <div>
                     <div class="p-m-3">
                         <submit-options />
-                        <examples />
+
                     </div>
                 </div>
             </div>
             <div class="p-col-12 p-lg-6">
                 <div class="p-m-3">
                     <!--<about />-->
-                    <task-queue />
+                    <examples />
+                    <!--<task-queue />-->
                 </div>
             </div>
         </div>
@@ -25,7 +26,7 @@ import { defineComponent } from "@vue/runtime-core";
 import Examples from "@/components/layout/Examples.vue";
 import SubmitOptions from "@/components/layout/SubmitOptions.vue";
 // import About from "@/components/layout/About.vue";
-import About from "@/components/layout/TaskQueue.vue";
+// import About from "@/components/layout/TaskQueue.vue";
 import TaskQueue from "@/components/layout/TaskQueue.vue";
 
 export default defineComponent({

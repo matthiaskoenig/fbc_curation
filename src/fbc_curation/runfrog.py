@@ -169,6 +169,10 @@ def main():
         results.write_results(output_path / key)
         res_dict[key] = FrogReport.read_results(output_path / key)
 
+
+    # TODO: write to OMEX
+    # FIXME: reuse the functionality
+
     # perform comparison
     if len(res_dict) > 1:
         FrogReport.compare(res_dict)
