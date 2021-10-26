@@ -39,7 +39,7 @@ services:
     build: .
     volumes:
       - .:/code
-      - frog_data:/frog_data
+      - ./frog_data:/frog_data
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -76,7 +76,7 @@ services:
     container_name: frog_worker
     restart: always
     build: .
-    command: celery worker --app=src.fbc_curation.worker.celery --loglevel=info
+    command: celery --app=src.fbc_curation.worker.celery worker --loglevel=info
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -85,7 +85,7 @@ services:
       - redis
     volumes:
       - ./src/fbc_curation/:/usr/src/app
-      - frog_data:/frog_data
+      - ./frog_data:/frog_data
 
   redis:
     restart: always

@@ -63,10 +63,13 @@ def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
         entry: ManifestEntry
         for entry in omex.manifest.entries:
             if entry.is_sbml():
+                # TODO: check that SBML model with FBC information
                 sbml_path: Path = omex.get_path(entry.location)
                 content["frogs"][entry.location] = json_for_sbml(
                     source=sbml_path
                 )
+        else:
+            logger.error("No SBML file found in archive!")
     finally:
         # cleanup temporary files for celery
         if tmp_path:

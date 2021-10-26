@@ -17,6 +17,8 @@ volumes:
     driver: local
   node_modules:
     driver: local
+  frog_data:
+    driver: local
 
 services:
 
@@ -39,6 +41,7 @@ services:
     build: .
     volumes:
       - .:/code
+      - ./frog_data:/frog_data
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -53,7 +56,7 @@ services:
   worker:
     container_name: frog_worker
     build: .
-    command: celery worker --app=src.fbc_curation.worker.celery --loglevel=info
+    command: celery --app=src.fbc_curation.worker.celery worker --loglevel=info
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -62,6 +65,7 @@ services:
       - redis
     volumes:
       - ./src/fbc_curation/:/usr/src/app
+      - ./frog_data:/frog_data
 
   redis:
     container_name: frog_redis

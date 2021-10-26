@@ -218,7 +218,7 @@ def example(example_id: str) -> Dict[Any, Any]:
     content: Dict
     if example:
         source: Path = example.file  # type: ignore
-        with open(source, "wb") as f:
+        with open(source, "rb") as f:
             content = f.read()
             return frog_from_bytes(content)
 
