@@ -111,8 +111,8 @@ example_items: Dict[str, Example] = {
 '''
 Development
 http://localhost:8085/
-curl http://localhost:1556/tasks/ -H "Content-Type: application/json" --data '{"type": 1}'
-curl http://localhost:1556/tasks/d5404acb-c576-45df-a661-bbbeae2260f1
+curl http://localhost:1556/api/tasks/ -H "Content-Type: application/json" --data '{"type": 1}'
+curl http://localhost:1556/api/tasks/d5404acb-c576-45df-a661-bbbeae2260f1
 docker container logs --follow frog_worker
 
 '''

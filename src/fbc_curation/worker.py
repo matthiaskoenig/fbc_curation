@@ -20,9 +20,6 @@ logger = log.get_logger(__name__)
 celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
 celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
-celery.conf.update(
-    # result_expires=3600,
-)
 
 
 @celery.task(name="create_task")
