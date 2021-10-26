@@ -64,8 +64,10 @@ services:
       - frontend
       - redis
       - worker
+      - dashboard
     links:
       - backend:backend
+      - dashboard:dashboard
 
   worker:
     container_name: frog_worker
