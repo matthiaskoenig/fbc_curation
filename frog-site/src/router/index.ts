@@ -4,6 +4,7 @@ import Report from "../components/layout/Report.vue";
 import About from "../components/layout/About.vue";
 import Examples from "../components/layout/Examples.vue";
 import store from "@/store/index";
+import Frog from "@/components/layout/Frog.vue";
 
 const routes: Array<RouteRecordRaw> = [
     // landing page
@@ -17,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/report",
         name: "Report",
         component: Report,
+    },
+    {
+        path: "/frog/:id",
+        name: "Frog",
+        component: Frog,
     },
     {
         path: "/about",

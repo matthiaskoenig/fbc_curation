@@ -84,11 +84,16 @@ export default createStore({
         },
         initializeReport(context, payload) {
             // dump the raw data fetched from the backend
-            const OMEXRes = payload.data;
-            context.commit("SET_RAW_DATA", OMEXRes);
+            console.log("INITIALIZE REPORT")
+            console.log(payload)
+            const task_id = payload.data.task_id
 
-            const OMEXTree = OMEX_HELPERS.generateOMEXTree(OMEXRes);
-            context.commit("SET_OMEX_TREE", OMEXTree);
+
+            // const OMEXRes = payload.data;
+            // context.commit("SET_RAW_DATA", OMEXRes);
+            //
+            // const OMEXTree = OMEX_HELPERS.generateOMEXTree(OMEXRes);
+            // context.commit("SET_OMEX_TREE", OMEXTree);
 
             // const initializationData =
             //     INITIALIZATION_HELPERS.organizeLocationwiseContexts(OMEXRes) as Record<
@@ -111,7 +116,7 @@ export default createStore({
             // );
 
             // redirect to report view
-            router.push("/report");
+            router.push("/frog/" + task_id);
         },
         updateReportStatesAndFollowUp(context, payload) {
             context.commit("SET_CURRENT_REPORT", payload["report"]);
