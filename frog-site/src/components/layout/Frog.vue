@@ -5,8 +5,6 @@
     <h1>FROG report</h1>
     <h2>{{ $route.params.id }}</h2>
 
-    {{ manifest }}
-
     <strong>Status</strong>: <Tag :value="status"></Tag>
         <div>
             <code style="font-size: x-small">{{ result }}</code>
@@ -28,12 +26,12 @@ export default defineComponent({
         task_id(){
             return this.$route.params.id;
         },
-        manifest(){
-            return this.result.manifest;
-        },
-        frogs(){
-            return this.result.frogs;
-        },
+        // manifest(){
+        //     return this.data.result.manifest;
+        // },
+        // frogs(){
+        //     return this.data.result.frogs;
+        // },
     },
     data() {
         return {
@@ -41,7 +39,6 @@ export default defineComponent({
             result: {
                 manifest: null,
                 frogs: null,
-
             },
             status: "undefined",
             running: true,
@@ -58,7 +55,6 @@ export default defineComponent({
                     console.log(res);
                     this.status = res.data.task_status;
                     this.result = res.data.task_result;
-                    this.response = res
                 })
                 .catch((error) => {
                     console.log(error);

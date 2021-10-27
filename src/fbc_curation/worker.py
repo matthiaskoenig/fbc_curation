@@ -71,9 +71,11 @@ def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
         else:
             logger.error("No SBML file found in archive!")
     finally:
+        pass
+        # FIXME:
         # cleanup temporary files for celery
-        if tmp_path:
-            os.remove(omex_path_str)
+        # if tmp_path:
+        #     os.remove(omex_path_str)
 
     return content
 
