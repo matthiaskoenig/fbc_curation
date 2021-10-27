@@ -40,7 +40,6 @@ configuration = cobra.Configuration()
 configuration.processes = 1
 
 logger = log.get_logger(__name__)
-logger.info(f"cobrapy processes: {configuration.processes}")
 
 
 class CuratorCobrapy(Curator):

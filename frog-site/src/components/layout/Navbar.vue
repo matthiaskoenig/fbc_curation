@@ -38,18 +38,8 @@ export default defineComponent({
                 {
                     label: "REST API",
                     icon: "pi pi-fw pi-sitemap",
-                    url: "http://localhost:1555/docs",
+                    url: "https://runfrog.de/docs",
                 },
-                // {
-                //     label: "Examples",
-                //     icon: "pi pi-fw pi-list",
-                //     to: "/examples",
-                // },
-                // {
-                //     label: "About",
-                //     icon: "pi pi-fw pi-info-circle",
-                //     to: "/about",
-                // },
                 {
                     label: "Dashboard",
                     icon: "pi pi-fw pi-desktop",
