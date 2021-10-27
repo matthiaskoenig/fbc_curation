@@ -7,7 +7,7 @@
 #   docker-compose -f docker-compose-develop.yml build
 # serve containers
 #   docker-compose -f docker-compose-develop.yml up --detach
-#   docker-compose -f docker-compose-develop.yml up
+#   docker-compose -f docker-compose-develop.yml up --build
 # -----------------------------------------------------------------------------
 
 version: '3'

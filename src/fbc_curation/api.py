@@ -62,15 +62,16 @@ api = FastAPI(
             "name": "examples",
             "description": "Manage and query examples.",
         },
+        {
+            "name": "tasks",
+            "description": "Task queue operations.",
+        },
     ],
 )
 
 
 # API Permissions Data
 origins = [
-    # "localhost",
-    # "localhost:3456",
-    # "sbml4humans.de",
     "*"
 ]
 
@@ -83,6 +84,84 @@ api.add_middleware(
 )
 
 
+@api.get("/api/tasks/{task_id}", tags=["task"])
+def get_status(task_id: str) -> JSONResponse:
+    """Status and results of task for id."""
+    task_result = AsyncResult(task_id)
+    result = {
+        "task_id": task_id,
+        "task_status": task_result.status,
+        "task_result": task_result.result
+    }
+    return JSONResponse(result)
+
+
+@api.get("/api/url", tags=["frog"])
+def frog_from_url(url: str) -> Dict[str, Any]:
+    """Create FROG via URL.
+
+    Creates a task for the FROG report.
+    :returns: task_id
+    """
+    response = requests.get(url)
+    response.raise_for_status()
+    return frog_from_bytes(response.content)
+
+
+@api.post("/api/file", tags=["frog"])
+async def frog_from_file(request: Request) -> Dict[str, Any]:
+    """Upload file and create FROG.
+
+    Creates a task for the FROG report.
+    :returns: task_id
+    """
+    file_data = await request.form()
+    file_content = await file_data["source"].read()  # type: ignore
+    return frog_from_bytes(file_content)
+
+
+@api.post("/api/content", tags=["frog"])
+async def frog_from_content(request: Request) -> Dict[str, Any]:
+    """Create FROG from file contents.
+
+    Creates a task for the FROG report.
+    :returns: task_id
+    """
+    content: bytes = await request.body()
+    return frog_from_bytes(content)
+
+
+def frog_from_bytes(content: bytes) -> Dict[str, Any]:
+    """Start FROG task for given content.
+
+    Necessary to serialize the content to a common location
+    accessible for the task queue.
+    :returns: task_id
+    """
+    # FIXME: This is currently not working correctly
+    try:
+        # persistent temporary file cleaned up by task
+        _, path = tempfile.mkstemp(dir="/frog_data")
+
+        with open(path, "wb") as f_tmp:
+            logger.warning(content)
+            f_tmp.write(content)
+        logger.error(f"Saving content in: {str(path)}")
+        task = frog_task.delay(str(path), True)
+        return {"task_id": task.id}
+
+    except Exception as e:
+        res = {
+            "errors": [
+                f"{e.__str__()}",
+                f"{''.join(traceback.format_exception(None, e, e.__traceback__))}",
+            ],
+        }
+        logger.error(res)
+
+        return res
+
+
 class Example(BaseModel):
     """Metadata for example model on sbml4humans."""
 
@@ -91,7 +170,7 @@ class Example(BaseModel):
     description: Optional[str] = None
 
 
-example_items: Dict[str, Example] = {
+_example_items: Dict[str, Example] = {
     "e_coli_core_sbml": Example(
         id="e_coli_core_sbml",
         file=EXAMPLE_PATH / "models" / "e_coli_core.xml",
@@ -113,109 +192,26 @@ example_items: Dict[str, Example] = {
         description="iJR904 model from BiGG database as OMEX.",
     ),
 }
-
-'''
-Development
-http://localhost:8085/
-curl http://localhost:1556/api/tasks/ -H "Content-Type: application/json" --data '{"type": 1}'
-curl http://localhost:1556/api/tasks/d5404acb-c576-45df-a661-bbbeae2260f1
-docker container logs --follow frog_worker
-
-'''
-
-
-class TaskInfo(BaseModel):
-    type: int
-
-
-@api.get("/api/tasks/{task_id}")
-def get_status(task_id):
-    task_result = AsyncResult(task_id)
-    result = {
-        "task_id": task_id,
-        "task_status": task_result.status,
-        "task_result": task_result.result
-    }
-    return JSONResponse(result)
-
-
-@api.get("/api/url", tags=["frog"])
-def frog_from_url(url: str) -> Dict[Any, Any]:
-    """Get JSON FROG via URL."""
-    response = requests.get(url)
-    response.raise_for_status()
-    return frog_from_bytes(response.content)
-
-
-@api.post("/api/file", tags=["frog"])
-async def frog_from_file(request: Request) -> Dict[Any, Any]:
-    """Upload file and return JSON FROG."""
-    file_data = await request.form()
-    file_content = await file_data["source"].read()  # type: ignore
-    return frog_from_bytes(file_content)
-
-
-@api.post("/api/content", tags=["frog"])
-async def frog_from_content(request: Request) -> Dict[Any, Any]:
-    """Get JSON FROG from file contents."""
-    content: bytes = await request.body()
-    return frog_from_bytes(content)
-
-
-def frog_from_bytes(content: bytes) -> Dict[Any, Any]:
-    """Start FROG task for given content."""
-    try:
-        # persistent temporary file cleaned up by task
-        _, path = tempfile.mkstemp(dir="/frog_data")
-
-        with open(path, "wb") as f_tmp:
-            logger.warning(content)
-            f_tmp.write(content)
-        logger.error(f"Saving content in: {str(path)}")
-        task = frog_task.delay(str(path), True)
-        return {"task_id": task.id}
-
-    except Exception as e:
-        return _handle_error(e)
-
-
-def _handle_error(e: Exception, info: Optional[Dict] = None) -> Dict[Any, Any]:
-    """Handle exceptions in the backend.
-
-    All calls are wrapped in a try/except which will provide the errors to the frontend.
-
-    :param info: optional dictionary with information.
-    """
-
-    res = {
-        "errors": [
-            f"{e.__str__()}",
-            f"{''.join(traceback.format_exception(None, e, e.__traceback__))}",
-        ],
-        "warnings": [],
-        "info": info,
-    }
-    logger.error(res)
-
-    return res
+examples = [example.dict() for example in _example_items.values()]
 
 
 @api.get("/api/examples", tags=["examples"])
 def examples() -> Dict[Any, Any]:
     """Get FROG examples."""
-    try:
-        example: Example
-        return {"examples": [example.dict() for example in example_items.values()]}
-
-    except Exception as e:
-        return _handle_error(e)
+    return {
+        "examples": examples
+    }
 
 
 @api.get("/api/examples/{example_id}", tags=["examples"])
-def example(example_id: str) -> Dict[Any, Any]:
-    """Get specific FROG example."""
+def example(example_id: str) -> Dict[str, Any]:
+    """Get specific FROG example.
 
-    example: Optional[Example] = example_items.get(example_id, None)
+    Creates a task for the FROG report.
+    :returns: task_id
+    """
+
+    example: Optional[Example] = _example_items.get(example_id, None)
     content: Dict
     if example:
         source: Path = example.file  # type: ignore
@@ -224,7 +220,9 @@ def example(example_id: str) -> Dict[Any, Any]:
             return frog_from_bytes(content)
 
     else:
-        return {"error": f"example for id does not exist '{example_id}'"}
+        return {
+            "error": f"Example for id '{example_id}' does not exist."
+        }
 
 
 if __name__ == "__main__":
