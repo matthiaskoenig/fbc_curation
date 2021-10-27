@@ -53,7 +53,7 @@ export default defineComponent({
                 {
                     label: "Dashboard",
                     icon: "pi pi-fw pi-desktop",
-                    url: "https://runfrog.de/flower/",
+                    url: "https://runfrog.de/dashboard/",
                 },
                 {
                     label: "Report issue",
