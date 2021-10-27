@@ -95,11 +95,9 @@ services:
     restart: always
     image: nginx:1.21.3
     expose:
-      - "5556"
       - "8086"
     ports:
       - 8086:80
-      - 5556:5556
     volumes:
       - ./nginx/config/conf.d:/etc/nginx/conf.d
       - vue_dist:/vue
