@@ -48,7 +48,7 @@ export default defineComponent({
         queryTaskStatus() {
             this.running = true;
 
-            const url = VUE_APP_APIURL + "/tasks/" + this.task_id;
+            const url = VUE_APP_APIURL + "/task/status/" + this.task_id;
             console.log(url)
             axios.get(url)
                 .then((res) => {

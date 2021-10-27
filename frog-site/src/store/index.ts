@@ -193,7 +193,7 @@ export default createStore({
             context.commit("SET_FILE_LOADING", true);
 
             // assembling the request parameters
-            const url = VUE_APP_APIURL + "/file";
+            const url = VUE_APP_APIURL + "/frog/file";
             const formData = payload.formData;
             const headers = payload.headers;
 
@@ -213,7 +213,7 @@ export default createStore({
             context.commit("SET_FILE_LOADING", true);
 
             // assembling the request parameters
-            const url = VUE_APP_APIURL + "/url?url=" + payload;
+            const url = VUE_APP_APIURL + "/frog/url?url=" + payload;
             console.log("Create report for url: " + url);
             const res = await axios.get(url);
 
@@ -231,7 +231,7 @@ export default createStore({
             context.commit("SET_FILE_LOADING", true);
 
             // assembling the request parameters
-            const url = VUE_APP_APIURL + "/content";
+            const url = VUE_APP_APIURL + "/frog/content";
             const res = await axios.post(url, payload);
 
             context.commit("SET_FILE_LOADING", false);

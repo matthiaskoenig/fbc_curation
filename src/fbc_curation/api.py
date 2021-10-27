@@ -93,7 +93,7 @@ api.add_middleware(
 )
 
 
-@api.get("/")
+@api.get("/api")
 def get_api_information(request: Request):
     return {
         "title": api.title,
@@ -101,6 +101,7 @@ def get_api_information(request: Request):
         "contact": api.contact,
         "root_path": request.scope.get("root_path")
     }
+
 
 @api.get("/api/task/status/{task_id}", tags=["tasks"])
 def get_status_for_task(task_id: str) -> JSONResponse:
