@@ -68,15 +68,19 @@ services:
       - ./frog_data:/frog_data
 
   redis:
+    restart: always
     container_name: frog_redis
     image: redis:6-alpine
 
   dashboard:
+    restart: always
     container_name: frog_dashboard
     build: .
     command: celery flower --app=src.fbc_curation.worker.celery --port=5555 --broker=redis://redis:6379/0
+    expose:
+      - "5556"
     ports:
-      - 5556:5555
+      - "5556:5555"
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
