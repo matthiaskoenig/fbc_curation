@@ -50,7 +50,11 @@ export default defineComponent({
                 //     icon: "pi pi-fw pi-info-circle",
                 //     to: "/about",
                 // },
-
+                {
+                    label: "Dashboard",
+                    icon: "pi pi-fw pi-desktop",
+                    url: "https://runfrog.de/flower/",
+                },
                 {
                     label: "Report issue",
                     icon: "pi pi-fw pi-pencil",
