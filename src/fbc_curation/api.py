@@ -181,14 +181,16 @@ def frog_from_bytes(content: bytes) -> Dict[str, Any]:
 
     :returns: `task_id`
     """
-    # FIXME: This is currently not working correctly
     try:
         # persistent temporary file cleaned up by task
         _, path = tempfile.mkstemp(dir="/frog_data")
 
-        with open(path, "wb") as f_tmp:
+        with open(path, "w+b") as f_tmp:
             logger.warning(content)
             f_tmp.write(content)
+            logger.info("Binary information written")
+            logger.info(str(content))
+            f_tmp.close()
         logger.error(f"Saving content in: {str(path)}")
         task = frog_task.delay(str(path), True)
         return {"task_id": task.id}

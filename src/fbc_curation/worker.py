@@ -47,6 +47,8 @@ def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
         if not omex_path.is_file():
             raise IOError(f"Path is not a file: '{omex_path}'")
 
+        # move data for task
+
         if Omex.is_omex(omex_path):
             omex = Omex().from_omex(omex_path)
         else:
@@ -68,8 +70,7 @@ def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
                 # TODO: check that SBML model with FBC information
                 sbml_path: Path = omex.get_path(entry.location)
                 content["frogs"][entry.location] = json_for_sbml(source=sbml_path)
-        else:
-            logger.error("No SBML file found in archive!")
+
     finally:
         pass
         # FIXME:

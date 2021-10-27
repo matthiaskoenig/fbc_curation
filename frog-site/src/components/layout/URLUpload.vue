@@ -27,7 +27,7 @@
         <loading parent="file" />
         <p>
             To embed the report use the
-            <code style="font-size: small">{{ frontend_url }}/model_url?url=URL</code>
+            <code style="font-size: small">{{ api_url }}/api/frog/url?url=URL</code>
             endpoint. Example:
             <a :href="example_url">
                 <code style="font-size: small">{{ example_url }}</code>
@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import store, { VUE_APP_FRONTENDURL } from "@/store/index";
+import store, {VUE_APP_APIURL, VUE_APP_FRONTENDURL} from "@/store/index";
 import { defineComponent } from "vue";
 
 import Loading from "@/components/layout/Loading.vue";
@@ -68,13 +68,13 @@ export default defineComponent({
         loading(): boolean {
             return store.state.fileLoading;
         },
-        frontend_url(): string {
-            return VUE_APP_FRONTENDURL;
+        api_url(): string {
+            return VUE_APP_APIURL;
         },
         example_url(): string {
             return (
-                VUE_APP_FRONTENDURL +
-                "/model_url?url=https://github.com/matthiaskoenig/fbc_curation/raw/version-0.2.0/src/fbc_curation/resources/examples/models/e_coli_core.omex"
+                VUE_APP_APIURL +
+                "/api/frog/url?url=https://github.com/matthiaskoenig/fbc_curation/raw/version-0.2.0/src/fbc_curation/resources/examples/models/e_coli_core.omex"
             );
         },
     },

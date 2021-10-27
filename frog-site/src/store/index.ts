@@ -86,8 +86,6 @@ export default createStore({
         },
         initializeReport(context, payload) {
             // dump the raw data fetched from the backend
-            console.log("INITIALIZE REPORT")
-            console.log(payload)
             const task_id = payload.data.task_id
 
 

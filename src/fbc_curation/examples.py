@@ -9,7 +9,7 @@ from fbc_curation import EXAMPLE_PATH
 from fbc_curation.curator import Curator
 from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
-from fbc_curation.frog import CuratorConstants, FrogFormat, FrogReport
+from fbc_curation.frog import CuratorConstants, FrogReport
 
 
 def run_examples(results_path: Path = EXAMPLE_PATH / "results"):
@@ -94,26 +94,26 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
                 entry_path=json_path,
                 entry=ManifestEntry(
                     location=f"./FROG/{curator_key}/{CuratorConstants.REPORT_FILENAME}",
-                    format=FrogFormat.FROG_JSON_VERSION_1,
+                    format=EntryFormat.FROG_JSON_V1,
                 ),
             )
             for filename, format in [
                 (
                     CuratorConstants.METADATA_FILENAME,
-                    FrogFormat.FROG_METADATA_VERSION_1,
+                    EntryFormat.FROG_METADATA_V1,
                 ),
                 (
                     CuratorConstants.OBJECTIVE_FILENAME,
-                    FrogFormat.FROG_OBJECTIVE_VERSION_1,
+                    EntryFormat.FROG_OBJECTIVE_V1,
                 ),
-                (CuratorConstants.FVA_FILENAME, FrogFormat.FROG_FVA_VERSION_1),
+                (CuratorConstants.FVA_FILENAME, EntryFormat.FROG_FVA_V1),
                 (
                     CuratorConstants.REACTION_DELETION_FILENAME,
-                    FrogFormat.FROG_REACTIONDELETION_VERSION_1,
+                    EntryFormat.FROG_REACTIONDELETION_V1,
                 ),
                 (
                     CuratorConstants.GENE_DELETION_FILENAME,
-                    FrogFormat.FROG_GENEDELETION_VERSION_1,
+                    EntryFormat.FROG_GENEDELETION_V1,
                 ),
             ]:
                 omex.add_entry(

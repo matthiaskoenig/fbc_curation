@@ -26,7 +26,7 @@ export default defineComponent({
         message: {
             type: String,
             required: false,
-            default: "Creating SBML report",
+            default: "Model prepared for FROG analysis",
         },
     },
     computed: {
