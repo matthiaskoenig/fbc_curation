@@ -19,7 +19,7 @@ if (!VUE_APP_BASEURL) {
     VUE_APP_BASEURL = "http://0.0.0.0";
     VUE_APP_FRONTENDURL = "http://0.0.0.0:8085";
     VUE_APP_APIURL = "http://0.0.0.0:1556";
-    VUE_APP_FLOWERURL = "http://0.0.0.0:5555";
+    VUE_APP_FLOWERURL = "http://0.0.0.0:5556";
 }
 
 console.log("URL: " + VUE_APP_FRONTENDURL + " | " + VUE_APP_APIURL);

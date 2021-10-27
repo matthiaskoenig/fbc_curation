@@ -42,8 +42,6 @@ description = """
 
 This service provides an API for running FROG analysis.
 
-The base url is `https://runfrog.de`.
-
 After submission of a
 model for frog analysis a `task_id` is returned which allows to query the status
 of the FROG task and retrieve the FROG report after the task succeeded.

@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import store, {VUE_APP_APIURL, VUE_APP_BASEURL} from "@/store";
+import store, {VUE_APP_APIURL, VUE_APP_BASEURL, VUE_APP_FLOWERURL} from "@/store";
 
 /**
  * Navbar component for providing main links in the application
@@ -38,12 +38,12 @@ export default defineComponent({
                 {
                     label: "REST API",
                     icon: "pi pi-fw pi-sitemap",
-                    url: VUE_APP_BASEURL + "/docs",
+                    url: VUE_APP_APIURL + "/docs",
                 },
                 {
                     label: "Dashboard",
                     icon: "pi pi-fw pi-desktop",
-                    url: VUE_APP_BASEURL + "/flower/",
+                    url: VUE_APP_FLOWERURL + "/flower/",
                 },
                 {
                     label: "Report issue",
