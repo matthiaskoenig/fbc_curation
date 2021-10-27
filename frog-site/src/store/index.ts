@@ -10,14 +10,16 @@ import OMEX_HELPERS from "@/helpers/omexInitialization";
 
 // read from .env.template file
 export let VUE_APP_BASEURL = process.env.VUE_APP_BASEURL;
-export let VUE_APP_APIURL = process.env.VUE_APP_APIURL;
 export let VUE_APP_FRONTENDURL = process.env.VUE_APP_FRONTENDURL;
+export let VUE_APP_APIURL = process.env.VUE_APP_APIURL;
+export let VUE_APP_FLOWERURL = process.env.VUE_APP_FLOWERURL;
 
 if (!VUE_APP_BASEURL) {
     // running in develop, no environment variable set
     VUE_APP_BASEURL = "http://0.0.0.0";
-    VUE_APP_APIURL = "http://0.0.0.0:1556/api";
     VUE_APP_FRONTENDURL = "http://0.0.0.0:8085";
+    VUE_APP_APIURL = "http://0.0.0.0:1556";
+    VUE_APP_FLOWERURL = "http://0.0.0.0:5555";
 }
 
 console.log("URL: " + VUE_APP_FRONTENDURL + " | " + VUE_APP_APIURL);
@@ -157,7 +159,7 @@ export default createStore({
         },
         // get list of all available examples from backend API
         async fetchExamples(context) {
-            const url = VUE_APP_APIURL + "/examples";
+            const url = VUE_APP_APIURL + "/api/examples";
             const res = await axios.get(url);
             if (res.status === 200) {
                 checkAPIResponse(res);
@@ -174,7 +176,7 @@ export default createStore({
         // generate report for one particular example
         async fetchExampleReport(context, payload) {
             context.commit("SET_EXAMPLE_LOADING", true);
-            const url = VUE_APP_APIURL + "/examples/" + payload.exampleId;
+            const url = VUE_APP_APIURL + "/api/examples/" + payload.exampleId;
             const res = await axios.get(url);
             console.log(url);
 
@@ -193,7 +195,7 @@ export default createStore({
             context.commit("SET_FILE_LOADING", true);
 
             // assembling the request parameters
-            const url = VUE_APP_APIURL + "/frog/file";
+            const url = VUE_APP_APIURL + "/api/frog/file";
             const formData = payload.formData;
             const headers = payload.headers;
 
@@ -213,7 +215,7 @@ export default createStore({
             context.commit("SET_FILE_LOADING", true);
 
             // assembling the request parameters
-            const url = VUE_APP_APIURL + "/frog/url?url=" + payload;
+            const url = VUE_APP_APIURL + "/api/frog/url?url=" + payload;
             console.log("Create report for url: " + url);
             const res = await axios.get(url);
 
@@ -231,7 +233,7 @@ export default createStore({
             context.commit("SET_FILE_LOADING", true);
 
             // assembling the request parameters
-            const url = VUE_APP_APIURL + "/frog/content";
+            const url = VUE_APP_APIURL + "/api/frog/content";
             const res = await axios.post(url, payload);
 
             context.commit("SET_FILE_LOADING", false);

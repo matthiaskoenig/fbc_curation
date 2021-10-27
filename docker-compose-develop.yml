@@ -76,11 +76,9 @@ services:
     restart: always
     container_name: frog_flower
     build: .
-    command: celery --app=src.fbc_curation.worker.celery --broker=redis://redis:6379/0 flower --port=5555
+    command: celery --app=src.fbc_curation.worker.celery --broker=redis://redis:6379/0 flower --port=5555 --url_prefix=flower
     expose:
-      - "5556"
-    ports:
-      - "5556:5555"
+      - 5555
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0

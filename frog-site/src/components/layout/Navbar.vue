@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import store from "@/store";
+import store, {VUE_APP_APIURL, VUE_APP_BASEURL} from "@/store";
 
 /**
  * Navbar component for providing main links in the application
@@ -38,12 +38,12 @@ export default defineComponent({
                 {
                     label: "REST API",
                     icon: "pi pi-fw pi-sitemap",
-                    url: "https://runfrog.de/docs",
+                    url: VUE_APP_BASEURL + "/docs",
                 },
                 {
                     label: "Dashboard",
                     icon: "pi pi-fw pi-desktop",
-                    url: "https://runfrog.de/flower/",
+                    url: VUE_APP_BASEURL + "/flower/",
                 },
                 {
                     label: "Report issue",
