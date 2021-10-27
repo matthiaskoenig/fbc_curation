@@ -1,17 +1,18 @@
+import os
+import platform
 from datetime import date
 
 import pytest
-import os
-import platform
+
 from fbc_curation import __citation__, __software__, __version__
-from fbc_curation.metadata import FrogMetaData, Creator, Tool
+from fbc_curation.metadata import Creator, FrogMetaData, Tool
 
 
 def test_frog_metadata() -> None:
-    from fbc_curation import EXAMPLE_PATH
-    from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
     from cobra import __version__ as cobra_version
-    from fbc_curation import __citation__, __software__, __version__
+    from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
+
+    from fbc_curation import EXAMPLE_PATH, __citation__, __software__, __version__
 
     ecoli_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
     metadata = FrogMetaData(

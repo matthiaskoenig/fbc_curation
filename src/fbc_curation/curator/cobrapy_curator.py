@@ -4,8 +4,6 @@ from pathlib import Path
 from typing import Dict
 
 import cobra
-from pydantic import ValidationError
-from rich import print
 import pandas as pd
 from cobra import __version__ as cobra_version
 from cobra.core import Model
@@ -16,13 +14,26 @@ from cobra.flux_analysis import (
     single_reaction_deletion,
 )
 from cobra.io import read_sbml_model
+from pydantic import ValidationError
 from pymetadata import log
+from rich import print
 from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
 
-from fbc_curation.frog import CuratorConstants, FrogMetaData, Tool, StatusCode, FrogFVA, \
-    FrogObjective, FrogGeneDeletions, FrogReactionDeletions, FrogFVASingle, \
-    FrogGeneDeletion, FrogReactionDeletion
 from fbc_curation.curator import Curator
+from fbc_curation.frog import (
+    CuratorConstants,
+    FrogFVA,
+    FrogFVASingle,
+    FrogGeneDeletion,
+    FrogGeneDeletions,
+    FrogMetaData,
+    FrogObjective,
+    FrogReactionDeletion,
+    FrogReactionDeletions,
+    StatusCode,
+    Tool,
+)
+
 
 # use a single core
 configuration = cobra.Configuration()
@@ -30,6 +41,7 @@ configuration.processes = 1
 
 logger = log.get_logger(__name__)
 logger.info(f"cobrapy processes: {configuration.processes}")
+
 
 class CuratorCobrapy(Curator):
     """FBC curator based on cobrapy."""
@@ -51,8 +63,7 @@ class CuratorCobrapy(Curator):
             url="https://github.com/opencobra/cobrapy",
         )
         solver = Tool(
-            name="glpk", version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}",
-            url=None
+            name="glpk", version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}", url=None
         )
         md = super().metadata(solver=solver, software=software)
         return md
@@ -156,9 +167,7 @@ class CuratorCobrapy(Curator):
         deletions = []
         for item in json:
             try:
-                deletions.append(
-                    FrogGeneDeletion(**item)
-                )
+                deletions.append(FrogGeneDeletion(**item))
             except ValidationError as e:
                 print(item)
                 print(e.json())
@@ -191,12 +200,9 @@ class CuratorCobrapy(Curator):
         deletions = []
         for item in json:
             try:
-                deletions.append(
-                    FrogReactionDeletion(**item)
-                )
+                deletions.append(FrogReactionDeletion(**item))
             except ValidationError as e:
                 print(item)
                 print(e.json())
 
         return FrogReactionDeletions(deletions=deletions)
-

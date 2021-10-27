@@ -9,6 +9,7 @@ from fbc_curation import __citation__, __version__
 from fbc_curation.curator import Curator
 from fbc_curation.frog import FrogReport
 
+
 logger = log.get_logger(__name__)
 
 
@@ -168,7 +169,6 @@ def main():
         results = curator.run()  # type: FROGResults
         results.write_results(output_path / key)
         res_dict[key] = FrogReport.read_results(output_path / key)
-
 
     # TODO: write to OMEX
     # FIXME: reuse the functionality

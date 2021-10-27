@@ -5,28 +5,24 @@ and returning the JSON representation based on fastAPI.
 """
 
 import tempfile
-import time
 import traceback
 import typing
-import uuid
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
-import libsbml
+import orjson
 import requests
 import uvicorn
-import orjson
 from celery.result import AsyncResult
-
-from fastapi import FastAPI, Request, Response, Body
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, FilePath
 from pymetadata import log
 from starlette.responses import JSONResponse
 
-from fbc_curation.worker import frog_task
 from fbc_curation import EXAMPLE_PATH
-from fbc_curation import FROG_DATA_DIR
+from fbc_curation.worker import frog_task
+
 
 logger = log.get_logger(__name__)
 
@@ -71,9 +67,7 @@ api = FastAPI(
 
 
 # API Permissions Data
-origins = [
-    "*"
-]
+origins = ["*"]
 
 api.add_middleware(
     CORSMiddleware,
@@ -91,7 +85,7 @@ def get_status(task_id: str) -> JSONResponse:
     result = {
         "task_id": task_id,
         "task_status": task_result.status,
-        "task_result": task_result.result
+        "task_result": task_result.result,
     }
     return JSONResponse(result)
 
@@ -198,9 +192,7 @@ examples = [example.dict() for example in _example_items.values()]
 @api.get("/api/examples", tags=["examples"])
 def examples() -> Dict[Any, Any]:
     """Get FROG examples."""
-    return {
-        "examples": examples
-    }
+    return {"examples": examples}
 
 
 @api.get("/api/examples/{example_id}", tags=["examples"])
@@ -220,9 +212,7 @@ def example(example_id: str) -> Dict[str, Any]:
             return frog_from_bytes(content)
 
     else:
-        return {
-            "error": f"Example for id '{example_id}' does not exist."
-        }
+        return {"error": f"Example for id '{example_id}' does not exist."}
 
 
 if __name__ == "__main__":

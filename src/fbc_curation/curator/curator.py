@@ -1,9 +1,11 @@
 """Base class for all FBC curators."""
 import os
-from collections import defaultdict, namedtuple
-from pathlib import Path
+
 # from sys import platform
 import platform
+from collections import defaultdict, namedtuple
+from datetime import date
+from pathlib import Path
 from typing import Dict, List
 
 import cobra
@@ -12,18 +14,17 @@ import pandas as pd
 from cobra.io import read_sbml_model
 from pymetadata import log
 from pymetadata.console import console
-from datetime import date
-from fbc_curation.frog import (
-    FrogReport,
-    FrogMetaData,
-    FrogObjective,
-    Tool,
-    FrogFVA,
-    FrogReactionDeletions,
-    FrogGeneDeletions,
-)
 
 from fbc_curation import __citation__, __software__, __version__
+from fbc_curation.frog import (
+    FrogFVA,
+    FrogGeneDeletions,
+    FrogMetaData,
+    FrogObjective,
+    FrogReactionDeletions,
+    FrogReport,
+    Tool,
+)
 
 
 ObjectiveInformation = namedtuple(

@@ -4,8 +4,7 @@ import sys
 
 import pytest
 
-from fbc_curation import EXAMPLE_PATH
-from fbc_curation import runfrog
+from fbc_curation import EXAMPLE_PATH, runfrog
 
 
 @pytest.mark.parametrize("filename", ["e_coli_core.xml", "iJR904.xml.gz"])

@@ -2,24 +2,26 @@ import os
 import tempfile
 import time
 from pathlib import Path
-from typing import Dict, Any, Union
+from typing import Any, Dict, Union
 
 from celery import Celery
-from pymetadata.omex import Omex, ManifestEntry, EntryFormat
-
-from pymetadata.console import console
 from pymetadata import log
+from pymetadata.console import console
+from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
 from fbc_curation.curator import Curator
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 from fbc_curation.frog import FrogReport
+
 
 logger = log.get_logger(__name__)
 
 
 celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
-celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
+celery.conf.result_backend = os.environ.get(
+    "CELERY_RESULT_BACKEND", "redis://localhost:6379"
+)
 
 # FIXME: ensure the tmp dir is deleted afterwards
 
@@ -65,9 +67,7 @@ def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
             if entry.is_sbml():
                 # TODO: check that SBML model with FBC information
                 sbml_path: Path = omex.get_path(entry.location)
-                content["frogs"][entry.location] = json_for_sbml(
-                    source=sbml_path
-                )
+                content["frogs"][entry.location] = json_for_sbml(source=sbml_path)
         else:
             logger.error("No SBML file found in archive!")
     finally:
@@ -119,7 +119,7 @@ def frog_json_for_sbml(source: Union[Path, str]) -> FrogReport:
         # curator_keys = ["cobrapy", "cameo"]
         obj_info = Curator._read_objective_information(sbml_path)
         curator = CuratorCobrapy(
-                model_path=sbml_path, objective_id=obj_info.active_objective
+            model_path=sbml_path, objective_id=obj_info.active_objective
         )
         report: FrogReport = curator.run()
         return report.dict()

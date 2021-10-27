@@ -3,18 +3,17 @@ import hashlib
 import json
 import os
 import platform
+from datetime import date
+from enum import Enum
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
 
 import numpy as np
 import pandas as pd
 from pydantic import BaseModel, Field
-from datetime import date
-
+from pymetadata import log
 from pymetadata.console import console
 
-from enum import Enum
-from pymetadata import log
 
 logger = log.get_logger(__name__)
 
@@ -23,11 +22,13 @@ logger = log.get_logger(__name__)
 # FIXME: get rid of this information !!!
 # Handling NaNs via https://github.com/samuelcolvin/pydantic/issues/1779
 from math import isnan
-from pydantic import BaseModel as PydanticBaseModel, validator
+
+from pydantic import BaseModel as PydanticBaseModel
+from pydantic import validator
 
 
 class BaseModel(PydanticBaseModel):
-    @validator('*')
+    @validator("*")
     def change_nan_to_none(cls, v, field):
         if field.outer_type_ is float and isnan(v):
             return None
@@ -147,6 +148,7 @@ class Creator(BaseModel):
     class Config:
         use_enum_values = True
 
+
 class Tool(BaseModel):
     name: str = Field(description="Name of tool/software/library.")
     version: Optional[str] = Field(description="Version of tool/software/library.")
@@ -154,6 +156,7 @@ class Tool(BaseModel):
 
     class Config:
         use_enum_values = True
+
 
 class FrogMetaData(BaseModel):
     """FROG metadata."""
@@ -222,6 +225,7 @@ class FrogGeneDeletions(BaseModel):
 
 class FrogReport(BaseModel):
     """Definition of the FROG standard."""
+
     metadata: FrogMetaData
     objective: FrogObjective
     fva: FrogFVA
@@ -232,7 +236,7 @@ class FrogReport(BaseModel):
         use_enum_values = True
 
     @staticmethod
-    def read_json(path: Path) -> 'FrogReport':
+    def read_json(path: Path) -> "FrogReport":
         """Read FrogReport from JSON format.
 
         raises ValidationError
@@ -272,7 +276,12 @@ class FrogReport(BaseModel):
                     CuratorConstants.GENE_DELETION_FILENAME,
                     CuratorConstants.REACTION_DELETION_FILENAME,
                 ],
-                [self.objective, self.fva, self.gene_deletions, self.reaction_deletions],
+                [
+                    self.objective,
+                    self.fva,
+                    self.gene_deletions,
+                    self.reaction_deletions,
+                ],
             )
         ).items():
             logger.info(f"-> {output_dir / filename}")
@@ -289,7 +298,7 @@ class FrogReport(BaseModel):
                 df = pd.DataFrame(d)
                 if filename in {
                     CuratorConstants.FVA_FILENAME,
-                    CuratorConstants.REACTION_DELETION_FILENAME
+                    CuratorConstants.REACTION_DELETION_FILENAME,
                 }:
                     df.sort_values(by=["reaction"], inplace=True)
                     df.index = range(len(df))
@@ -302,11 +311,17 @@ class FrogReport(BaseModel):
                 CuratorConstants.REACTION_DELETION_FILENAME,
                 CuratorConstants.GENE_DELETION_FILENAME,
             ]:
-                df[df.status == StatusCode.INFEASIBLE.value].value = CuratorConstants.VALUE_INFEASIBLE
+                df[
+                    df.status == StatusCode.INFEASIBLE.value
+                ].value = CuratorConstants.VALUE_INFEASIBLE
                 print(df[df.status == StatusCode.INFEASIBLE.value])
             elif filename == CuratorConstants.FVA_FILENAME:
-                df[df.status == StatusCode.INFEASIBLE.value].minimum = CuratorConstants.VALUE_INFEASIBLE
-                df[df.status == StatusCode.INFEASIBLE.value].maximum = CuratorConstants.VALUE_INFEASIBLE
+                df[
+                    df.status == StatusCode.INFEASIBLE.value
+                ].minimum = CuratorConstants.VALUE_INFEASIBLE
+                df[
+                    df.status == StatusCode.INFEASIBLE.value
+                ].maximum = CuratorConstants.VALUE_INFEASIBLE
 
             # print(df.head())
             df.to_csv(output_dir / filename, sep="\t", index=False, na_rep="NaN")
@@ -314,7 +329,7 @@ class FrogReport(BaseModel):
             # df.to_json(path_out / filename, sep="\t", index=False)
 
     @classmethod
-    def read_tsvs(cls, path_in: Path) -> 'FrogReport':
+    def read_tsvs(cls, path_in: Path) -> "FrogReport":
         """Read fbc curation files from given directory."""
         path_metadata = path_in / CuratorConstants.METADATA_FILENAME
         path_objective = path_in / CuratorConstants.OBJECTIVE_FILENAME

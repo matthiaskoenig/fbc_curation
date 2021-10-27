@@ -5,8 +5,9 @@ https://json-schema.org/
 """
 from pymetadata.console import console
 
-from fbc_curation.frog import FrogReport
 from fbc_curation import FROG_SCHEMA_VERSION_1
+from fbc_curation.frog import FrogReport
+
 
 if __name__ == "__main__":
     console.rule(style="white")

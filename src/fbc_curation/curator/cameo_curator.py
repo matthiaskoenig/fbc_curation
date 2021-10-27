@@ -16,17 +16,20 @@ from pydantic import ValidationError
 from pymetadata import log
 from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
 
+from fbc_curation.curator import Curator
 from fbc_curation.frog import (
     CuratorConstants,
-    FrogMetaData,
-    Tool,
-    StatusCode,
-    FrogReactionDeletions,
-    FrogGeneDeletions,
     FrogFVA,
-    FrogObjective, FrogReactionDeletion, FrogGeneDeletion, FrogFVASingle,
+    FrogFVASingle,
+    FrogGeneDeletion,
+    FrogGeneDeletions,
+    FrogMetaData,
+    FrogObjective,
+    FrogReactionDeletion,
+    FrogReactionDeletions,
+    StatusCode,
+    Tool,
 )
-from fbc_curation.curator import Curator
 
 
 logger = log.get_logger(__name__)
@@ -60,8 +63,7 @@ class CuratorCameo(Curator):
             url="https://github.com/opencobra/cobrapy",
         )
         solver = Tool(
-            name="glpk", version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}",
-            url=None
+            name="glpk", version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}", url=None
         )
         return super().metadata(software=software, solver=solver)
 
@@ -176,9 +178,7 @@ class CuratorCameo(Curator):
         deletions = []
         for item in json:
             try:
-                deletions.append(
-                    FrogGeneDeletion(**item)
-                )
+                deletions.append(FrogGeneDeletion(**item))
             except ValidationError as e:
                 print(item)
                 print(e.json())
@@ -224,9 +224,7 @@ class CuratorCameo(Curator):
         deletions = []
         for item in json:
             try:
-                deletions.append(
-                    FrogReactionDeletion(**item)
-                )
+                deletions.append(FrogReactionDeletion(**item))
             except ValidationError as e:
                 print(item)
                 print(e.json())

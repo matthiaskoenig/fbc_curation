@@ -10,4 +10,3 @@ EXAMPLE_PATH = RESOURCES_DIR / "examples"
 
 FROG_SCHEMA_VERSION_1 = RESOURCES_DIR / "schema" / "frog-schema-version-1.json"
 FROG_DATA_DIR = Path(__file__).parent.parent / "frog_data"
-

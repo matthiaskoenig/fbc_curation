@@ -15,10 +15,7 @@ from fbc_curation.frog import CuratorConstants, FrogReport
 logger = log.get_logger(__name__)
 
 
-
-
-
-
+class Comparison:
     @staticmethod
     def compare(results: Dict[str, "FROGResults"]) -> bool:
         """Compare results against each other.
@@ -50,7 +47,7 @@ logger = log.get_logger(__name__)
                         console.print(
                             f"difference: '{curator_keys[p]}' vs '{curator_keys[q]}'"
                         )
-                        FROGResults.analyse_df_difference(df1, df2)
+                        Comparison.analyse_df_difference(df1, df2)
 
             df_equal = pd.DataFrame(
                 mat_equal, columns=list(keys), index=list(keys), dtype=int

@@ -3,14 +3,13 @@ from pathlib import Path
 from typing import Dict
 
 from pymetadata.console import console
-
-from pymetadata.omex import Omex, EntryFormat, ManifestEntry
+from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
 from fbc_curation import EXAMPLE_PATH
-from fbc_curation.frog import FrogReport, CuratorConstants, FrogFormat
 from fbc_curation.curator import Curator
 from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
+from fbc_curation.frog import CuratorConstants, FrogFormat, FrogReport
 
 
 def run_examples(results_path: Path = EXAMPLE_PATH / "results"):
@@ -64,7 +63,6 @@ def example_iAB_AMO1410_SARS_omex(results_path: Path) -> Dict:
     )
 
 
-
 def _run_example(model_path: Path, results_path: Path) -> Dict:
     console.rule(str(model_path))
     obj_info = Curator._read_objective_information(model_path)
@@ -89,7 +87,7 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
             entry=ManifestEntry(
                 location=f"./{model_path.name}",
                 format=EntryFormat.SBML,
-            )
+            ),
         )
         for curator_key in curator_keys:
             omex.add_entry(
@@ -97,32 +95,38 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
                 entry=ManifestEntry(
                     location=f"./FROG/{curator_key}/{CuratorConstants.REPORT_FILENAME}",
                     format=FrogFormat.FROG_JSON_VERSION_1,
-                )
+                ),
             )
             for filename, format in [
                 (
                     CuratorConstants.METADATA_FILENAME,
-                    FrogFormat.FROG_METADATA_VERSION_1),
-                (CuratorConstants.OBJECTIVE_FILENAME,
-                 FrogFormat.FROG_OBJECTIVE_VERSION_1),
+                    FrogFormat.FROG_METADATA_VERSION_1,
+                ),
+                (
+                    CuratorConstants.OBJECTIVE_FILENAME,
+                    FrogFormat.FROG_OBJECTIVE_VERSION_1,
+                ),
                 (CuratorConstants.FVA_FILENAME, FrogFormat.FROG_FVA_VERSION_1),
-                (CuratorConstants.REACTION_DELETION_FILENAME,
-                 FrogFormat.FROG_REACTIONDELETION_VERSION_1),
-                (CuratorConstants.GENE_DELETION_FILENAME,
-                 FrogFormat.FROG_GENEDELETION_VERSION_1),
+                (
+                    CuratorConstants.REACTION_DELETION_FILENAME,
+                    FrogFormat.FROG_REACTIONDELETION_VERSION_1,
+                ),
+                (
+                    CuratorConstants.GENE_DELETION_FILENAME,
+                    FrogFormat.FROG_GENEDELETION_VERSION_1,
+                ),
             ]:
                 omex.add_entry(
                     entry_path=results_path / curator_keys[k] / filename,
                     entry=ManifestEntry(
                         location=f"./FROG/{curator_key}/{filename}",
                         format=format,
-                    )
+                    ),
                 )
 
     omex_path = results_path / f"{model_path.stem}_FROG.omex"
     omex.to_omex(omex_path)
     console.print(f"FROG OMEX written: 'file://{omex_path}'")
-
 
     # FIXME: reading and comparison
     # Read all reports
