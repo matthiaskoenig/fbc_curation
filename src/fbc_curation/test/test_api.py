@@ -19,15 +19,12 @@ def test_get_api_information():
         assert key in json
 
 
-def test_get_api_information():
-    response = client.get("/api")
+def test_get_examples():
+    response = client.get("/api/examples")
     assert response.status_code == 200
     json = response.json()
     assert json
     for key in [
-        "title",
-        "description",
-        "contact",
-        "root_path",
+        "examples",
     ]:
         assert key in json

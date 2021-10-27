@@ -42,6 +42,8 @@ description = """
 
 This service provides an API for running FROG analysis.
 
+The base url is `https://runfrog.de`.
+
 After submission of a
 model for frog analysis a `task_id` is returned which allows to query the status
 of the FROG task and retrieve the FROG report after the task succeeded.
@@ -135,19 +137,6 @@ async def get_combine_archive_for_task(task_id: str):
     )
 
 
-@api.get("/api/frog/url", tags=["frog"])
-def create_frog_from_url(url: str) -> Dict[str, Any]:
-    """Create FROG via URL to SBML or COMBINE archive.
-
-    Creates a task for the FROG report.
-
-    :returns: `task_id`
-    """
-    response = requests.get(url)
-    response.raise_for_status()
-    return frog_from_bytes(response.content)
-
-
 @api.post("/api/frog/file", tags=["frog"])
 async def create_frog_from_file(request: Request) -> Dict[str, Any]:
     """Upload file and create FROG.
@@ -171,6 +160,19 @@ async def create_frog_from_content(request: Request) -> Dict[str, Any]:
     """
     content: bytes = await request.body()
     return frog_from_bytes(content)
+
+
+@api.get("/api/frog/url", tags=["frog"])
+def create_frog_from_url(url: str) -> Dict[str, Any]:
+    """Create FROG via URL to SBML or COMBINE archive.
+
+    Creates a task for the FROG report.
+
+    :returns: `task_id`
+    """
+    response = requests.get(url)
+    response.raise_for_status()
+    return frog_from_bytes(response.content)
 
 
 def frog_from_bytes(content: bytes) -> Dict[str, Any]:
