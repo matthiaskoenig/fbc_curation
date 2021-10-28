@@ -117,12 +117,9 @@ def get_status_for_task(task_id: str) -> JSONResponse:
 
 @api.get("/api/task/omex/{task_id}", tags=["tasks"])
 async def get_combine_archive_for_task(task_id: str):
-    """Get COMBINE archive (omex) for FROG task with `task_id`.
+    """Get COMBINE archive (omex) for FROG task with `task_id`."""
 
-    # TODO: create omex
-    # TODO: return 404 if omex does not exist
-    """
-    omex_path = ""
+    omex_path = Path("/frog_data") / f"{task_id}.omex"
 
     if not omex_path:
         raise HTTPException(status_code=404, detail=f"No COMBINE archive for task with "

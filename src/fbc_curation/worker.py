@@ -11,8 +11,8 @@ from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
 from fbc_curation.curator import Curator
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
-from fbc_curation.frog import FrogReport
-
+from fbc_curation.frog import FrogReport, CuratorConstants
+from fbc_curation import FROG_DATA_DIR
 
 logger = log.get_logger(__name__)
 
@@ -69,19 +69,69 @@ def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
             if entry.is_sbml():
                 # TODO: check that SBML model with FBC information
                 sbml_path: Path = omex.get_path(entry.location)
-                content["frogs"][entry.location] = json_for_sbml(source=sbml_path)
+                report: FrogReport = json_for_sbml(source=sbml_path)
+
+                # add JSON to response
+                content["frogs"][entry.location] = report.dict()
+
+                # add FROG files to archive
+                with tempfile.TemporaryDirectory() as f_tmp:
+                    tmp_path = Path(f_tmp)
+                    json_path = tmp_path / CuratorConstants.REPORT_FILENAME
+                    report.to_json(json_path)
+
+                    # write tsv
+                    report.to_tsvs_with_metadata(tmp_path)
+
+                    omex.add_entry(
+                        entry_path=json_path,
+                        entry=ManifestEntry(
+                            location=f"./FROG/{CuratorConstants.REPORT_FILENAME}",
+                            format=EntryFormat.FROG_JSON_V1,
+                        ),
+                    )
+                    for filename, format in [
+                        (
+                            CuratorConstants.METADATA_FILENAME,
+                            EntryFormat.FROG_METADATA_V1,
+                        ),
+                        (
+                            CuratorConstants.OBJECTIVE_FILENAME,
+                            EntryFormat.FROG_OBJECTIVE_V1,
+                        ),
+                        (CuratorConstants.FVA_FILENAME, EntryFormat.FROG_FVA_V1),
+                        (
+                            CuratorConstants.REACTION_DELETION_FILENAME,
+                            EntryFormat.FROG_REACTIONDELETION_V1,
+                        ),
+                        (
+                            CuratorConstants.GENE_DELETION_FILENAME,
+                            EntryFormat.FROG_GENEDELETION_V1,
+                        ),
+                    ]:
+                        omex.add_entry(
+                            entry_path=tmp_path / filename,
+                            entry=ManifestEntry(
+                                location=f"./FROG/{filename}",
+                                format=format,
+                            ),
+                        )
+
+        # save archive for download
+        task_id = frog_task.request.id
+        omex.to_omex(
+            omex_path=Path("/frog_data") / f"{task_id}.omex"
+        )
 
     finally:
-        pass
-        # FIXME:
         # cleanup temporary files for celery
-        # if tmp_path:
-        #     os.remove(omex_path_str)
+        if tmp_path:
+            os.remove(omex_path_str)
 
     return content
 
 
-def json_for_sbml(source: Union[Path, str, bytes]) -> Dict:
+def json_for_sbml(source: Union[Path, str, bytes]) -> FrogReport:
     """Create FROG JSON content for given SBML source.
 
     Source is either path to SBML file or SBML string.
@@ -123,4 +173,4 @@ def frog_json_for_sbml(source: Union[Path, str]) -> FrogReport:
             model_path=sbml_path, objective_id=obj_info.active_objective
         )
         report: FrogReport = curator.run()
-        return report.dict()
+        return report

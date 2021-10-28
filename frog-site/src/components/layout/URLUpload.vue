@@ -25,14 +25,6 @@
             </div>
         </div>
         <loading parent="file" />
-        <p>
-            To embed the report use the
-            <code style="font-size: small">{{ api_url }}/api/frog/url?url=URL</code>
-            endpoint. Example:
-            <a :href="example_url">
-                <code style="font-size: small">{{ example_url }}</code>
-            </a>
-        </p>
     </div>
 </template>
 

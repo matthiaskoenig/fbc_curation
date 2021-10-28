@@ -26,7 +26,7 @@ export default defineComponent({
         message: {
             type: String,
             required: false,
-            default: "Model prepared for FROG analysis",
+            default: "Preparing model for FROG analysis",
         },
     },
     computed: {

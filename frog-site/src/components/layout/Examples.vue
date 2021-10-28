@@ -43,7 +43,7 @@
                         </template>
                     </Column>
                 </DataTable>
-                <loading parent="example" message="Loading FROG examples" />
+                <loading parent="example" />
             </TabPanel>
         </TabView>
     </div>
