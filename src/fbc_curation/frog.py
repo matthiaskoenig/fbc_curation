@@ -2,17 +2,15 @@
 from __future__ import annotations
 
 import hashlib
-import json
-import os
-import platform
+
 import tempfile
-from datetime import date
 from enum import Enum
 from math import isnan
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import numpy as np
+import orjson
 import pandas as pd
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import Field, ValidationError, validator
@@ -23,17 +21,14 @@ from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
 logger = log.get_logger(__name__)
 
-# ----------------------------------------------
-# Handling NaNs via https://github.com/samuelcolvin/pydantic/issues/1779
-# FIXME: get rid of this information !!!
-
 
 class BaseModel(PydanticBaseModel):
-    @validator("*")
-    def change_nan_to_none(cls, v: Any, field: Any) -> Any:
-        if field.outer_type_ is float and isnan(v):
-            return None
-        return v
+    pass
+    # @validator("*")
+    # def change_nan_to_none(cls, v: Any, field: Any) -> Any:
+    #     if field.outer_type_ is float and isnan(v):
+    #         return None
+    #     return v
 
 
 class CuratorConstants:
@@ -77,10 +72,10 @@ class FrogFVASingle(BaseModel):
     model: str
     objective: str
     reaction: str
-    flux: float
+    flux: Optional[float]
     status: StatusCode
-    minimum: float
-    maximum: float
+    minimum: Optional[float]
+    maximum: Optional[float]
     fraction_optimum: float
 
     class Config:
@@ -92,7 +87,7 @@ class FrogReactionDeletion(BaseModel):
     objective: str
     reaction: str
     status: StatusCode
-    value: float
+    value: Optional[float]
 
     class Config:
         use_enum_values = True
@@ -103,7 +98,7 @@ class FrogGeneDeletion(BaseModel):
     objective: str
     gene: str
     status: StatusCode
-    value: float
+    value: Optional[float]
 
     class Config:
         use_enum_values = True
@@ -294,8 +289,9 @@ class FrogReport(BaseModel):
 
         # write FROG
         logger.debug(f"{path}")
-        with open(path, "w") as f_json:
-            f_json.write(self.json(indent=2))
+        with open(path, "w+b") as f_json:
+            json_bytes = orjson.dumps(self.dict(), option=orjson.OPT_INDENT_2)
+            f_json.write(json_bytes)
 
     @staticmethod
     def from_json(path: Path) -> FrogReport:
@@ -305,8 +301,9 @@ class FrogReport(BaseModel):
 
         :path: path to JSON report file
         """
-        with open(path, "r") as f_json:
-            d = json.load(fp=f_json)
+        with open(path, "r+b") as f_json:
+            s_json = f_json.read()
+            d = orjson.loads(s_json)
             return FrogReport(**d)
 
     def to_dfs(self) -> Dict[str, pd.DataFrame]:
@@ -331,20 +328,20 @@ class FrogReport(BaseModel):
         ).items():
 
             d = data.dict()
-            if key == CuratorConstants.OBJECTIVE_KEY:
-                item = list(d.values())[0]
-                df = pd.DataFrame(item)
-                if key == CuratorConstants.OBJECTIVE_KEY:
-                    df.sort_values(by=["objective"], inplace=True)
-                if key in {
-                    CuratorConstants.FVA_KEY,
-                    CuratorConstants.REACTIONDELETIONS_KEY,
-                }:
-                    df.sort_values(by=["reaction"], inplace=True)
-                elif key == CuratorConstants.GENEDELETIONS_KEY:
-                    df.sort_values(by=["gene"], inplace=True)
 
-                df.index = range(len(df))
+            item = list(d.values())[0]
+            df = pd.DataFrame(item)
+            if key == CuratorConstants.OBJECTIVE_KEY:
+                df.sort_values(by=["objective"], inplace=True)
+            if key in {
+                CuratorConstants.FVA_KEY,
+                CuratorConstants.REACTIONDELETIONS_KEY,
+            }:
+                df.sort_values(by=["reaction"], inplace=True)
+            elif key == CuratorConstants.GENEDELETIONS_KEY:
+                df.sort_values(by=["gene"], inplace=True)
+
+            df.index = range(len(df))
 
             if key in [
                 CuratorConstants.OBJECTIVE_KEY,
@@ -392,29 +389,40 @@ class FrogReport(BaseModel):
             df.to_csv(output_dir / filename, sep="\t", index=False, na_rep="NaN")
 
     @classmethod
-    def from_tsv(cls, path: Path) -> "FrogReport":
+    def from_tsv(cls, path: Path) -> FrogReport:
         """Read fbc curation files from given directory."""
         # FIXME: implement
 
         path_metadata = path / CuratorConstants.METADATA_FILENAME
         path_objective = path / CuratorConstants.OBJECTIVE_FILENAME
         path_fva = path / CuratorConstants.FVA_FILENAME
-        path_gene_deletion = path / CuratorConstants.GENEDELETIONS_FILENAME
         path_reaction_deletion = path / CuratorConstants.REACTIONDELETIONS_FILENAME
+        path_gene_deletion = path / CuratorConstants.GENEDELETIONS_FILENAME
         df_dict: Dict[str, pd.DataFrame] = dict()
-        for k, path in enumerate(
-            [path_objective, path_fva, path_gene_deletion, path_reaction_deletion]
-        ):
-            if not path_objective.exists():
+
+        with open(path_metadata, "r+b") as f_json:
+            json_bytes = f_json.read()
+            df_dict[CuratorConstants.METADATA_KEY] = orjson.loads(json_bytes)
+
+        for key, path in {
+            CuratorConstants.OBJECTIVE_KEY: path_objective,
+            CuratorConstants.FVA_KEY: path_fva,
+            CuratorConstants.REACTIONDELETIONS_KEY: path_reaction_deletion,
+            CuratorConstants.GENEDELETIONS_KEY: path_gene_deletion,
+        }.items():
+            if not path.exists():
                 logger.error(f"Required file for fbc curation does not exist: '{path}'")
             else:
-                df_dict[CuratorConstants.KEYS[k]] = pd.read_csv(path, sep="\t")
+                df_dict[key] = pd.read_csv(path, sep="\t")
 
-        with open(path_metadata, "r") as f_json:
-            df_dict[CuratorConstants.METADATA_KEY] = json.load(fp=f_json)
-        objective_id = df_dict["objective"].objective.values[0]
-
-        return FrogReport(objective_id=objective_id, **df_dict)
+        report = FrogReport(
+            metadata=FrogMetaData(**df_dict[CuratorConstants.METADATA_KEY]),
+            objectives=FrogObjectives.from_df(df_dict[CuratorConstants.OBJECTIVE_KEY]),
+            fva=FrogFVA.from_df(df_dict[CuratorConstants.FVA_KEY]),
+            reaction_deletions=FrogReactionDeletions.from_df(df_dict[CuratorConstants.REACTIONDELETIONS_KEY]),
+            gene_deletions=FrogGeneDeletions.from_df(df_dict[CuratorConstants.GENEDELETIONS_KEY]),
+        )
+        return report
 
     def to_omex(self, omex: Omex, location_prefix="./FROG/") -> None:
         """Add report to omex.

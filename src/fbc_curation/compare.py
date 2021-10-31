@@ -8,6 +8,7 @@ import pandas as pd
 from pydantic import BaseModel
 from pymetadata import log
 from pymetadata.console import console
+from pymetadata.omex import Omex, EntryFormat
 
 from fbc_curation.frog import CuratorConstants, FrogReport
 
@@ -42,6 +43,34 @@ class Comparison:
 
     absolute_tolerance = 1e-6
     relative_tolerance = 1e-6
+
+    @staticmethod
+    def read_reports_from_omex(omex_path: Path):
+        """Read all reports from JSON and TSVs."""
+        reports: List[FrogReport] = []
+        omex = Omex.from_omex(omex_path)
+        for entry in omex.manifest.entries:
+            if entry.format == EntryFormat.FROG_JSON_V1:
+                report = FrogReport.from_json(path=omex.get_path(entry.location))
+                reports.append(report)
+            elif entry.format == EntryFormat.FROG_METADATA_V1:
+                path = omex.get_path(entry.location).parent
+                report = FrogReport.from_tsv(path)
+                reports.append(report)
+
+        # get model reports per model
+        model_reports: Dict[str, Dict[str, FrogReport]] = {}
+        for report in reports:
+            model_location = report.metadata.model_location
+            d = model_reports.get(model_location, {})
+            frog_id = report.metadata.frog_id
+            if frog_id in d:
+                logger.error(f"duplicate FROG report: '{frog_id}' for '{model_location}'")
+            d[frog_id] = report
+            model_reports[model_location] = d
+
+        for location, reports_dict in model_reports.items():
+            logger.info(f"{location}: {reports_dict.keys()}")
 
     @staticmethod
     def compare(reports: Dict[str, FrogReport]) -> None:

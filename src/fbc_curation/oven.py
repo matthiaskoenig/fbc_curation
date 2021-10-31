@@ -1,11 +1,12 @@
 import json
 import tempfile
+from math import isnan
 from pathlib import Path
 from typing import Optional
 
 import numpy as np
 import orjson
-from pydantic import BaseModel as PydanticBaseModel
+from pydantic import BaseModel as PydanticBaseModel, validator
 from rich import print
 
 
@@ -37,6 +38,7 @@ models = [
 ]
 
 for model in models:
+    print("-" * 80)
     print(repr(model))
     with tempfile.TemporaryDirectory() as tmp_dir:
         json_path = Path(tmp_dir) / "example.json"
@@ -52,3 +54,4 @@ for model in models:
             d = json.load(f_json)
             print(d)
             model2 = Model(**d)
+            print(repr(model2))
