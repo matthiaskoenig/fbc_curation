@@ -42,7 +42,7 @@ def frog_task(
 
     Path can be either Omex or an SBML file.
     """
-    logger.error(f"Loading content from: {source_path_str}")
+    logger.info(f"Loading '{source_path_str}'")
 
     try:
         omex_path = Path(source_path_str)

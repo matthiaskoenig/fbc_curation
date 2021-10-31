@@ -8,6 +8,7 @@ from pymetadata.console import console
 from fbc_curation import __citation__, __version__
 from fbc_curation.curator import Curator
 from fbc_curation.frog import FrogReport
+from fbc_curation.worker import frog_task
 
 
 logger = log.get_logger(__name__)
@@ -19,8 +20,8 @@ def main() -> None:
     The script is registered as `runfrog`.
 
     Example:
-        runfrog --model resources/examples/models/e_coli_core.xml --path resources/examples/results/e_coli_core
-        python runfrog.py --model resources/examples/models/e_coli_core.xml --path resources/examples/results/e_coli_core
+        runfrog --input resources/examples/models/e_coli_core.xml --output resources/examples/results/e_coli_core.omex
+        python runfrog.py --input resources/examples/models/e_coli_core.xml --path resources/examples/results/e_coli_core.omex
 
     """
 
@@ -29,41 +30,25 @@ def main() -> None:
 
     parser = optparse.OptionParser()
     parser.add_option(
-        "-m",
-        "--model",
+        "-i",
+        "--input",
         action="store",
-        dest="model_path",
-        help="(required) path to SBML model with fbc information",
-    )
-    parser.add_option(
-        "-p",
-        "--path",
-        action="store",
-        dest="output_path",
-        help="(required) directory path to write output files to",
-    )
-    parser.add_option(
-        "-c",
-        "--curator",
-        action="store",
-        dest="curator",
-        help="(optional) curator tool to create reference files: Select from "
-        "['cobrapy', 'cameo', 'all']",
+        dest="input_path",
+        help="(required) path to OMEX with SBML model or SBML model with fbc information",
     )
     parser.add_option(
         "-o",
-        "--objective",
+        "--output",
         action="store",
-        dest="objective",
-        help="(optional) objective to use in optimization, "
-        "defaults to active objective",
+        dest="output_path",
+        help="(required) omex output path to write FROG to with file ending '.omex'",
     )
     parser.add_option(
         "-r",
         "--reference",
         action="store",
         dest="reference_path",
-        help="(optional) directory path to reference output (comparison is performed)",
+        help="(optional) path to OMEX with FROG results to include in comparison",
     )
 
     console.rule(style="white")
@@ -82,21 +67,22 @@ def main() -> None:
         console.rule(style="white")
         sys.exit(1)
 
-    if not options.model_path:
-        _parser_message("Required argument '--model' missing")
+    if not options.input_path:
+        _parser_message("Required argument '--input' missing")
     if not options.output_path:
-        _parser_message("Required argument '--path' missing")
+        _parser_message("Required argument '--output' missing")
 
-    model_path = Path(options.model_path)
-    if not model_path.exists():
+    input_path = Path(options.input_path)
+    if not input_path.exists():
         _parser_message(
-            f"--model '{options.model_path}' does not exist, ensure valid model path."
+            f"--input '{options.input_path}' does not exist, ensure valid model or "
+            f"OMEX path."
         )
 
     output_path = Path(options.output_path)
-    if not output_path.exists():
-        logger.warning(
-            f"output path --path '{output_path}' does not exist, path will be created."
+    if not str(output_path).endswith(".omex"):
+        _parser_message(
+            f"--output '{options.model_path}' output path must end in '.omex'"
         )
 
     if not options.reference_path:
@@ -109,70 +95,30 @@ def main() -> None:
                 f"valid reference path."
             )
 
-    if not options.curator:
-        options.curator = "all"
-    supported_curators = ["cameo", "cobrapy", "all"]
-    if options.curator not in supported_curators:
-        _parser_message(
-            f"--curator '{options.curator}' is not supported, use one of the supported "
-            f"curators: {supported_curators}"
-        )
+    frog_task(
+        source_path_str=str(input_path),
+        input_is_temporary=False,
+        omex_path_str=str(output_path),
+    )
 
-    obj_info = Curator._read_objective_information(model_path)
-    if not options.objective:
-        objective_id = obj_info.active_objective
-    else:
-        objective_id = options.objective
-        if objective_id not in obj_info.objective_ids:
-            _parser_message(
-                f"Objective --objective'{objective_id}' dose not exist "
-                f"in SBML model objectives: "
-                f"'{obj_info.objective_ids}'"
-            )
-        elif not objective_id == obj_info.active_objective:
-            _parser_message(
-                f"Only active_objective supported in cobrapy, use "
-                f"--objective {obj_info.active_objective}"
-            )
 
-    # Perform imports here to avoid messages above parser messages
-    curator_classes: List[Type[Curator]]
-    if options.curator == "cobrapy":
-        from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
-
-        curator_classes = [CuratorCobrapy]
-        curator_keys = ["cobrapy"]
-    elif options.curator == "cameo":
-        from fbc_curation.curator.cameo_curator import CuratorCameo
-
-        curator_classes = [CuratorCameo]
-        curator_keys = ["cameo"]
-    elif options.curator == "all":
-        from fbc_curation.curator.cameo_curator import CuratorCameo
-        from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
-
-        curator_classes = [CuratorCobrapy, CuratorCameo]
-        curator_keys = ["cobrapy", "cameo"]
-
+    # TODO: comparison with reference solution
     # Reading reference solution
-    res_dict: Dict[str, FrogReport] = {}
-    if reference_path:
-        reference_results = FrogReport.read_results(reference_path)
-        res_dict["reference"] = reference_results
-
-    for k, curator_class in enumerate(curator_classes):
-        key = curator_keys[k]
-        curator = curator_class(model_path=model_path, objective_id=objective_id)
-        results = curator.run()  # type: FROGResults
-        results.write_results(output_path / key)
-        res_dict[key] = FrogReport.read_results(output_path / key)
-
-    # TODO: write to OMEX
-    # FIXME: reuse the functionality
-
-    # perform comparison
-    if len(res_dict) > 1:
-        FrogReport.compare(res_dict)
+    # res_dict: Dict[str, FrogReport] = {}
+    # if reference_path:
+    #     reference_results = FrogReport.read_results(reference_path)
+    #     res_dict["reference"] = reference_results
+    #
+    # for k, curator_class in enumerate(curator_classes):
+    #     key = curator_keys[k]
+    #     curator = curator_class(model_path=model_path, objective_id=objective_id)
+    #     results = curator.run()  # type: FROGResults
+    #     results.write_results(output_path / key)
+    #     res_dict[key] = FrogReport.read_results(output_path / key)
+    #
+    # # perform comparison
+    # if len(res_dict) > 1:
+    #     FrogReport.compare(res_dict)
 
 
 if __name__ == "__main__":
