@@ -28,8 +28,7 @@ celery.conf.result_backend = os.environ.get(
     "CELERY_RESULT_BACKEND", "redis://localhost:6379"
 )
 
-# FIXME: ensure the tmp dir is deleted afterwards
-# FIXME: reuse this code also for the local execution
+# FIXME: ensure that files are removed from time to time
 
 
 @celery.task(name="frog_task")
@@ -72,8 +71,6 @@ def frog_task(
         for entry in omex.manifest.entries:
             if entry.is_sbml():
                 # TODO: check that SBML model with FBC information
-                # TODO: handle multiple models correctly
-                # TODO: handle multiple curators correctly
 
                 report_dict = {}
                 for curator in ["cobrapy", "cameo"]:

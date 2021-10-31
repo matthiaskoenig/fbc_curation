@@ -101,24 +101,7 @@ def main() -> None:
         omex_path_str=str(output_path),
     )
 
-
     # TODO: comparison with reference solution
-    # Reading reference solution
-    # res_dict: Dict[str, FrogReport] = {}
-    # if reference_path:
-    #     reference_results = FrogReport.read_results(reference_path)
-    #     res_dict["reference"] = reference_results
-    #
-    # for k, curator_class in enumerate(curator_classes):
-    #     key = curator_keys[k]
-    #     curator = curator_class(model_path=model_path, objective_id=objective_id)
-    #     results = curator.run()  # type: FROGResults
-    #     results.write_results(output_path / key)
-    #     res_dict[key] = FrogReport.read_results(output_path / key)
-    #
-    # # perform comparison
-    # if len(res_dict) > 1:
-    #     FrogReport.compare(res_dict)
 
 
 if __name__ == "__main__":

@@ -10,7 +10,7 @@ from datetime import date
 from enum import Enum
 from math import isnan
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Dict
 
 import numpy as np
 import pandas as pd
@@ -38,48 +38,24 @@ class BaseModel(PydanticBaseModel):
 
 class CuratorConstants:
     """Class storing constants for curation and file format."""
-
-    # keys of outputs
+    FROG_KEY = "frog"
     METADATA_KEY = "metadata"
     OBJECTIVE_KEY = "objective"
     FVA_KEY = "fva"
-    GENE_DELETION_KEY = "gene_deletion"
-    REACTION_DELETION_KEY = "reaction_deletion"
+    GENEDELETIONS_KEY = "gene_deletion"
+    REACTIONDELETIONS_KEY = "reaction_deletion"
 
     # output filenames
-    REPORT_FILENAME = "frog.json"
+    FROG_FILENAME = "frog.json"
     METADATA_FILENAME = "metadata.json"
     OBJECTIVE_FILENAME = f"01_{OBJECTIVE_KEY}.tsv"
     FVA_FILENAME = f"02_{FVA_KEY}.tsv"
-    GENE_DELETION_FILENAME = f"03_{GENE_DELETION_KEY}.tsv"
-    REACTION_DELETION_FILENAME = f"04_{REACTION_DELETION_KEY}.tsv"
+    GENEDELETIONS_FILENAME = f"03_{GENEDELETIONS_KEY}.tsv"
+    REACTIONDELETIONS_FILENAME = f"04_{REACTIONDELETIONS_KEY}.tsv"
 
-    FILENAMES = [
-        REPORT_FILENAME,
-        METADATA_FILENAME,
-        OBJECTIVE_FILENAME,
-        FVA_FILENAME,
-        GENE_DELETION_FILENAME,
-        REACTION_DELETION_FILENAME,
-    ]
-
-    # fields
-    # FVA_FIELDS = [
-    #     "model",
-    #     "objective",
-    #     "reaction",
-    #     "flux",
-    #     "status",
-    #     "minimum",
-    #     "maximum",
-    #     "fraction_optimum",
-    # ]
-    # GENE_DELETION_FIELDS = ["model", "objective", "gene", "status", "value"]
-    # REACTION_DELETION_FIELDS = ["model", "objective", "reaction", "status", "value"]
 
     # special settings for comparison
     VALUE_INFEASIBLE = np.NaN
-    NUM_DECIMALS = 6  # decimals to write in the solution
 
 
 class StatusCode(str, Enum):
@@ -162,27 +138,28 @@ class Tool(BaseModel):
 class FrogMetaData(BaseModel):
     """FROG metadata."""
 
-    frog_date: date = Field(
-        alias="frog.date", description="Curators which executed the FROG analysis."
+    model_location: str = Field(
+        alias="model.location",
+        description="Location of the model in the COMBINE archive for which the FROG "
+                    "analysis was performed."
     )
-    frog_version: str = Field(
-        title="FROG version",
-        alias="frog.version",
-        description="Version of FROG according to schema.",
+    frog_id: str = Field(
+        description="Id for the FROG analysis. All frog_ids within an archive must be "
+                    "unique."
     )
     frog_curators: List[Creator] = Field(
         alias="frog.curators", description="Curators which executed the FROG analysis."
     )
     frog_software: Tool = Field(
         alias="frog.software",
-        description="Software used to run FROG",
+        description="Software used to run FROG (e.g. 'fbc_curation'",
     )
-    software: Tool = Field(description="Software used to run FBC.")
+    software: Tool = Field(
+        description="Software used to run FBC (e.g. 'cameo', 'COBRA', 'cobrapy'"
+    )
     solver: Tool = Field(
-        description="Solver used to solve LP problem (e.g. CPLEX, GUROBI, GLPK)."
+        description="Solver used to solve LP problem (e.g. 'CPLEX', 'GUROBI', 'GLPK')."
     )
-    model_filename: str = Field(alias="model.filename")
-    model_md5: str = Field(alias="model.md5")
     environment: Optional[str] = Field(
         description="Execution environment such as Linux."
     )
@@ -265,6 +242,61 @@ class FrogReport(BaseModel):
             d = json.load(fp=f_json)
             return FrogReport(**d)
 
+    def to_dfs(self) -> Dict[str, pd.DataFrame]:
+        """Create report DataFrames."""
+
+        dfs: Dict[str, pd.DataFrame] = {}
+        for key, data in dict(
+            zip(
+                [
+                    CuratorConstants.OBJECTIVE_KEY,
+                    CuratorConstants.FVA_KEY,
+                    CuratorConstants.GENEDELETIONS_KEY,
+                    CuratorConstants.REACTIONDELETIONS_KEY,
+                ],
+                [
+                    self.objective,
+                    self.fva,
+                    self.gene_deletions,
+                    self.reaction_deletions,
+                ],
+            )
+        ).items():
+
+            d = data.dict()
+            if key == CuratorConstants.OBJECTIVE_KEY:
+                df = pd.DataFrame.from_records([d])
+                df.sort_values(by=["objective"], inplace=True)
+                df.index = range(len(df))
+            else:
+                item = list(d.values())[0]
+                df = pd.DataFrame(item)
+                if key in {
+                    CuratorConstants.FVA_KEY,
+                    CuratorConstants.REACTIONDELETIONS_KEY,
+                }:
+                    df.sort_values(by=["reaction"], inplace=True)
+                    df.index = range(len(df))
+                elif key == CuratorConstants.GENEDELETIONS_KEY:
+                    df.sort_values(by=["gene"], inplace=True)
+                    df.index = range(len(df))
+
+            if key in [
+                CuratorConstants.OBJECTIVE_KEY,
+                CuratorConstants.REACTIONDELETIONS_KEY,
+                CuratorConstants.GENEDELETIONS_KEY,
+            ]:
+                df.loc[
+                    df.status == StatusCode.INFEASIBLE.value, "value"
+                ] = CuratorConstants.VALUE_INFEASIBLE
+            elif key == CuratorConstants.FVA_KEY:
+                df.loc[
+                    df.status == StatusCode.INFEASIBLE.value, ["flux", "minimum", "maximum"]
+                ] = CuratorConstants.VALUE_INFEASIBLE
+
+            df[key] = df
+        return dfs
+
     def to_tsv(self, output_dir: Path) -> None:
         """Write Report TSV and metadata to directory"""
         if not output_dir.exists():
@@ -276,55 +308,17 @@ class FrogReport(BaseModel):
         with open(output_dir / CuratorConstants.METADATA_FILENAME, "w") as f_json:
             f_json.write(self.metadata.json(indent=2))
 
-        # write reference files (CSV files)
-        for filename, object in dict(
-            zip(
-                [
-                    CuratorConstants.OBJECTIVE_FILENAME,
-                    CuratorConstants.FVA_FILENAME,
-                    CuratorConstants.GENE_DELETION_FILENAME,
-                    CuratorConstants.REACTION_DELETION_FILENAME,
-                ],
-                [
-                    self.objective,
-                    self.fva,
-                    self.gene_deletions,
-                    self.reaction_deletions,
-                ],
-            )
-        ).items():
-            logger.debug(f"{output_dir / filename}")
-
-            d = object.dict()
-            if filename == CuratorConstants.OBJECTIVE_FILENAME:
-                df = pd.DataFrame.from_records([d])
-                df.sort_values(by=["objective"], inplace=True)
-                df.index = range(len(df))
-            else:
-                item = list(d.values())[0]
-                df = pd.DataFrame(item)
-                if filename in {
-                    CuratorConstants.FVA_FILENAME,
-                    CuratorConstants.REACTION_DELETION_FILENAME,
-                }:
-                    df.sort_values(by=["reaction"], inplace=True)
-                    df.index = range(len(df))
-                elif filename == CuratorConstants.GENE_DELETION_FILENAME:
-                    df.sort_values(by=["gene"], inplace=True)
-                    df.index = range(len(df))
-
-            if filename in [
-                CuratorConstants.OBJECTIVE_FILENAME,
-                CuratorConstants.REACTION_DELETION_FILENAME,
-                CuratorConstants.GENE_DELETION_FILENAME,
-            ]:
-                df.loc[
-                    df.status == StatusCode.INFEASIBLE.value, "value"
-                ] = CuratorConstants.VALUE_INFEASIBLE
-            elif filename == CuratorConstants.FVA_FILENAME:
-                df.loc[
-                    df.status == StatusCode.INFEASIBLE.value, ["minimum", "maximum"]
-                ] = CuratorConstants.VALUE_INFEASIBLE
+        # write reference files (TSV files)
+        dfs_dict = self.to_dfs()
+        for key, df in dfs_dict.items():
+            if key == CuratorConstants.OBJECTIVE_KEY:
+                filename = CuratorConstants.OBJECTIVE_FILENAME
+            elif key == CuratorConstants.FVA_KEY:
+                filename = CuratorConstants.FVA_FILENAME
+            elif key == CuratorConstants.GENEDELETIONS_KEY:
+                filename = CuratorConstants.GENEDELETIONS_FILENAME
+            elif key == CuratorConstants.REACTIONDELETIONS_KEY:
+                filename = CuratorConstants.REACTIONDELETIONS_FILENAME
 
             df.to_csv(output_dir / filename, sep="\t", index=False, na_rep="NaN")
 
@@ -336,8 +330,8 @@ class FrogReport(BaseModel):
         path_metadata = path_in / CuratorConstants.METADATA_FILENAME
         path_objective = path_in / CuratorConstants.OBJECTIVE_FILENAME
         path_fva = path_in / CuratorConstants.FVA_FILENAME
-        path_gene_deletion = path_in / CuratorConstants.GENE_DELETION_FILENAME
-        path_reaction_deletion = path_in / CuratorConstants.REACTION_DELETION_FILENAME
+        path_gene_deletion = path_in / CuratorConstants.GENEDELETIONS_FILENAME
+        path_reaction_deletion = path_in / CuratorConstants.REACTIONDELETIONS_FILENAME
         df_dict = dict()
 
         for k, path in enumerate(
@@ -366,12 +360,12 @@ class FrogReport(BaseModel):
             tmp_path: Path = Path(f_tmp)
 
             # write json
-            json_path = tmp_path / CuratorConstants.REPORT_FILENAME
+            json_path = tmp_path / CuratorConstants.FROG_FILENAME
             self.to_json(json_path)
             omex.add_entry(
                 entry_path=json_path,
                 entry=ManifestEntry(
-                    location=f"{location_prefix}{CuratorConstants.REPORT_FILENAME}",
+                    location=f"{location_prefix}{CuratorConstants.FROG_FILENAME}",
                     format=EntryFormat.FROG_JSON_V1,
                 ),
             )
@@ -389,11 +383,11 @@ class FrogReport(BaseModel):
                 ),
                 (CuratorConstants.FVA_FILENAME, EntryFormat.FROG_FVA_V1),
                 (
-                    CuratorConstants.REACTION_DELETION_FILENAME,
+                    CuratorConstants.REACTIONDELETIONS_FILENAME,
                     EntryFormat.FROG_REACTIONDELETION_V1,
                 ),
                 (
-                    CuratorConstants.GENE_DELETION_FILENAME,
+                    CuratorConstants.GENEDELETIONS_FILENAME,
                     EntryFormat.FROG_GENEDELETION_V1,
                 ),
             ]:
@@ -404,6 +398,10 @@ class FrogReport(BaseModel):
                         format=format,
                     ),
                 )
+
+    def from_omex(self, omex_path) -> List[FrogReport]:
+        """Read report from OMEX files"""
+        pass
 
 
 if __name__ == "__main__":

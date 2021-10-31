@@ -12,9 +12,9 @@ def _check_tmp_path(path):
         assert Path.exists(path / curator_key / CuratorConstants.OBJECTIVE_FILENAME)
         assert Path.exists(path / curator_key / CuratorConstants.FVA_FILENAME)
         assert Path.exists(
-            path / curator_key / CuratorConstants.REACTION_DELETION_FILENAME
+            path / curator_key / CuratorConstants.REACTIONDELETIONS_FILENAME
         )
-        assert Path.exists(path / curator_key / CuratorConstants.GENE_DELETION_FILENAME)
+        assert Path.exists(path / curator_key / CuratorConstants.GENEDELETIONS_FILENAME)
 
 
 def _check_example_results(res):
