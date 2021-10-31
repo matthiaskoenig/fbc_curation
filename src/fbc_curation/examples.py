@@ -1,7 +1,9 @@
 """Create curation information for example models."""
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
 
+import orjson
+from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
@@ -11,6 +13,9 @@ from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 from fbc_curation.frog import CuratorConstants, FrogReport
 from fbc_curation.worker import frog_task
+
+
+logger = log.get_logger(__name__)
 
 
 def run_examples(results_path: Path = EXAMPLE_PATH / "results") -> None:
@@ -74,9 +79,32 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
         omex_path_str=str(omex_path),
     )
 
-    # FIXME: reading and comparison
-    # Read all reports
-    # all_results: Dict[str: FrogReport] = {}
+    # Read all reports from JSON (FIXME: support reading from TSV)
+    reports: List[FrogReport] = []
+    omex = Omex.from_omex(omex_path)
+    for entry in omex.manifest.entries:
+        if entry.format == EntryFormat.FROG_JSON_V1:
+            report = FrogReport.from_json(path=omex.get_path(entry.location))
+            reports.append(report)
+        elif entry.format == EntryFormat.FROG_METADATA_V1:
+            path = omex.get_path(entry.location).parent
+            report = FrogReport.from_tsv(path)
+            reports.append(report)
+
+    # get model reports per model
+    model_reports = Dict[str, Dict[str, FrogReport]]
+    for report in model_reports:
+        model_location = report.metadata.model_location
+        d = model_reports.get(model_location, {})
+        frog_id = report.metadata.frog_id
+        if frog_id in d:
+            logger.error(f"duplicate FROG report: '{frog_id}' for '{model_path}'")
+        d[frog_id] = report
+        model_reports[model_location] = d
+
+    for location, reports_dict in model_reports.items():
+        logger.info(f"{location}: {reports_dict.keys()}")
+
     # for curator_key in curator_keys:
     #     all_results[curator_key] = FrogReport.read_json(
     #         path=results_path / curator_key / CuratorConstants.REPORT_FILENAME

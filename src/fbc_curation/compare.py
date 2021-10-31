@@ -32,6 +32,7 @@ logger = log.get_logger(__name__)
 # if len(res_dict) > 1:
 #     FrogReport.compare(res_dict)
 
+
 class ComparisonResult:
     keys: List[str]
     fva: pd.DataFrame
@@ -39,8 +40,8 @@ class ComparisonResult:
 
 class Comparison:
 
-    absolute_tolerance = 1E-6
-    relative_tolerance = 1E-6
+    absolute_tolerance = 1e-6
+    relative_tolerance = 1e-6
 
     @staticmethod
     def compare(reports: Dict[str, FrogReport]) -> None:
@@ -58,7 +59,6 @@ class Comparison:
 
         console.rule("Comparison of reports", style="white")
 
-
         data: Dict[str, Dict[str, pd.DataFrame]] = {}
 
         # DataFrames for report
@@ -72,7 +72,7 @@ class Comparison:
             CuratorConstants.OBJECTIVE_KEY,
             CuratorConstants.FVA_KEY,
             CuratorConstants.REACTIONDELETIONS_KEY,
-            CuratorConstants.GENEDELETIONS_KEY
+            CuratorConstants.GENEDELETIONS_KEY,
         ]:
             mat_equal = np.zeros(shape=(num_reports, num_reports))
 
@@ -96,7 +96,7 @@ class Comparison:
                             df1[field].values,
                             df2[field].values,
                             atol=Comparison.absolute_tolerance,
-                            rtol=Comparison.relative_tolerance
+                            rtol=Comparison.relative_tolerance,
                         )
                         equal = equal and equal_field
 
@@ -115,7 +115,8 @@ class Comparison:
             console.print(f"--- {key} ---")
             console.print(df_equal)
             all_equal = (
-                all_equal and np.sum(np.sum(df_equal.values)) == num_reports * num_reports
+                all_equal
+                and np.sum(np.sum(df_equal.values)) == num_reports * num_reports
             )
 
         console.rule(style="white")
@@ -126,4 +127,4 @@ class Comparison:
 
 if __name__ == "__main__":
     # Read results and compare
-
+    pass

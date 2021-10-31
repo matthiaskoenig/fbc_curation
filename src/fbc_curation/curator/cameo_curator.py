@@ -5,6 +5,7 @@ Too many issues with package compatibility.
 """
 
 from pathlib import Path
+from typing import List
 
 import pandas as pd
 from cameo import __version__ as cameo_version
@@ -15,20 +16,17 @@ from cameo.flux_analysis.analysis import (
 )
 from cobra.core import Model
 from cobra.io import read_sbml_model
-from pydantic import ValidationError
 from pymetadata import log
 from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
 
 from fbc_curation.curator import Curator
 from fbc_curation.frog import (
+    Creator,
     CuratorConstants,
     FrogFVA,
-    FrogFVASingle,
-    FrogGeneDeletion,
     FrogGeneDeletions,
     FrogMetaData,
-    FrogObjective,
-    FrogReactionDeletion,
+    FrogObjectives,
     FrogReactionDeletions,
     StatusCode,
     Tool,
@@ -51,9 +49,11 @@ class CuratorCameo(Curator):
     https://pythonhosted.org/cameo/
     """
 
-    def __init__(self, model_path: Path, objective_id: str = None):
+    def __init__(self, model_path: Path, frog_id: str, curators: List[Creator]):
         """Create instance."""
-        Curator.__init__(self, model_path=model_path, objective_id=objective_id)
+        Curator.__init__(
+            self, model_path=model_path, frog_id=frog_id, curators=curators
+        )
 
     def read_model(self) -> Model:
         return read_sbml_model(str(self.model_path), f_replace={})
@@ -70,23 +70,31 @@ class CuratorCameo(Curator):
         )
         return super().metadata(software=software, solver=solver)
 
-    def objective(self) -> FrogObjective:
+    def objectives(self) -> FrogObjectives:
         model = self.read_model()
         try:
-            # fbc optimization
             result = fba(model)
-            value = result.objective_value
-            status = StatusCode.OPTIMAL
+            df = pd.DataFrame(
+                {
+                    "model": self.model_location,
+                    "objective": self.objective_id,
+                    "status": StatusCode.OPTIMAL,
+                    "value": result.objective_value,
+                },
+                index=[0],
+            )
         except Exception:
-            value = CuratorConstants.VALUE_INFEASIBLE
-            status = StatusCode.INFEASIBLE
+            df = pd.DataFrame(
+                {
+                    "model": self.model_location,
+                    "objective": self.objective_id,
+                    "status": StatusCode.INFEASIBLE,
+                    "value": CuratorConstants.VALUE_INFEASIBLE,
+                },
+                index=[0],
+            )
 
-        return FrogObjective(
-            model=self.model_location,
-            objective=self.objective_id,
-            status=status,
-            value=value,
-        )
+        return FrogObjectives.from_df(df)
 
     def fva(self) -> FrogFVA:
         model = self.read_model()
@@ -124,15 +132,7 @@ class CuratorCameo(Curator):
                 }
             )
 
-        fva = []
-        for item in df_out.to_dict(orient="records"):
-            try:
-                fva.append(FrogFVASingle(**item))
-            except ValidationError as e:
-                logger.error(item)
-                logger.error(e.json())
-
-        return FrogFVA(fva=fva)
+        return FrogFVA.from_df(df_out)
 
     def gene_deletions(self) -> FrogGeneDeletions:
         model = self.read_model()
@@ -175,16 +175,8 @@ class CuratorCameo(Curator):
                 "value": gene_values,
             }
         )
-        json = df.to_dict(orient="records")
-        deletions = []
-        for item in json:
-            try:
-                deletions.append(FrogGeneDeletion(**item))
-            except ValidationError as e:
-                logger.error(item)
-                logger.error(e.json())
 
-        return FrogGeneDeletions(deletions=deletions)
+        return FrogGeneDeletions.from_df(df)
 
     def reaction_deletions(self) -> FrogReactionDeletions:
         model = self.read_model()
@@ -220,13 +212,4 @@ class CuratorCameo(Curator):
             }
         )
 
-        json = df.to_dict(orient="records")
-        deletions = []
-        for item in json:
-            try:
-                deletions.append(FrogReactionDeletion(**item))
-            except ValidationError as e:
-                logger.error(item)
-                logger.error(e.json())
-
-        return FrogReactionDeletions(deletions=deletions)
+        return FrogReactionDeletions.from_df(df)

@@ -125,7 +125,6 @@ def frog_for_sbml(source: Union[Path, str, bytes], curator: str) -> FrogReport:
             with open(sbml_path, "w") as f_sbml:
                 f_sbml.write(source)
 
-        obj_info = Curator._read_objective_information(sbml_path)
         if curator == "cobrapy":
             curator_class = CuratorCobrapy
         elif curator == "cameo":
@@ -134,7 +133,9 @@ def frog_for_sbml(source: Union[Path, str, bytes], curator: str) -> FrogReport:
             raise ValueError(f"Unsupported curator: {curator}")
 
         curator = curator_class(
-            model_path=sbml_path, objective_id=obj_info.active_objective
+            model_path=sbml_path,
+            frog_id=curator,
+            curators=[],
         )
         report: FrogReport = curator.run()
 

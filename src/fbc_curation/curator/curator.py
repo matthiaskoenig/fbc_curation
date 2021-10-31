@@ -14,10 +14,12 @@ from pymetadata.console import console
 
 from fbc_curation import __citation__, __software__, __version__
 from fbc_curation.frog import (
+    Creator,
     FrogFVA,
     FrogGeneDeletions,
     FrogMetaData,
     FrogObjective,
+    FrogObjectives,
     FrogReactionDeletions,
     FrogReport,
     Tool,
@@ -34,33 +36,19 @@ logger = log.get_logger(__name__)
 class Curator:
     """Base class of all Curator implementations."""
 
-    def __init__(self, model_path: Path, objective_id: str = None):
+    def __init__(self, model_path: Path, frog_id: str, curators: List[Creator]):
         """Create instance."""
         if not model_path.exists():
             raise ValueError(f"model_path does not exist: '{model_path}'")
 
+        self.frog_id: str = frog_id
+        self.curators = curators
         self.model_path: Path = model_path
         self.model_location: str = f"./{self.model_path.name}"
-        self.active_objective, self.objective_ids = Curator._read_objective_information(
+        active_objective, objective_ids = Curator._read_objective_information(
             model_path
         )
-
-        self.objective_id: str
-        if objective_id is None:
-            logger.warning(
-                f"No objective id provided, using the active objective: "
-                f"{self.active_objective}"
-            )
-            self.objective_id = self.active_objective
-        else:
-            if objective_id not in self.objective_ids:
-                logger.error(
-                    f"objective id does not exist in model: '{self.objective_id}', "
-                    f"using the active objective: {self.active_objective}"
-                )
-                self.objective_id = self.active_objective
-            else:
-                self.objective_id = objective_id
+        self.objective_id = active_objective
 
     def __str__(self) -> str:
         """Create string representation."""
@@ -75,26 +63,24 @@ class Curator:
         raise NotImplementedError
 
     def metadata(self, software: Tool, solver: Tool) -> FrogMetaData:
-        today = date.today()
         md = FrogMetaData(
-            frog_date=date(year=today.year, month=today.month, day=today.day),
-            frog_version="1.0",
-            frog_curators=[],
+            model_location=self.model_location,
+            model_md5=FrogMetaData.md5_for_path(self.model_path),
+            frog_id=self.frog_id,
             frog_software=Tool(
                 name=__software__,
                 version=__version__,
                 url=__citation__,
             ),
-            environment=f"{os.name}, {platform.system()}, {platform.release()}",
-            model_filename=self.model_path.name,
-            model_md5=FrogMetaData.md5_for_path(self.model_path),
+            curators=self.curators,
             software=software,
             solver=solver,
+            environment=f"{os.name}, {platform.system()}, {platform.release()}",
         )
 
         return md
 
-    def objective(self) -> FrogObjective:
+    def objectives(self) -> FrogObjectives:
         raise NotImplementedError
 
     def fva(self) -> FrogFVA:
@@ -113,8 +99,8 @@ class Curator:
         logger.info(f"* metadata")
         metadata = self.metadata()
 
-        logger.info(f"* objective")
-        objective = self.objective()
+        logger.info(f"* objectives")
+        objectives = self.objectives()
 
         logger.info(f"* fva")
         fva = self.fva()
@@ -127,7 +113,7 @@ class Curator:
 
         return FrogReport(
             metadata=metadata,
-            objective=objective,
+            objectives=objectives,
             fva=fva,
             gene_deletions=gene_deletions,
             reaction_deletions=reaction_deletions,

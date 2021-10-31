@@ -10,12 +10,12 @@ from datetime import date
 from enum import Enum
 from math import isnan
 from pathlib import Path
-from typing import Any, List, Optional, Dict
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
 from pydantic import BaseModel as PydanticBaseModel
-from pydantic import Field, validator
+from pydantic import Field, ValidationError, validator
 from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
@@ -38,6 +38,7 @@ class BaseModel(PydanticBaseModel):
 
 class CuratorConstants:
     """Class storing constants for curation and file format."""
+
     FROG_KEY = "frog"
     METADATA_KEY = "metadata"
     OBJECTIVE_KEY = "objective"
@@ -52,7 +53,6 @@ class CuratorConstants:
     FVA_FILENAME = f"02_{FVA_KEY}.tsv"
     GENEDELETIONS_FILENAME = f"03_{GENEDELETIONS_KEY}.tsv"
     REACTIONDELETIONS_FILENAME = f"04_{REACTIONDELETIONS_KEY}.tsv"
-
 
     # special settings for comparison
     VALUE_INFEASIBLE = np.NaN
@@ -141,18 +141,22 @@ class FrogMetaData(BaseModel):
     model_location: str = Field(
         alias="model.location",
         description="Location of the model in the COMBINE archive for which the FROG "
-                    "analysis was performed."
+        "analysis was performed.",
+    )
+    model_md5: Optional[str] = Field(
+        alias="model.md5",
+        description="MD5 hash of model",
     )
     frog_id: str = Field(
         description="Id for the FROG analysis. All frog_ids within an archive must be "
-                    "unique."
-    )
-    frog_curators: List[Creator] = Field(
-        alias="frog.curators", description="Curators which executed the FROG analysis."
+        "unique."
     )
     frog_software: Tool = Field(
         alias="frog.software",
         description="Software used to run FROG (e.g. 'fbc_curation'",
+    )
+    curators: List[Creator] = Field(
+        alias="frog.curators", description="Curators which executed the FROG analysis."
     )
     software: Tool = Field(
         description="Software used to run FBC (e.g. 'cameo', 'COBRA', 'cobrapy'"
@@ -180,6 +184,29 @@ class FrogMetaData(BaseModel):
             return hashlib.md5(data).hexdigest()
 
 
+class FrogObjectives(BaseModel):
+    """Definition of FROG Objectives."""
+
+    objectives: List[FrogObjective]
+
+    class Config:
+        use_enum_values = True
+
+    @staticmethod
+    def from_df(df: pd.DataFrame) -> FrogObjectives:
+        """Parse Objectives from DataFrame."""
+        json = df.to_dict(orient="records")
+        objectives = []
+        for item in json:
+            try:
+                objectives.append(FrogObjective(**item))
+            except ValidationError as e:
+                logger.error(item)
+                logger.error(e.json())
+
+        return FrogObjectives(objectives=objectives)
+
+
 class FrogFVA(BaseModel):
     """Definition of FROG FVA."""
 
@@ -187,6 +214,18 @@ class FrogFVA(BaseModel):
 
     class Config:
         use_enum_values = True
+
+    @staticmethod
+    def from_df(df: pd.DataFrame) -> FrogFVA:
+        """Parse FVA from DataFrame."""
+        fva = []
+        for item in df.to_dict(orient="records"):
+            try:
+                fva.append(FrogFVASingle(**item))
+            except ValidationError as e:
+                logger.error(item)
+                logger.error(e.json())
+        return FrogFVA(fva=fva)
 
 
 class FrogReactionDeletions(BaseModel):
@@ -197,6 +236,20 @@ class FrogReactionDeletions(BaseModel):
     class Config:
         use_enum_values = True
 
+    @staticmethod
+    def from_df(df: pd.DataFrame) -> FrogReactionDeletions:
+        """Parse FVA from DataFrame."""
+        json = df.to_dict(orient="records")
+        deletions = []
+        for item in json:
+            try:
+                deletions.append(FrogReactionDeletion(**item))
+            except ValidationError as e:
+                logger.error(item)
+                logger.error(e.json())
+
+        return FrogReactionDeletions(deletions=deletions)
+
 
 class FrogGeneDeletions(BaseModel):
     """Definition of FROG Gene deletions."""
@@ -206,12 +259,26 @@ class FrogGeneDeletions(BaseModel):
     class Config:
         use_enum_values = True
 
+    @staticmethod
+    def from_df(df: pd.DataFrame) -> FrogGeneDeletions:
+        """Parse GeneDeletions from DataFrame."""
+        json = df.to_dict(orient="records")
+        deletions = []
+        for item in json:
+            try:
+                deletions.append(FrogGeneDeletion(**item))
+            except ValidationError as e:
+                logger.error(item)
+                logger.error(e.json())
+
+        return FrogGeneDeletions(deletions=deletions)
+
 
 class FrogReport(BaseModel):
     """Definition of the FROG standard."""
 
     metadata: FrogMetaData
-    objective: FrogObjective
+    objectives: FrogObjectives
     fva: FrogFVA
     reaction_deletions: FrogReactionDeletions
     gene_deletions: FrogGeneDeletions
@@ -255,7 +322,7 @@ class FrogReport(BaseModel):
                     CuratorConstants.REACTIONDELETIONS_KEY,
                 ],
                 [
-                    self.objective,
+                    self.objectives,
                     self.fva,
                     self.gene_deletions,
                     self.reaction_deletions,
@@ -265,21 +332,19 @@ class FrogReport(BaseModel):
 
             d = data.dict()
             if key == CuratorConstants.OBJECTIVE_KEY:
-                df = pd.DataFrame.from_records([d])
-                df.sort_values(by=["objective"], inplace=True)
-                df.index = range(len(df))
-            else:
                 item = list(d.values())[0]
                 df = pd.DataFrame(item)
+                if key == CuratorConstants.OBJECTIVE_KEY:
+                    df.sort_values(by=["objective"], inplace=True)
                 if key in {
                     CuratorConstants.FVA_KEY,
                     CuratorConstants.REACTIONDELETIONS_KEY,
                 }:
                     df.sort_values(by=["reaction"], inplace=True)
-                    df.index = range(len(df))
                 elif key == CuratorConstants.GENEDELETIONS_KEY:
                     df.sort_values(by=["gene"], inplace=True)
-                    df.index = range(len(df))
+
+                df.index = range(len(df))
 
             if key in [
                 CuratorConstants.OBJECTIVE_KEY,
@@ -291,10 +356,11 @@ class FrogReport(BaseModel):
                 ] = CuratorConstants.VALUE_INFEASIBLE
             elif key == CuratorConstants.FVA_KEY:
                 df.loc[
-                    df.status == StatusCode.INFEASIBLE.value, ["flux", "minimum", "maximum"]
+                    df.status == StatusCode.INFEASIBLE.value,
+                    ["flux", "minimum", "maximum"],
                 ] = CuratorConstants.VALUE_INFEASIBLE
 
-            df[key] = df
+            dfs[key] = df
         return dfs
 
     def to_tsv(self, output_dir: Path) -> None:
@@ -306,7 +372,10 @@ class FrogReport(BaseModel):
         # write metadata file
         logger.debug(f"{output_dir / CuratorConstants.METADATA_FILENAME}")
         with open(output_dir / CuratorConstants.METADATA_FILENAME, "w") as f_json:
-            f_json.write(self.metadata.json(indent=2))
+            # make a copy
+            metadata = FrogMetaData(**self.metadata.dict())
+            metadata.frog_id = f"{metadata.frog_id}_tsv"
+            f_json.write(metadata.json(indent=2))
 
         # write reference files (TSV files)
         dfs_dict = self.to_dfs()
@@ -323,17 +392,16 @@ class FrogReport(BaseModel):
             df.to_csv(output_dir / filename, sep="\t", index=False, na_rep="NaN")
 
     @classmethod
-    def from_tsv(cls, path_in: Path) -> "FrogReport":
+    def from_tsv(cls, path: Path) -> "FrogReport":
         """Read fbc curation files from given directory."""
         # FIXME: implement
 
-        path_metadata = path_in / CuratorConstants.METADATA_FILENAME
-        path_objective = path_in / CuratorConstants.OBJECTIVE_FILENAME
-        path_fva = path_in / CuratorConstants.FVA_FILENAME
-        path_gene_deletion = path_in / CuratorConstants.GENEDELETIONS_FILENAME
-        path_reaction_deletion = path_in / CuratorConstants.REACTIONDELETIONS_FILENAME
-        df_dict = dict()
-
+        path_metadata = path / CuratorConstants.METADATA_FILENAME
+        path_objective = path / CuratorConstants.OBJECTIVE_FILENAME
+        path_fva = path / CuratorConstants.FVA_FILENAME
+        path_gene_deletion = path / CuratorConstants.GENEDELETIONS_FILENAME
+        path_reaction_deletion = path / CuratorConstants.REACTIONDELETIONS_FILENAME
+        df_dict: Dict[str, pd.DataFrame] = dict()
         for k, path in enumerate(
             [path_objective, path_fva, path_gene_deletion, path_reaction_deletion]
         ):
