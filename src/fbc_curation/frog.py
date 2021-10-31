@@ -1,4 +1,6 @@
 """FROG schema definition."""
+from __future__ import annotations
+
 import hashlib
 import json
 import os
@@ -8,6 +10,8 @@ from enum import Enum
 from math import isnan
 from pathlib import Path
 from typing import Any, List, Optional
+
+
 
 import numpy as np
 import pandas as pd
@@ -200,6 +204,8 @@ class FrogMetaData(BaseModel):
 
 
 class FrogFVA(BaseModel):
+    """Definition of FROG FVA."""
+
     fva: List[FrogFVASingle]
 
     class Config:
@@ -207,6 +213,8 @@ class FrogFVA(BaseModel):
 
 
 class FrogReactionDeletions(BaseModel):
+    """Definition of FROG Reaction deletions."""
+
     deletions: List[FrogReactionDeletion]
 
     class Config:
@@ -214,6 +222,8 @@ class FrogReactionDeletions(BaseModel):
 
 
 class FrogGeneDeletions(BaseModel):
+    """Definition of FROG Gene deletions."""
+
     deletions: List[FrogGeneDeletion]
 
     class Config:
@@ -232,8 +242,19 @@ class FrogReport(BaseModel):
     class Config:
         use_enum_values = True
 
+    def to_json(self, path: Path) -> None:
+        """Write FrogReport to JSON format."""
+        if not path.parent.exists():
+            logger.warning(f"Creating results path: {path.parent}")
+            path.mkdir(parents=True)
+
+        # write FROG
+        logger.debug(f"{path}")
+        with open(path, "w") as f_json:
+            f_json.write(self.json(indent=2))
+
     @staticmethod
-    def read_json(path: Path) -> "FrogReport":
+    def from_json(path: Path) -> FrogReport:
         """Read FrogReport from JSON format.
 
         raises ValidationError
@@ -244,23 +265,14 @@ class FrogReport(BaseModel):
             d = json.load(fp=f_json)
             return FrogReport(**d)
 
-    def to_json(self, path: Path) -> None:
-        """Write FrogReport to JSON format."""
-        if not path.parent.exists():
-            logger.warning(f"Creating results path: {path.parent}")
-            path.mkdir(parents=True)
-
-        # write FROG
-        with open(path, "w") as f_json:
-            f_json.write(self.json(indent=2))
-
-    def to_tsvs_with_metadata(self, output_dir: Path) -> None:
+    def to_tsv(self, output_dir: Path) -> None:
         """Write Report TSV and metadata to directory"""
         if not output_dir.exists():
             logger.warning(f"Creating results path: {output_dir}")
             output_dir.mkdir(parents=True)
 
         # write metadata file
+        logger.debug(f"{output_dir / CuratorConstants.METADATA_FILENAME}")
         with open(output_dir / CuratorConstants.METADATA_FILENAME, "w") as f_json:
             f_json.write(self.metadata.json(indent=2))
 
@@ -281,10 +293,9 @@ class FrogReport(BaseModel):
                 ],
             )
         ).items():
-            logger.info(f"-> {output_dir / filename}")
+            logger.debug(f"{output_dir / filename}")
 
             d = object.dict()
-            # print(d)
             if filename == CuratorConstants.OBJECTIVE_FILENAME:
                 df = pd.DataFrame.from_records([d])
                 df.sort_values(by=["objective"], inplace=True)
@@ -307,25 +318,14 @@ class FrogReport(BaseModel):
                 CuratorConstants.REACTION_DELETION_FILENAME,
                 CuratorConstants.GENE_DELETION_FILENAME,
             ]:
-                df[
-                    df.status == StatusCode.INFEASIBLE.value
-                ].value = CuratorConstants.VALUE_INFEASIBLE
-                print(df[df.status == StatusCode.INFEASIBLE.value])
+                df.loc[df.status == StatusCode.INFEASIBLE.value, "value"] = CuratorConstants.VALUE_INFEASIBLE
             elif filename == CuratorConstants.FVA_FILENAME:
-                df[
-                    df.status == StatusCode.INFEASIBLE.value
-                ].minimum = CuratorConstants.VALUE_INFEASIBLE
-                df[
-                    df.status == StatusCode.INFEASIBLE.value
-                ].maximum = CuratorConstants.VALUE_INFEASIBLE
+                df.loc[df.status == StatusCode.INFEASIBLE.value, ["minimum", "maximum"]] = CuratorConstants.VALUE_INFEASIBLE
 
-            # print(df.head())
             df.to_csv(output_dir / filename, sep="\t", index=False, na_rep="NaN")
 
-            # df.to_json(path_out / filename, sep="\t", index=False)
-
     @classmethod
-    def read_tsvs(cls, path_in: Path) -> "FrogReport":
+    def from_tsv(cls, path_in: Path) -> "FrogReport":
         """Read fbc curation files from given directory."""
         # FIXME: implement
 

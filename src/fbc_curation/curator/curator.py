@@ -1,7 +1,6 @@
 """Base class for all FBC curators."""
 import os
 
-# from sys import platform
 import platform
 from collections import defaultdict, namedtuple
 from datetime import date
@@ -10,7 +9,6 @@ from typing import Dict, List
 
 import cobra
 import libsbml
-import pandas as pd
 from cobra.io import read_sbml_model
 from pymetadata import log
 from pymetadata.console import console
@@ -112,20 +110,20 @@ class Curator:
     def run(self) -> FrogReport:
         """Run the curator and stores the results."""
 
-        console.rule("CuratorResults", style="white")
-        self._print_header(f"{self.__class__.__name__}: metadata")
+        console.rule(f"FROG {self.__class__.__name__}", style="white")
+        logger.info(f"* metadata")
         metadata = self.metadata()
 
-        self._print_header(f"{self.__class__.__name__}: objective")
+        logger.info(f"* objective")
         objective = self.objective()
 
-        self._print_header(f"{self.__class__.__name__}: fva")
+        logger.info(f"* fva")
         fva = self.fva()
 
-        self._print_header(f"{self.__class__.__name__}: gene_deletion")
+        logger.info(f"* genedeletions")
         gene_deletions = self.gene_deletions()
 
-        self._print_header(f"{self.__class__.__name__}: reaction_deletion")
+        logger.info(f"* reactiondeletions")
         reaction_deletions = self.reaction_deletions()
 
         return FrogReport(
@@ -135,52 +133,6 @@ class Curator:
             gene_deletions=gene_deletions,
             reaction_deletions=reaction_deletions,
         )
-
-    # def _round_and_sort(self):
-    #     """Round and sort."""
-    #     # FIXME: processing must be done on creating the files ?!
-    #     # round and sort objective value
-    #     for key in ["value"]:
-    #         self.objective[key] = self.objective[key].apply(self._round)
-    #     self.objective.sort_values(by=["objective"], inplace=True)
-    #
-    #     # round and sort fva
-    #     for key in ["flux", "minimum", "maximum"]:
-    #         self.fva[key] = self.fva[key].apply(self._round)
-    #     self.fva.sort_values(by=["reaction"], inplace=True)
-    #     self.fva.index = range(len(self.fva))
-    #
-    #     # round and sort gene_deletion
-    #     for key in ["value"]:
-    #         self.gene_deletion[key] = self.gene_deletion[key].apply(self._round)
-    #     self.gene_deletion.sort_values(by=["gene"], inplace=True)
-    #     self.gene_deletion.index = range(len(self.gene_deletion))
-    #
-    #     # round and sort reaction deletion
-    #     for key in ["value"]:
-    #         self.reaction_deletion[key] = self.reaction_deletion[key].apply(self._round)
-    #     self.reaction_deletion.sort_values(by=["reaction"], inplace=True)
-    #     self.reaction_deletion.index = range(len(self.reaction_deletion))
-    #
-    #     # validate
-    #     self.validate()
-    #
-    # def _round(self, x):
-    #     """Round the float and sets small values positive.
-    #
-    #     Ensuring positivity removes -0.0, 0.0 changes to files.
-    #     """
-    #     if x == CuratorConstants.VALUE_INFEASIBLE:
-    #         return x
-    #     else:
-    #         x = round(x, self.num_decimals)
-    #         if abs(x) < 1e-10:
-    #             x = abs(x)
-    #         return x
-
-    @staticmethod
-    def _print_header(title):
-        console.print(f"* {title}")
 
     @staticmethod
     def _knockout_reactions_for_genes(

@@ -1,7 +1,10 @@
-"""Curate fbc with cameo."""
+"""Curate fbc with cameo.
+
+This is DEPRECATED and no longer used.
+Too many issues with package compatibility.
+"""
 
 from pathlib import Path
-from typing import Dict
 
 import pandas as pd
 from cameo import __version__ as cameo_version
@@ -74,8 +77,7 @@ class CuratorCameo(Curator):
             result = fba(model)
             value = result.objective_value
             status = StatusCode.OPTIMAL
-        except Exception as e:
-            logger.error(f"{e}")
+        except Exception:
             value = CuratorConstants.VALUE_INFEASIBLE
             status = StatusCode.INFEASIBLE
 
@@ -127,8 +129,8 @@ class CuratorCameo(Curator):
             try:
                 fva.append(FrogFVASingle(**item))
             except ValidationError as e:
-                print(item)
-                print(e.json())
+                logger.error(item)
+                logger.error(e.json())
 
         return FrogFVA(fva=fva)
 
@@ -154,8 +156,7 @@ class CuratorCameo(Curator):
                 result = fba(model)
                 value = result.objective_value
                 status = StatusCode.OPTIMAL
-            except Exception as e:
-                logger.error(f"{e}")
+            except Exception:
                 value = CuratorConstants.VALUE_INFEASIBLE
                 status = StatusCode.INFEASIBLE
             gene_status.append(status)
@@ -180,8 +181,8 @@ class CuratorCameo(Curator):
             try:
                 deletions.append(FrogGeneDeletion(**item))
             except ValidationError as e:
-                print(item)
-                print(e.json())
+                logger.error(item)
+                logger.error(e.json())
 
         return FrogGeneDeletions(deletions=deletions)
 
@@ -200,7 +201,6 @@ class CuratorCameo(Curator):
                 value = result.objective_value
                 status = StatusCode.OPTIMAL
             except Exception as e:
-                logger.error(f"{e}")
                 value = CuratorConstants.VALUE_INFEASIBLE
                 status = StatusCode.INFEASIBLE
 
@@ -226,7 +226,7 @@ class CuratorCameo(Curator):
             try:
                 deletions.append(FrogReactionDeletion(**item))
             except ValidationError as e:
-                print(item)
-                print(e.json())
+                logger.error(item)
+                logger.error(e.json())
 
         return FrogReactionDeletions(deletions=deletions)

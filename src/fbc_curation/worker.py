@@ -1,3 +1,7 @@
+"""Celery worker.
+
+Here the tasks are defined which are executed in the task queue.
+"""
 import os
 import tempfile
 import time
@@ -9,7 +13,6 @@ from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
-from fbc_curation import FROG_DATA_DIR
 from fbc_curation.curator import Curator
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 from fbc_curation.frog import CuratorConstants, FrogReport
@@ -25,6 +28,7 @@ celery.conf.result_backend = os.environ.get(
 )
 
 # FIXME: ensure the tmp dir is deleted afterwards
+# FIXME: reuse this code also for the local execution
 
 
 @celery.task(name="frog_task")
@@ -76,7 +80,7 @@ def frog_task(source_path_str: str, omex_is_temporary: bool = True) -> Dict[str,
                     report.to_json(json_path)
 
                     # write tsv
-                    report.to_tsvs_with_metadata(tmp_path)
+                    report.to_tsv(tmp_path)
 
                     omex.add_entry(
                         entry_path=json_path,

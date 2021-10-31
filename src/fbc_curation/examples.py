@@ -69,6 +69,8 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
     obj_info = Curator._read_objective_information(model_path)
 
     # Create FROG reports
+    # FIXME: This must be the runfrog functionality
+
     curator_keys = ["cobrapy", "cameo"]
     for k, curator_class in enumerate([CuratorCobrapy, CuratorCameo]):
         curator = curator_class(
@@ -79,7 +81,7 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
         report.to_json(json_path)
 
         # write tsv
-        report.to_tsvs_with_metadata(results_path / curator_keys[k])
+        report.to_tsv(results_path / curator_keys[k])
 
         # create omex
         omex = Omex()
@@ -125,9 +127,9 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
                     ),
                 )
 
+    console.rule("Write OMEX", style="white")
     omex_path = results_path / f"{model_path.stem}_FROG.omex"
     omex.to_omex(omex_path)
-    console.print(f"FROG OMEX written: 'file://{omex_path}'")
 
     # FIXME: reading and comparison
     # Read all reports
@@ -153,3 +155,5 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
 if __name__ == "__main__":
     # run_examples()
     example_ecoli_core(results_path=EXAMPLE_PATH / "results" / "e_coli_core")
+    # TODO: comparison
+    # TODO: second curator

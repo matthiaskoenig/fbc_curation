@@ -19,11 +19,8 @@ def main() -> None:
     The script is registered as `runfrog`.
 
     Example:
-        runfrog --model resources/examples/models/e_coli_core.xml
-          --path resources/examples/results/e_coli_core
-
-        python curation.py --model resources/examples/models/e_coli_core.xml
-          --path resources/examples/results/e_coli_core
+        runfrog --model resources/examples/models/e_coli_core.xml --path resources/examples/results/e_coli_core
+        python runfrog.py --model resources/examples/models/e_coli_core.xml --path resources/examples/results/e_coli_core
 
     """
 
@@ -70,7 +67,7 @@ def main() -> None:
     )
 
     console.rule(style="white")
-    console.print(":frog: FBC CURATION FROG ANALYSIS :frog:", style="white on black")
+    console.print(":frog: FBC CURATION FROG ANALYSIS :frog:")
     console.print(
         f"Version {__version__} (https://github.com/matthiaskoenig/fbc_curation)"
     )

@@ -1,5 +1,5 @@
 {
-  "frog_date": "2021-10-21",
+  "frog_date": "2021-10-31",
   "frog_version": "1.0",
   "frog_curators": [],
   "frog_software": {
@@ -19,5 +19,5 @@
   },
   "model_filename": "e_coli_core.xml",
   "model_md5": "4574760460afe9e1b3388dc15f354706",
-  "environment": "posix, Linux, 5.11.0-37-generic"
+  "environment": "posix, Linux, 5.11.0-38-generic"
 }
