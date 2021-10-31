@@ -1,6 +1,6 @@
 """Module creates FBC curation files."""
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List, Type
 
 from pymetadata import log
 from pymetadata.console import console
@@ -13,7 +13,7 @@ from fbc_curation.frog import FrogReport
 logger = log.get_logger(__name__)
 
 
-def main():
+def main() -> None:
     """Entry point which runs FROG report script.
 
     The script is registered as `runfrog`.
@@ -79,7 +79,7 @@ def main():
 
     options, args = parser.parse_args()
 
-    def _parser_message(text):
+    def _parser_message(text: str) -> None:
         console.print(text)
         parser.print_help()
         console.rule(style="white")
@@ -139,7 +139,7 @@ def main():
             )
 
     # Perform imports here to avoid messages above parser messages
-
+    curator_classes: List[Type[Curator]]
     if options.curator == "cobrapy":
         from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 

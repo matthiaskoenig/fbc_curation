@@ -65,7 +65,7 @@ class Curator:
             else:
                 self.objective_id = objective_id
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Create string representation."""
         lines = [
             f"--- {self.__class__.__name__} ---",
@@ -74,7 +74,7 @@ class Curator:
         ]
         return "\n".join(lines)
 
-    def read_model(self):
+    def read_model(self) -> None:
         raise NotImplementedError
 
     def metadata(self, software: Tool, solver: Tool) -> FrogMetaData:

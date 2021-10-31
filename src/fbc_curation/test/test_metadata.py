@@ -4,8 +4,7 @@ from datetime import date
 
 import pytest
 
-from fbc_curation import __citation__, __software__, __version__
-from fbc_curation.metadata import Creator, FrogMetaData, Tool
+from fbc_curation.frog import Creator, FrogMetaData, Tool
 
 
 def test_frog_metadata() -> None:
@@ -45,4 +44,3 @@ def test_frog_metadata() -> None:
         model_md5=FrogMetaData.md5_for_path(ecoli_path),
     )
     assert metadata
-    assert metadata.curator_version

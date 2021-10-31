@@ -31,11 +31,9 @@ class ORJSONResponse(JSONResponse):
     media_type = "application/json"
 
     def render(self, content: typing.Any) -> bytes:
-        return orjson.dumps(content)
+        content_bytes: bytes = orjson.dumps(content)
+        return content_bytes
 
-
-# FIXME: document API
-# FIXME: run API on different end point.
 
 description = """
 ## 🐸 FROG webservice
@@ -94,7 +92,7 @@ api.add_middleware(
 
 
 @api.get("/api")
-def get_api_information(request: Request):
+def get_api_information(request: Request) -> Dict[str, Any]:
     return {
         "title": api.title,
         "description": api.description,
@@ -116,7 +114,7 @@ def get_status_for_task(task_id: str) -> JSONResponse:
 
 
 @api.get("/api/task/omex/{task_id}", tags=["tasks"])
-async def get_combine_archive_for_task(task_id: str):
+async def get_combine_archive_for_task(task_id: str) -> FileResponse:
     """Get COMBINE archive (omex) for FROG task with `task_id`."""
 
     omex_path = Path("/frog_data") / f"{task_id}.omex"
@@ -183,12 +181,8 @@ def frog_from_bytes(content: bytes) -> Dict[str, Any]:
         _, path = tempfile.mkstemp(dir="/frog_data")
 
         with open(path, "w+b") as f_tmp:
-            logger.warning(content)
             f_tmp.write(content)
-            logger.info("Binary information written")
-            logger.info(str(content))
             f_tmp.close()
-        logger.error(f"Saving content in: {str(path)}")
         task = frog_task.delay(str(path), True)
         return {"task_id": task.id}
 
@@ -253,11 +247,10 @@ def create_frog_for_example(example_id: str) -> Dict[str, Any]:
     """
 
     example: Optional[Example] = _example_items.get(example_id, None)
-    content: Dict
     if example:
-        source: Path = example.file  # type: ignore
+        source: Path = example.file
         with open(source, "rb") as f:
-            content = f.read()
+            content: bytes = f.read()
             return frog_from_bytes(content)
 
     else:

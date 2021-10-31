@@ -12,7 +12,7 @@ from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 from fbc_curation.frog import CuratorConstants, FrogReport
 
 
-def run_examples(results_path: Path = EXAMPLE_PATH / "results"):
+def run_examples(results_path: Path = EXAMPLE_PATH / "results") -> None:
     """Run all examples."""
     example_ecoli_core(results_path=results_path / "e_coli_core")
     example_iJR904(results_path=results_path / "iJR904")
@@ -64,6 +64,7 @@ def example_iAB_AMO1410_SARS_omex(results_path: Path) -> Dict:
 
 
 def _run_example(model_path: Path, results_path: Path) -> Dict:
+    """Run single example helper function."""
     console.rule(str(model_path))
     obj_info = Curator._read_objective_information(model_path)
 
@@ -137,6 +138,7 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
     #     )
 
     # comparison
+    info: Dict = {}
     # valid = [r.validate() for r in all_results.values()]
     # equal = FrogReport.compare(all_results)
     # info = {
@@ -145,7 +147,7 @@ def _run_example(model_path: Path, results_path: Path) -> Dict:
     #     "equal": equal,
     # }
     # console.print(info)
-    # return info
+    return info
 
 
 if __name__ == "__main__":

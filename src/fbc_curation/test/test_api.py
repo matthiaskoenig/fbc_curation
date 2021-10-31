@@ -7,7 +7,8 @@ from fbc_curation.api import api
 client = TestClient(api)
 
 
-def test_get_api_information():
+def test_get_api_information() -> None:
+    """Test /api endpoint."""
     response = client.get("/api")
     assert response.status_code == 200
     json = response.json()
@@ -21,7 +22,8 @@ def test_get_api_information():
         assert key in json
 
 
-def test_get_examples():
+def test_get_examples() -> None:
+    """Test /api/examples endpoint"""
     response = client.get("/api/examples")
     assert response.status_code == 200
     json = response.json()

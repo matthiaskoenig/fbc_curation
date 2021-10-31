@@ -4,9 +4,8 @@ import libsbml
 import pandas as pd
 
 from fbc_curation import EXAMPLE_PATH
-from fbc_curation.constants import CuratorConstants
-from fbc_curation.curator import FROGResults
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
+from fbc_curation.frog import CuratorConstants
 
 
 model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
@@ -81,13 +80,13 @@ def _check_gene_deletion(df):
     assert "optimal" in status_codes
 
 
-def test_gene_deletion():
+def test_gene_deletion() -> None:
     """Check gene deletion."""
     df = results.gene_deletion
     _check_gene_deletion(df)
 
 
-def _check_reaction_deletion(df):
+def _check_reaction_deletion(df: pd.DataFrame) -> None:
     """Check reaction deletion."""
     assert isinstance(df, pd.DataFrame)
     assert not df.empty

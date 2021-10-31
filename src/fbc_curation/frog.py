@@ -5,31 +5,28 @@ import os
 import platform
 from datetime import date
 from enum import Enum
+from math import isnan
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
-from pydantic import BaseModel, Field
+from pydantic import BaseModel as PydanticBaseModel
+from pydantic import Field, validator
 from pymetadata import log
 from pymetadata.console import console
 
 
 logger = log.get_logger(__name__)
 
-
 # ----------------------------------------------
-# FIXME: get rid of this information !!!
 # Handling NaNs via https://github.com/samuelcolvin/pydantic/issues/1779
-from math import isnan
-
-from pydantic import BaseModel as PydanticBaseModel
-from pydantic import validator
+# FIXME: get rid of this information !!!
 
 
 class BaseModel(PydanticBaseModel):
     @validator("*")
-    def change_nan_to_none(cls, v, field):
+    def change_nan_to_none(cls, v: Any, field: Any) -> Any:
         if field.outer_type_ is float and isnan(v):
             return None
         return v
@@ -247,7 +244,7 @@ class FrogReport(BaseModel):
             d = json.load(fp=f_json)
             return FrogReport(**d)
 
-    def to_json(self, path: Path):
+    def to_json(self, path: Path) -> None:
         """Write FrogReport to JSON format."""
         if not path.parent.exists():
             logger.warning(f"Creating results path: {path.parent}")
@@ -257,7 +254,7 @@ class FrogReport(BaseModel):
         with open(path, "w") as f_json:
             f_json.write(self.json(indent=2))
 
-    def to_tsvs_with_metadata(self, output_dir: Path):
+    def to_tsvs_with_metadata(self, output_dir: Path) -> None:
         """Write Report TSV and metadata to directory"""
         if not output_dir.exists():
             logger.warning(f"Creating results path: {output_dir}")
@@ -289,13 +286,12 @@ class FrogReport(BaseModel):
             d = object.dict()
             # print(d)
             if filename == CuratorConstants.OBJECTIVE_FILENAME:
-                d = [d]
-                df = pd.DataFrame.from_records(d)
+                df = pd.DataFrame.from_records([d])
                 df.sort_values(by=["objective"], inplace=True)
                 df.index = range(len(df))
             else:
-                d = list(d.values())[0]
-                df = pd.DataFrame(d)
+                item = list(d.values())[0]
+                df = pd.DataFrame(item)
                 if filename in {
                     CuratorConstants.FVA_FILENAME,
                     CuratorConstants.REACTION_DELETION_FILENAME,
@@ -331,6 +327,8 @@ class FrogReport(BaseModel):
     @classmethod
     def read_tsvs(cls, path_in: Path) -> "FrogReport":
         """Read fbc curation files from given directory."""
+        # FIXME: implement
+
         path_metadata = path_in / CuratorConstants.METADATA_FILENAME
         path_objective = path_in / CuratorConstants.OBJECTIVE_FILENAME
         path_fva = path_in / CuratorConstants.FVA_FILENAME

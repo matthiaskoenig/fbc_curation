@@ -27,22 +27,16 @@ celery.conf.result_backend = os.environ.get(
 # FIXME: ensure the tmp dir is deleted afterwards
 
 
-@celery.task(name="create_task")
-def create_task(task_type):
-    time.sleep(int(task_type) * 10)
-    return True
-
-
 @celery.task(name="frog_task")
-def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
+def frog_task(source_path_str: str, omex_is_temporary: bool = True) -> Dict[str, Any]:
     """Run FROG task and create JSON for omex path.
 
     Path can be either Omex or an SBML file.
     """
-    logger.error(f"Loading content from: {omex_path_str}")
+    logger.error(f"Loading content from: {source_path_str}")
 
     try:
-        omex_path = Path(omex_path_str)
+        omex_path = Path(source_path_str)
         if not omex_path.exists():
             raise IOError(f"Path does not exist: '{omex_path}'")
         if not omex_path.is_file():
@@ -73,11 +67,11 @@ def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
                 report: FrogReport = json_for_sbml(source=sbml_path)
 
                 # add JSON to response
-                content["frogs"][entry.location] = report.dict()
+                content["frogs"][entry.location] = report.dict()  # type: ignore
 
                 # add FROG files to archive
                 with tempfile.TemporaryDirectory() as f_tmp:
-                    tmp_path = Path(f_tmp)
+                    tmp_path: Path = Path(f_tmp)
                     json_path = tmp_path / CuratorConstants.REPORT_FILENAME
                     report.to_json(json_path)
 
@@ -124,8 +118,8 @@ def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
 
     finally:
         # cleanup temporary files for celery
-        if tmp_path:
-            os.remove(omex_path_str)
+        if omex_is_temporary:
+            os.remove(source_path_str)
 
     return content
 

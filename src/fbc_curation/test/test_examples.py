@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from fbc_curation import examples
-from fbc_curation.constants import CuratorConstants
+from fbc_curation.frog import CuratorConstants
 
 
 def _check_tmp_path(path):
