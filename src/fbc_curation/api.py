@@ -14,11 +14,11 @@ import orjson
 import requests
 import uvicorn
 from celery.result import AsyncResult
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, FilePath
 from pymetadata import log
-from starlette.responses import JSONResponse, FileResponse
+from starlette.responses import FileResponse, JSONResponse
 
 from fbc_curation import EXAMPLE_PATH
 from fbc_curation.worker import frog_task
@@ -71,7 +71,7 @@ api = FastAPI(
         {
             "name": "tasks",
             "description": "Task operations, such as querying status and "
-                           "retrieving results.",
+            "retrieving results.",
         },
         {
             "name": "examples",
@@ -99,7 +99,7 @@ def get_api_information(request: Request):
         "title": api.title,
         "description": api.description,
         "contact": api.contact,
-        "root_path": request.scope.get("root_path")
+        "root_path": request.scope.get("root_path"),
     }
 
 
@@ -122,13 +122,13 @@ async def get_combine_archive_for_task(task_id: str):
     omex_path = Path("/frog_data") / f"{task_id}.omex"
 
     if not omex_path:
-        raise HTTPException(status_code=404, detail=f"No COMBINE archive for task with "
-                                                    f"id '{task_id}'")
+        raise HTTPException(
+            status_code=404,
+            detail=f"No COMBINE archive for task with " f"id '{task_id}'",
+        )
 
     return FileResponse(
-        path=omex_path,
-        media_type="application/zip",
-        filename=omex_path.name
+        path=omex_path, media_type="application/zip", filename=omex_path.name
     )
 
 

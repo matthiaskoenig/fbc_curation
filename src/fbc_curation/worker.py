@@ -9,10 +9,11 @@ from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
+from fbc_curation import FROG_DATA_DIR
 from fbc_curation.curator import Curator
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
-from fbc_curation.frog import FrogReport, CuratorConstants
-from fbc_curation import FROG_DATA_DIR
+from fbc_curation.frog import CuratorConstants, FrogReport
+
 
 logger = log.get_logger(__name__)
 
@@ -119,9 +120,7 @@ def frog_task(omex_path_str: str, tmp_path: bool = True) -> Dict[str, Any]:
 
         # save archive for download
         task_id = frog_task.request.id
-        omex.to_omex(
-            omex_path=Path("/frog_data") / f"{task_id}.omex"
-        )
+        omex.to_omex(omex_path=Path("/frog_data") / f"{task_id}.omex")
 
     finally:
         # cleanup temporary files for celery

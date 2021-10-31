@@ -1,6 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
+
 from fbc_curation.api import api
+
 
 client = TestClient(api)
 
