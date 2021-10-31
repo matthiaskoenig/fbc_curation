@@ -1,6 +1,5 @@
 """Base class for all FBC curators."""
 import os
-
 import platform
 from collections import defaultdict, namedtuple
 from datetime import date

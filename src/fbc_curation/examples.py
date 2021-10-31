@@ -10,6 +10,7 @@ from fbc_curation.curator import Curator
 from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 from fbc_curation.frog import CuratorConstants, FrogReport
+from fbc_curation.worker import frog_task
 
 
 def run_examples(results_path: Path = EXAMPLE_PATH / "results") -> None:
@@ -65,71 +66,13 @@ def example_iAB_AMO1410_SARS_omex(results_path: Path) -> Dict:
 
 def _run_example(model_path: Path, results_path: Path) -> Dict:
     """Run single example helper function."""
-    console.rule(str(model_path))
-    obj_info = Curator._read_objective_information(model_path)
 
-    # Create FROG reports
-    # FIXME: This must be the runfrog functionality
-
-    curator_keys = ["cobrapy", "cameo"]
-    for k, curator_class in enumerate([CuratorCobrapy, CuratorCameo]):
-        curator = curator_class(
-            model_path=model_path, objective_id=obj_info.active_objective
-        )
-        report: FrogReport = curator.run()
-        json_path = results_path / curator_keys[k] / CuratorConstants.REPORT_FILENAME
-        report.to_json(json_path)
-
-        # write tsv
-        report.to_tsv(results_path / curator_keys[k])
-
-        # create omex
-        omex = Omex()
-        omex.add_entry(
-            entry_path=model_path,
-            entry=ManifestEntry(
-                location=f"./{model_path.name}",
-                format=EntryFormat.SBML,
-            ),
-        )
-        for curator_key in curator_keys:
-            omex.add_entry(
-                entry_path=json_path,
-                entry=ManifestEntry(
-                    location=f"./FROG/{curator_key}/{CuratorConstants.REPORT_FILENAME}",
-                    format=EntryFormat.FROG_JSON_V1,
-                ),
-            )
-            for filename, format in [
-                (
-                    CuratorConstants.METADATA_FILENAME,
-                    EntryFormat.FROG_METADATA_V1,
-                ),
-                (
-                    CuratorConstants.OBJECTIVE_FILENAME,
-                    EntryFormat.FROG_OBJECTIVE_V1,
-                ),
-                (CuratorConstants.FVA_FILENAME, EntryFormat.FROG_FVA_V1),
-                (
-                    CuratorConstants.REACTION_DELETION_FILENAME,
-                    EntryFormat.FROG_REACTIONDELETION_V1,
-                ),
-                (
-                    CuratorConstants.GENE_DELETION_FILENAME,
-                    EntryFormat.FROG_GENEDELETION_V1,
-                ),
-            ]:
-                omex.add_entry(
-                    entry_path=results_path / curator_keys[k] / filename,
-                    entry=ManifestEntry(
-                        location=f"./FROG/{curator_key}/{filename}",
-                        format=format,
-                    ),
-                )
-
-    console.rule("Write OMEX", style="white")
     omex_path = results_path / f"{model_path.stem}_FROG.omex"
-    omex.to_omex(omex_path)
+    frog_task(
+        source_path_str=str(model_path),
+        input_is_temporary=False,
+        omex_path_str=str(omex_path),
+    )
 
     # FIXME: reading and comparison
     # Read all reports

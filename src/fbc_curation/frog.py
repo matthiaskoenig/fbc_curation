@@ -5,13 +5,12 @@ import hashlib
 import json
 import os
 import platform
+import tempfile
 from datetime import date
 from enum import Enum
 from math import isnan
 from pathlib import Path
 from typing import Any, List, Optional
-
-
 
 import numpy as np
 import pandas as pd
@@ -19,6 +18,7 @@ from pydantic import BaseModel as PydanticBaseModel
 from pydantic import Field, validator
 from pymetadata import log
 from pymetadata.console import console
+from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
 
 logger = log.get_logger(__name__)
@@ -318,9 +318,13 @@ class FrogReport(BaseModel):
                 CuratorConstants.REACTION_DELETION_FILENAME,
                 CuratorConstants.GENE_DELETION_FILENAME,
             ]:
-                df.loc[df.status == StatusCode.INFEASIBLE.value, "value"] = CuratorConstants.VALUE_INFEASIBLE
+                df.loc[
+                    df.status == StatusCode.INFEASIBLE.value, "value"
+                ] = CuratorConstants.VALUE_INFEASIBLE
             elif filename == CuratorConstants.FVA_FILENAME:
-                df.loc[df.status == StatusCode.INFEASIBLE.value, ["minimum", "maximum"]] = CuratorConstants.VALUE_INFEASIBLE
+                df.loc[
+                    df.status == StatusCode.INFEASIBLE.value, ["minimum", "maximum"]
+                ] = CuratorConstants.VALUE_INFEASIBLE
 
             df.to_csv(output_dir / filename, sep="\t", index=False, na_rep="NaN")
 
@@ -349,6 +353,57 @@ class FrogReport(BaseModel):
         objective_id = df_dict["objective"].objective.values[0]
 
         return FrogReport(objective_id=objective_id, **df_dict)
+
+    def to_omex(self, omex: Omex, location_prefix="./FROG/") -> None:
+        """Add report to omex.
+
+        :param omex: OMEX archive to add report to.
+        :param location_prefix: prefix to where to write the FROG files in the OMEX
+        """
+        # TODO: create new omex with model if not existing
+
+        with tempfile.TemporaryDirectory() as f_tmp:
+            tmp_path: Path = Path(f_tmp)
+
+            # write json
+            json_path = tmp_path / CuratorConstants.REPORT_FILENAME
+            self.to_json(json_path)
+            omex.add_entry(
+                entry_path=json_path,
+                entry=ManifestEntry(
+                    location=f"{location_prefix}{CuratorConstants.REPORT_FILENAME}",
+                    format=EntryFormat.FROG_JSON_V1,
+                ),
+            )
+
+            # write tsvs with metadata
+            self.to_tsv(tmp_path)
+            for filename, format in [
+                (
+                    CuratorConstants.METADATA_FILENAME,
+                    EntryFormat.FROG_METADATA_V1,
+                ),
+                (
+                    CuratorConstants.OBJECTIVE_FILENAME,
+                    EntryFormat.FROG_OBJECTIVE_V1,
+                ),
+                (CuratorConstants.FVA_FILENAME, EntryFormat.FROG_FVA_V1),
+                (
+                    CuratorConstants.REACTION_DELETION_FILENAME,
+                    EntryFormat.FROG_REACTIONDELETION_V1,
+                ),
+                (
+                    CuratorConstants.GENE_DELETION_FILENAME,
+                    EntryFormat.FROG_GENEDELETION_V1,
+                ),
+            ]:
+                omex.add_entry(
+                    entry_path=tmp_path / filename,
+                    entry=ManifestEntry(
+                        location=f"{location_prefix}{filename}",
+                        format=format,
+                    ),
+                )
 
 
 if __name__ == "__main__":

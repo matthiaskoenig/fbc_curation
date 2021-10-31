@@ -6,7 +6,7 @@ import os
 import tempfile
 import time
 from pathlib import Path
-from typing import Any, Dict, Union
+from typing import Any, Dict, Optional, Union
 
 from celery import Celery
 from pymetadata import log
@@ -14,6 +14,7 @@ from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
 from fbc_curation.curator import Curator
+from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 from fbc_curation.frog import CuratorConstants, FrogReport
 
@@ -32,7 +33,11 @@ celery.conf.result_backend = os.environ.get(
 
 
 @celery.task(name="frog_task")
-def frog_task(source_path_str: str, omex_is_temporary: bool = True) -> Dict[str, Any]:
+def frog_task(
+    source_path_str: str,
+    input_is_temporary: bool = True,
+    omex_path_str: Optional[str] = None,
+) -> Dict[str, Any]:
     """Run FROG task and create JSON for omex path.
 
     Path can be either Omex or an SBML file.
@@ -67,69 +72,45 @@ def frog_task(source_path_str: str, omex_is_temporary: bool = True) -> Dict[str,
         for entry in omex.manifest.entries:
             if entry.is_sbml():
                 # TODO: check that SBML model with FBC information
-                sbml_path: Path = omex.get_path(entry.location)
-                report: FrogReport = json_for_sbml(source=sbml_path)
+                # TODO: handle multiple models correctly
+                # TODO: handle multiple curators correctly
 
-                # add JSON to response
-                content["frogs"][entry.location] = report.dict()  # type: ignore
-
-                # add FROG files to archive
-                with tempfile.TemporaryDirectory() as f_tmp:
-                    tmp_path: Path = Path(f_tmp)
-                    json_path = tmp_path / CuratorConstants.REPORT_FILENAME
-                    report.to_json(json_path)
-
-                    # write tsv
-                    report.to_tsv(tmp_path)
-
-                    omex.add_entry(
-                        entry_path=json_path,
-                        entry=ManifestEntry(
-                            location=f"./FROG/{CuratorConstants.REPORT_FILENAME}",
-                            format=EntryFormat.FROG_JSON_V1,
-                        ),
+                report_dict = {}
+                for curator in ["cobrapy", "cameo"]:
+                    sbml_path: Path = omex.get_path(entry.location)
+                    report: FrogReport = frog_for_sbml(
+                        source=sbml_path, curator=curator
                     )
-                    for filename, format in [
-                        (
-                            CuratorConstants.METADATA_FILENAME,
-                            EntryFormat.FROG_METADATA_V1,
-                        ),
-                        (
-                            CuratorConstants.OBJECTIVE_FILENAME,
-                            EntryFormat.FROG_OBJECTIVE_V1,
-                        ),
-                        (CuratorConstants.FVA_FILENAME, EntryFormat.FROG_FVA_V1),
-                        (
-                            CuratorConstants.REACTION_DELETION_FILENAME,
-                            EntryFormat.FROG_REACTIONDELETION_V1,
-                        ),
-                        (
-                            CuratorConstants.GENE_DELETION_FILENAME,
-                            EntryFormat.FROG_GENEDELETION_V1,
-                        ),
-                    ]:
-                        omex.add_entry(
-                            entry_path=tmp_path / filename,
-                            entry=ManifestEntry(
-                                location=f"./FROG/{filename}",
-                                format=format,
-                            ),
-                        )
+
+                    # add FROG files to archive
+                    report.to_omex(omex, location_prefix=f"./FROG/{curator}/")
+
+                    # add JSON to response
+                    report_dict[curator] = report.dict()
+
+                # store all reports for SBML entry
+                content["frogs"][entry.location] = report_dict
 
         # save archive for download
-        task_id = frog_task.request.id
-        omex.to_omex(omex_path=Path("/frog_data") / f"{task_id}.omex")
+        if omex_path_str is None:
+            # executed in task queue
+            task_id = frog_task.request.id
+            omex_path = Path("/frog_data") / f"{task_id}.omex"
+        else:
+            omex_path = Path(omex_path_str)
+        console.rule("Write OMEX", style="white")
+        omex.to_omex(omex_path=omex_path)
 
     finally:
         # cleanup temporary files for celery
-        if omex_is_temporary:
+        if input_is_temporary:
             os.remove(source_path_str)
 
     return content
 
 
-def json_for_sbml(source: Union[Path, str, bytes]) -> FrogReport:
-    """Create FROG JSON content for given SBML source.
+def frog_for_sbml(source: Union[Path, str, bytes], curator: str) -> FrogReport:
+    """Create FROGReport for given SBML source.
 
     Source is either path to SBML file or SBML string.
     """
@@ -138,22 +119,6 @@ def json_for_sbml(source: Union[Path, str, bytes]) -> FrogReport:
         source = source.decode("utf-8")
 
     time_start = time.time()
-    frog_json = frog_json_for_sbml(source=source)
-    time_elapsed = round(time.time() - time_start, 3)
-
-    debug = False
-    if debug:
-        console.rule("Creating JSON FROG")
-        console.print(frog_json)
-        console.rule()
-
-    logger.info(f"JSON created for in '{time_elapsed}'")
-
-    return frog_json
-
-
-def frog_json_for_sbml(source: Union[Path, str]) -> FrogReport:
-    """Read model info from SBML."""
 
     with tempfile.TemporaryDirectory() as f_tmp:
         if isinstance(source, Path):
@@ -163,11 +128,20 @@ def frog_json_for_sbml(source: Union[Path, str]) -> FrogReport:
             with open(sbml_path, "w") as f_sbml:
                 f_sbml.write(source)
 
-        # return SBMLDocumentInfo(doc=doc)
-        # curator_keys = ["cobrapy", "cameo"]
         obj_info = Curator._read_objective_information(sbml_path)
-        curator = CuratorCobrapy(
+        if curator == "cobrapy":
+            curator_class = CuratorCobrapy
+        elif curator == "cameo":
+            curator_class = CuratorCameo
+        else:
+            raise ValueError(f"Unsupported curator: {curator}")
+
+        curator = curator_class(
             model_path=sbml_path, objective_id=obj_info.active_objective
         )
         report: FrogReport = curator.run()
-        return report
+
+    time_elapsed = round(time.time() - time_start, 3)
+    logger.info(f"FROG created in '{time_elapsed}' [s]")
+
+    return report
