@@ -17,8 +17,7 @@ def run_examples() -> None:
     example_ecoli_core_omex()
     example_iJR904()
     example_iJR904_omex()
-    example_iAB_AMO1410_SARS()
-    example_iAB_AMO1410_SARS_omex()
+    example_iCGB21FR()
 
 
 def example_ecoli_core() -> None:
@@ -61,11 +60,11 @@ def example_iJR904_omex() -> None:
     )
 
 
-def example_iAB_AMO1410_SARS() -> None:
-    """Create FROG report for iAB_AMO1410_SARS."""
+def example_iCGB21FR() -> None:
+    """Create FROG report for iCGB21FR."""
     return _run_example(
-        EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml",
-        EXAMPLE_PATH / "frogs" / "iAB_AMO1410_SARS-CoV-2_FROG.omex",
+        EXAMPLE_PATH / "models" / "iCGB21FR.omex",
+        EXAMPLE_PATH / "frogs" / "iCGB21FR_FROG.omex",
     )
 
 
@@ -91,5 +90,5 @@ def _run_example(model_path: Path, omex_path: Path) -> None:
 
 if __name__ == "__main__":
     # run_examples()
-    example_iAB_AMO1410_SARS()
+    example_iCGB21FR()
     # example_ecoli_core_no_genes()
