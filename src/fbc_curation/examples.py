@@ -1,102 +1,85 @@
 """Create curation information for example models."""
 from pathlib import Path
-from typing import Dict, List
-
-import orjson
 from pymetadata import log
-from pymetadata.console import console
-from pymetadata.omex import EntryFormat, ManifestEntry, Omex
-
 from fbc_curation import EXAMPLE_PATH
 from fbc_curation.compare import Comparison
-from fbc_curation.curator import Curator
-from fbc_curation.curator.cameo_curator import CuratorCameo
-from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
-from fbc_curation.frog import CuratorConstants, FrogReport
 from fbc_curation.worker import frog_task
 
 
 logger = log.get_logger(__name__)
 
 
-def run_examples(results_path: Path = EXAMPLE_PATH / "results") -> None:
+def run_examples() -> None:
     """Run all examples."""
-    example_ecoli_core(results_path=results_path / "e_coli_core")
-    example_iJR904(results_path=results_path / "iJR904")
-    example_iAB_AMO1410_SARS(results_path=results_path / "iAB_AMO1410_SARS")
+    example_ecoli_core()
+    example_ecoli_core_omex()
+    example_iJR904()
+    example_iJR904_omex()
+    example_iAB_AMO1410_SARS()
+    example_iAB_AMO1410_SARS_omex()
 
 
-def example_ecoli_core(results_path: Path) -> Dict:
+def example_ecoli_core() -> None:
     """Create FROG report for ecoli core."""
     return _run_example(
-        EXAMPLE_PATH / "models" / "e_coli_core.xml", results_path=results_path
+        EXAMPLE_PATH / "models" / "e_coli_core.xml",
+        EXAMPLE_PATH / "frogs" / "e_coli_core_FROG.xml",
     )
 
 
-def example_ecoli_core_omex(results_path: Path) -> Dict:
+def example_ecoli_core_omex() -> None:
     """Create FROG report for ecoli core."""
     return _run_example(
-        EXAMPLE_PATH / "models" / "e_coli_core.omex", results_path=results_path
+        EXAMPLE_PATH / "models" / "e_coli_core.omex",
+        EXAMPLE_PATH / "models" / "e_coli_core_omex_FROG.omex",
     )
 
 
-def example_iJR904(results_path: Path) -> Dict:
+def example_iJR904() -> None:
     """Create FROG report for iJR904."""
     return _run_example(
-        EXAMPLE_PATH / "models" / "iJR904.xml", results_path=results_path
+        EXAMPLE_PATH / "models" / "iJR904.xml",
+        EXAMPLE_PATH / "frogs" / "iJR904_FROG.xml",
     )
 
 
-def example_iJR904_omex(results_path: Path) -> Dict:
+def example_iJR904_omex() -> None:
     """Create FROG report for iJR904."""
     return _run_example(
-        EXAMPLE_PATH / "models" / "iJR904.omex", results_path=results_path
+        EXAMPLE_PATH / "models" / "iJR904.omex",
+        EXAMPLE_PATH / "frogs" / "iJR904_omex_FROG.omex",
     )
 
 
-def example_iAB_AMO1410_SARS(results_path: Path) -> Dict:
+def example_iAB_AMO1410_SARS() -> None:
     """Create FROG report for iAB_AMO1410_SARS."""
     return _run_example(
         EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.xml",
-        results_path=results_path,
+        EXAMPLE_PATH / "frogs" / "iAB_AMO1410_SARS-CoV-2_FROG.omex",
     )
 
 
-def example_iAB_AMO1410_SARS_omex(results_path: Path) -> Dict:
+def example_iAB_AMO1410_SARS_omex() -> None:
     """Create FROG report for iAB_AMO1410_SARS."""
     return _run_example(
         EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.omex",
-        results_path=results_path,
+        EXAMPLE_PATH / "frogs" / "iAB_AMO1410_SARS-CoV-2_omex_FROG.omex",
     )
 
 
-def _run_example(model_path: Path, results_path: Path) -> Dict:
+def _run_example(model_path: Path, omex_path: Path) -> None:
     """Run single example helper function."""
-
-    omex_path = results_path / f"{model_path.stem}_FROG.omex"
     frog_task(
         source_path_str=str(model_path),
         input_is_temporary=False,
         omex_path_str=str(omex_path),
     )
-    Comparison.read_reports_from_omex(omex_path=omex_path)
-
-
-    # comparison
-    info: Dict = {}
-    # valid = [r.validate() for r in all_results.values()]
-    # equal = FrogReport.compare(all_results)
-    # info = {
-    #     "model_path": model_path,
-    #     "valid": valid,
-    #     "equal": equal,
-    # }
-    # console.print(info)
-    return info
+    model_reports = Comparison.read_reports_from_omex(omex_path=omex_path)
+    for model_location, reports in model_reports.items():
+        Comparison.compare(location=model_location, reports=reports)
 
 
 if __name__ == "__main__":
     # run_examples()
-    example_ecoli_core(results_path=EXAMPLE_PATH / "results" / "e_coli_core")
-    # TODO: comparison
-    # TODO: second curator
+    example_iAB_AMO1410_SARS()
+

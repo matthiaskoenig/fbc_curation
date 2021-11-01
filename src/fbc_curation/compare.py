@@ -10,6 +10,7 @@ from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import Omex, EntryFormat
 
+from fbc_curation import EXAMPLE_PATH
 from fbc_curation.frog import CuratorConstants, FrogReport
 
 
@@ -41,11 +42,11 @@ class ComparisonResult:
 
 class Comparison:
 
-    absolute_tolerance = 1e-6
-    relative_tolerance = 1e-6
+    absolute_tolerance = 1e-3
+    relative_tolerance = 1e-3
 
     @staticmethod
-    def read_reports_from_omex(omex_path: Path):
+    def read_reports_from_omex(omex_path: Path) -> Dict[str, Dict[str, FrogReport]]:
         """Read all reports from JSON and TSVs."""
         reports: List[FrogReport] = []
         omex = Omex.from_omex(omex_path)
@@ -69,11 +70,13 @@ class Comparison:
             d[frog_id] = report
             model_reports[model_location] = d
 
-        for location, reports_dict in model_reports.items():
-            logger.info(f"{location}: {reports_dict.keys()}")
+        info = {loc: list(item.keys()) for loc, item in model_reports.items()}
+        logger.info(f"Reports in omex:\n{info}")
+
+        return model_reports
 
     @staticmethod
-    def compare(reports: Dict[str, FrogReport]) -> None:
+    def compare(location: str, reports: Dict[str, FrogReport]) -> None:
         """Compare results against each other.
 
         Compares all matrices pairwise, i.e., comparison matrix for
@@ -82,11 +85,13 @@ class Comparison:
         - gene deletions
         - reaction deletions
         """
+        console.rule(f"Comparison of FROGReports for '{location}'", style="white")
 
         num_reports = len(reports)
+        all_equal: bool = True
         # only comparing comparison between two data frames
 
-        console.rule("Comparison of reports", style="white")
+
 
         data: Dict[str, Dict[str, pd.DataFrame]] = {}
 
@@ -126,16 +131,28 @@ class Comparison:
                             df2[field].values,
                             atol=Comparison.absolute_tolerance,
                             rtol=Comparison.relative_tolerance,
+                            equal_nan=True
                         )
                         equal = equal and equal_field
 
                     mat_equal[p, q] = int(equal)
 
                     if not equal:
-                        console.warning(
+                        logger.warning(
                             f"difference: '{report_keys[p]}' vs '{report_keys[q]}'"
                         )
-                        df_diff = pd.concat([df1, df2]).drop_duplicates(keep=False)
+                        equal_vec = np.isclose(
+                            df1[field].values,
+                            df2[field].values,
+                            atol=Comparison.absolute_tolerance,
+                            rtol=Comparison.relative_tolerance,
+                            equal_nan=True
+                        )
+                        df_diff = pd.concat([df1[~equal_vec], df2[~equal_vec]])
+                        if "reaction" in df_diff.columns:
+                            df_diff.sort_values(by=["reaction"], inplace=True)
+                        elif "gene" in df_diff.columns:
+                            df_diff.sort_values(by=["gene"], inplace=True)
                         console.print(df_diff)
 
             df_equal = pd.DataFrame(
@@ -156,4 +173,8 @@ class Comparison:
 
 if __name__ == "__main__":
     # Read results and compare
-    pass
+    omex_path = EXAMPLE_PATH / "results" / "e_coli_core" / "e_coli_core_FROG.omex"
+    model_reports = Comparison.read_reports_from_omex(omex_path=omex_path)
+    for model_location, reports in model_reports.items():
+        print(model_location)
+        Comparison.compare(reports)

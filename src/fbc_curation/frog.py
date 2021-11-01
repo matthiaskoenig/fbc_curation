@@ -339,6 +339,7 @@ class FrogReport(BaseModel):
             }:
                 df.sort_values(by=["reaction"], inplace=True)
             elif key == CuratorConstants.GENEDELETIONS_KEY:
+                print(df)
                 df.sort_values(by=["gene"], inplace=True)
 
             df.index = range(len(df))
