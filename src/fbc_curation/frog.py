@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import hashlib
-
 import tempfile
 from enum import Enum
 from math import isnan
@@ -331,32 +330,33 @@ class FrogReport(BaseModel):
 
             item = list(d.values())[0]
             df = pd.DataFrame(item)
-            if key == CuratorConstants.OBJECTIVE_KEY:
-                df.sort_values(by=["objective"], inplace=True)
-            if key in {
-                CuratorConstants.FVA_KEY,
-                CuratorConstants.REACTIONDELETIONS_KEY,
-            }:
-                df.sort_values(by=["reaction"], inplace=True)
-            elif key == CuratorConstants.GENEDELETIONS_KEY:
-                print(df)
-                df.sort_values(by=["gene"], inplace=True)
+            if len(df) > 0:
 
-            df.index = range(len(df))
+                if key == CuratorConstants.OBJECTIVE_KEY:
+                    df.sort_values(by=["objective"], inplace=True)
+                if key in {
+                    CuratorConstants.FVA_KEY,
+                    CuratorConstants.REACTIONDELETIONS_KEY,
+                }:
+                    df.sort_values(by=["reaction"], inplace=True)
+                elif key == CuratorConstants.GENEDELETIONS_KEY:
+                    df.sort_values(by=["gene"], inplace=True)
 
-            if key in [
-                CuratorConstants.OBJECTIVE_KEY,
-                CuratorConstants.REACTIONDELETIONS_KEY,
-                CuratorConstants.GENEDELETIONS_KEY,
-            ]:
-                df.loc[
-                    df.status == StatusCode.INFEASIBLE.value, "value"
-                ] = CuratorConstants.VALUE_INFEASIBLE
-            elif key == CuratorConstants.FVA_KEY:
-                df.loc[
-                    df.status == StatusCode.INFEASIBLE.value,
-                    ["flux", "minimum", "maximum"],
-                ] = CuratorConstants.VALUE_INFEASIBLE
+                df.index = range(len(df))
+
+                if key in [
+                    CuratorConstants.OBJECTIVE_KEY,
+                    CuratorConstants.REACTIONDELETIONS_KEY,
+                    CuratorConstants.GENEDELETIONS_KEY,
+                ]:
+                    df.loc[
+                        df.status == StatusCode.INFEASIBLE.value, "value"
+                    ] = CuratorConstants.VALUE_INFEASIBLE
+                elif key == CuratorConstants.FVA_KEY:
+                    df.loc[
+                        df.status == StatusCode.INFEASIBLE.value,
+                        ["flux", "minimum", "maximum"],
+                    ] = CuratorConstants.VALUE_INFEASIBLE
 
             dfs[key] = df
         return dfs
@@ -414,14 +414,21 @@ class FrogReport(BaseModel):
             if not path.exists():
                 logger.error(f"Required file for fbc curation does not exist: '{path}'")
             else:
-                df_dict[key] = pd.read_csv(path, sep="\t")
+                try:
+                    df_dict[key] = pd.read_csv(path, sep="\t")
+                except pd.errors.EmptyDataError:
+                    df_dict[key] = pd.DataFrame()
 
         report = FrogReport(
             metadata=FrogMetaData(**df_dict[CuratorConstants.METADATA_KEY]),
             objectives=FrogObjectives.from_df(df_dict[CuratorConstants.OBJECTIVE_KEY]),
             fva=FrogFVA.from_df(df_dict[CuratorConstants.FVA_KEY]),
-            reaction_deletions=FrogReactionDeletions.from_df(df_dict[CuratorConstants.REACTIONDELETIONS_KEY]),
-            gene_deletions=FrogGeneDeletions.from_df(df_dict[CuratorConstants.GENEDELETIONS_KEY]),
+            reaction_deletions=FrogReactionDeletions.from_df(
+                df_dict[CuratorConstants.REACTIONDELETIONS_KEY]
+            ),
+            gene_deletions=FrogGeneDeletions.from_df(
+                df_dict[CuratorConstants.GENEDELETIONS_KEY]
+            ),
         )
         return report
 

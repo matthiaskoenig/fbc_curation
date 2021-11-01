@@ -156,6 +156,18 @@ class CuratorCobrapy(Curator):
             df.status == StatusCode.INFEASIBLE, "value"
         ] = CuratorConstants.VALUE_INFEASIBLE
 
+        if not model.genes:
+            logger.error("no genes in model")
+            df = pd.DataFrame(
+                columns=[
+                    "model",
+                    "objective",
+                    "gene",
+                    "status",
+                    "value",
+                ]
+            )
+
         return FrogGeneDeletions.from_df(df)
 
     def reaction_deletions(self) -> FrogReactionDeletions:

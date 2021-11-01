@@ -8,7 +8,7 @@ import pandas as pd
 from pydantic import BaseModel
 from pymetadata import log
 from pymetadata.console import console
-from pymetadata.omex import Omex, EntryFormat
+from pymetadata.omex import EntryFormat, Omex
 
 from fbc_curation import EXAMPLE_PATH
 from fbc_curation.frog import CuratorConstants, FrogReport
@@ -66,7 +66,9 @@ class Comparison:
             d = model_reports.get(model_location, {})
             frog_id = report.metadata.frog_id
             if frog_id in d:
-                logger.error(f"duplicate FROG report: '{frog_id}' for '{model_location}'")
+                logger.error(
+                    f"duplicate FROG report: '{frog_id}' for '{model_location}'"
+                )
             d[frog_id] = report
             model_reports[model_location] = d
 
@@ -90,8 +92,6 @@ class Comparison:
         num_reports = len(reports)
         all_equal: bool = True
         # only comparing comparison between two data frames
-
-
 
         data: Dict[str, Dict[str, pd.DataFrame]] = {}
 
@@ -126,14 +126,15 @@ class Comparison:
                         fields = ["flux", "minimum", "maximum"]
 
                     for field in fields:
-                        equal_field = np.allclose(
-                            df1[field].values,
-                            df2[field].values,
-                            atol=Comparison.absolute_tolerance,
-                            rtol=Comparison.relative_tolerance,
-                            equal_nan=True
-                        )
-                        equal = equal and equal_field
+                        if field in df1.columns and field in df2.columns:
+                            equal_field = np.allclose(
+                                df1[field].values,
+                                df2[field].values,
+                                atol=Comparison.absolute_tolerance,
+                                rtol=Comparison.relative_tolerance,
+                                equal_nan=True,
+                            )
+                            equal = equal and equal_field
 
                     mat_equal[p, q] = int(equal)
 
@@ -146,7 +147,7 @@ class Comparison:
                             df2[field].values,
                             atol=Comparison.absolute_tolerance,
                             rtol=Comparison.relative_tolerance,
-                            equal_nan=True
+                            equal_nan=True,
                         )
                         df_diff = pd.concat([df1[~equal_vec], df2[~equal_vec]])
                         if "reaction" in df_diff.columns:

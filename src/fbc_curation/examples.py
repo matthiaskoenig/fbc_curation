@@ -1,6 +1,8 @@
 """Create curation information for example models."""
 from pathlib import Path
+
 from pymetadata import log
+
 from fbc_curation import EXAMPLE_PATH
 from fbc_curation.compare import Comparison
 from fbc_curation.worker import frog_task
@@ -24,6 +26,14 @@ def example_ecoli_core() -> None:
     return _run_example(
         EXAMPLE_PATH / "models" / "e_coli_core.xml",
         EXAMPLE_PATH / "frogs" / "e_coli_core_FROG.xml",
+    )
+
+
+def example_ecoli_core_no_genes() -> None:
+    """Create FROG report for ecoli core."""
+    return _run_example(
+        EXAMPLE_PATH / "models" / "e_coli_core_no_genes.xml",
+        EXAMPLE_PATH / "frogs" / "e_coli_core_no_genes_FROG.xml",
     )
 
 
@@ -82,4 +92,4 @@ def _run_example(model_path: Path, omex_path: Path) -> None:
 if __name__ == "__main__":
     # run_examples()
     example_iAB_AMO1410_SARS()
-
+    # example_ecoli_core_no_genes()

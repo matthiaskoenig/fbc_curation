@@ -6,7 +6,8 @@ from typing import Optional
 
 import numpy as np
 import orjson
-from pydantic import BaseModel as PydanticBaseModel, validator
+from pydantic import BaseModel as PydanticBaseModel
+from pydantic import validator
 from rich import print
 
 

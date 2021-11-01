@@ -2,7 +2,6 @@
 import os
 import platform
 from collections import defaultdict, namedtuple
-from datetime import date
 from pathlib import Path
 from typing import Dict, List
 
@@ -18,7 +17,6 @@ from fbc_curation.frog import (
     FrogFVA,
     FrogGeneDeletions,
     FrogMetaData,
-    FrogObjective,
     FrogObjectives,
     FrogReactionDeletions,
     FrogReport,
@@ -105,11 +103,11 @@ class Curator:
         logger.info(f"* fva")
         fva = self.fva()
 
-        logger.info(f"* genedeletions")
-        gene_deletions = self.gene_deletions()
-
         logger.info(f"* reactiondeletions")
         reaction_deletions = self.reaction_deletions()
+
+        logger.info(f"* genedeletions")
+        gene_deletions = self.gene_deletions()
 
         return FrogReport(
             metadata=metadata,

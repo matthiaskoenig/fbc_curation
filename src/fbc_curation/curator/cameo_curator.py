@@ -166,15 +166,27 @@ class CuratorCameo(Curator):
             for rid, bounds in reaction_bounds.items():
                 model.reactions.get_by_id(rid).bounds = bounds[:]
 
-        df = pd.DataFrame(
-            {
-                "model": self.model_location,
-                "objective": self.objective_id,
-                "gene": [gene.id for gene in model.genes],
-                "status": gene_status,
-                "value": gene_values,
-            }
-        )
+        if model.genes:
+            df = pd.DataFrame(
+                {
+                    "model": self.model_location,
+                    "objective": self.objective_id,
+                    "gene": [gene.id for gene in model.genes],
+                    "status": gene_status,
+                    "value": gene_values,
+                }
+            )
+        else:
+            logger.error("no genes in model")
+            df = pd.DataFrame(
+                columns=[
+                    "model",
+                    "objective",
+                    "gene",
+                    "status",
+                    "value",
+                ]
+            )
 
         return FrogGeneDeletions.from_df(df)
 
