@@ -129,4 +129,4 @@ and by the German Research Foundation (DFG) within the Research Unit Programme F
 "`QuaLiPerF <https://qualiperf.de>`__ (Quantifying Liver Perfusion-Function Relationship in Complex Resection - 
 A Systems Medicine Approach)" by grant number 436883643.
 
-© 2020-2021 Matthias König
+© 2020-2022 Matthias König

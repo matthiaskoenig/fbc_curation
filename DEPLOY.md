@@ -18,7 +18,7 @@ sudo ln -s /etc/nginx/sites-available/runfrog.de /etc/nginx/sites-enabled/
 
 ### Certificates
 #### Initial certificates
-Get certificates for `runfrog.de`
+Get certificates for `runfrog.de,www.runfrog.de`
 ```
 sudo service nginx stop
 sudo certbot certonly

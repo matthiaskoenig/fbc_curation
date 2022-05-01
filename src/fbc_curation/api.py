@@ -217,11 +217,6 @@ _example_items: Dict[str, Example] = {
         file=EXAMPLE_PATH / "models" / "e_coli_core.omex",
         description="E.coli core model from BiGG database as OMEX.",
     ),
-    "iAB_AMO1410_SARS-CoV-2": Example(
-        id="iAB_AMO1410_SARS-CoV-2",
-        file=EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.omex",
-        description="iAB_AMO1410_SARS-CoV-2 model as OMEX.",
-    ),
     "iJR904": Example(
         id="iJR904",
         file=EXAMPLE_PATH / "models" / "iJR904.omex",
