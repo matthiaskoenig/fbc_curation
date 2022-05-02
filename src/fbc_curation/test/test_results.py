@@ -1,18 +1,26 @@
 """Testing result."""
+from pathlib import Path
 
 import libsbml
 import pandas as pd
 
 from fbc_curation import EXAMPLE_PATH
-from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
+from fbc_curation.curator.cobrapy_curator import CuratorCobrapy, Creator
 from fbc_curation.frog import CuratorConstants
 
 
-model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
-curator = CuratorCobrapy(model_path=model_path)
+model_path: Path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
+frog_id: str = "1234"
+curators = [
+    Creator(
+        familyName="König",
+        givenName="Matthias",
+    )
+]
+curator = CuratorCobrapy(model_path=model_path, frog_id=frog_id, curators=curators)
 results = curator.run()
-doc = libsbml.readSBMLFromFile(str(model_path))  # type: libsbml.SBMLDocument
-model = doc.getModel()  # type: libsbml.Model
+doc: libsbml.SBMLDocument = libsbml.readSBMLFromFile(str(model_path))
+model: libsbml.Model = doc.getModel()
 
 
 def _check_objective(df):

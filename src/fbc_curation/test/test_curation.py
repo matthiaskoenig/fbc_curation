@@ -2,7 +2,7 @@
 
 import sys
 from pathlib import Path
-from typing import Generator
+from typing import Generator, Any
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -12,7 +12,7 @@ from fbc_curation import EXAMPLE_PATH, runfrog
 
 @pytest.mark.parametrize("filename", ["e_coli_core.xml", "iJR904.xml.gz"])
 def test_runfrog1(
-    monkeypatch: Generator[MonkeyPatch], tmp_path: Path, filename: str
+    monkeypatch: Any, tmp_path: Path, filename: str
 ) -> None:
     """First example via command line tool.
 
@@ -35,7 +35,7 @@ def test_runfrog1(
             assert (tmp_path / "cameo" / out_fname).exists()
 
 
-def test_runfrog2(monkeypatch: Generator[MonkeyPatch], tmp_path: Path) -> None:
+def test_runfrog2(monkeypatch: Any, tmp_path: Path) -> None:
     """Second example via command line tool.
 
     runfrog --model resources/examples/models/e_coli_core.xml
