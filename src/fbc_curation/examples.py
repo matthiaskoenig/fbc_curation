@@ -20,7 +20,7 @@ def run_examples() -> None:
     example_iCGB21FR()
 
 
-def example_ecoli_core() -> None:
+def example_ecoli_core() -> Path:
     """Create FROG report for ecoli core."""
     return _run_example(
         EXAMPLE_PATH / "models" / "e_coli_core.xml",
@@ -28,7 +28,7 @@ def example_ecoli_core() -> None:
     )
 
 
-def example_ecoli_core_no_genes() -> None:
+def example_ecoli_core_no_genes() -> Path:
     """Create FROG report for ecoli core."""
     return _run_example(
         EXAMPLE_PATH / "models" / "e_coli_core_no_genes.xml",
@@ -36,7 +36,7 @@ def example_ecoli_core_no_genes() -> None:
     )
 
 
-def example_ecoli_core_omex() -> None:
+def example_ecoli_core_omex() -> Path:
     """Create FROG report for ecoli core."""
     return _run_example(
         EXAMPLE_PATH / "models" / "e_coli_core.omex",
@@ -44,7 +44,7 @@ def example_ecoli_core_omex() -> None:
     )
 
 
-def example_iJR904() -> None:
+def example_iJR904() -> Path:
     """Create FROG report for iJR904."""
     return _run_example(
         EXAMPLE_PATH / "models" / "iJR904.xml",
@@ -52,7 +52,7 @@ def example_iJR904() -> None:
     )
 
 
-def example_iJR904_omex() -> None:
+def example_iJR904_omex() -> Path:
     """Create FROG report for iJR904."""
     return _run_example(
         EXAMPLE_PATH / "models" / "iJR904.omex",
@@ -60,7 +60,7 @@ def example_iJR904_omex() -> None:
     )
 
 
-def example_iCGB21FR() -> None:
+def example_iCGB21FR() -> Path:
     """Create FROG report for iCGB21FR."""
     return _run_example(
         EXAMPLE_PATH / "models" / "iCGB21FR.omex",
@@ -68,7 +68,7 @@ def example_iCGB21FR() -> None:
     )
 
 
-def example_iAB_AMO1410_SARS_omex() -> None:
+def example_iAB_AMO1410_SARS_omex() -> Path:
     """Create FROG report for iAB_AMO1410_SARS."""
     return _run_example(
         EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.omex",
@@ -76,7 +76,7 @@ def example_iAB_AMO1410_SARS_omex() -> None:
     )
 
 
-def _run_example(model_path: Path, omex_path: Path) -> None:
+def _run_example(model_path: Path, omex_path: Path) -> Path:
     """Run single example helper function."""
     frog_task(
         source_path_str=str(model_path),
@@ -86,6 +86,8 @@ def _run_example(model_path: Path, omex_path: Path) -> None:
     model_reports = Comparison.read_reports_from_omex(omex_path=omex_path)
     for model_location, reports in model_reports.items():
         Comparison.compare(location=model_location, reports=reports)
+
+    return omex_path
 
 
 if __name__ == "__main__":

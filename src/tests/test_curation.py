@@ -10,36 +10,35 @@ from _pytest.monkeypatch import MonkeyPatch
 from fbc_curation import EXAMPLE_PATH, runfrog
 
 
-@pytest.mark.parametrize("filename", ["e_coli_core.xml", "iJR904.xml.gz"])
+@pytest.mark.parametrize("filename", ["e_coli_core.xml", "e_coli_core.omex"])
 def test_runfrog1(
     monkeypatch: Any, tmp_path: Path, filename: str
 ) -> None:
     """First example via command line tool.
 
-    runfrog --model resources/examples/models/e_coli_core.xml
-    --path resources/examples/results/e_coli_core
+    runfrog --input resources/examples/models/e_coli_core.xml
+    --output resources/examples/results/e_coli_core.omex
     """
+    output_path = tmp_path / "test.omex"
     with monkeypatch.context() as m:
         args = [
             "runfrog",
-            "--model",
+            "--input",
             f"{EXAMPLE_PATH / 'models' / filename}",
-            "--path",
-            str(tmp_path),
+            "--output",
+            output_path,
         ]
         m.setattr(sys, "argv", args)
         runfrog.main()
-        # FIXME: check results files
-        for out_fname in ["frogreport.json"]:
-            assert (tmp_path / "cobrapy" / out_fname).exists()
-            assert (tmp_path / "cameo" / out_fname).exists()
+
+        assert output_path.exists()
 
 
 def test_runfrog2(monkeypatch: Any, tmp_path: Path) -> None:
     """Second example via command line tool.
 
-    runfrog --model resources/examples/models/e_coli_core.xml
-    --path resources/examples/results/e_coli_core
+    runfrog --input resources/examples/models/e_coli_core.xml
+    --output resources/examples/results/e_coli_core.omex
     --reference resources/examples/results/e_coli_core/cobrapy
     """
     with monkeypatch.context() as m:

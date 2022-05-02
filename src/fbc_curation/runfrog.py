@@ -1,6 +1,6 @@
 """Module creates FBC curation files."""
 from pathlib import Path
-from typing import Dict, List, Type
+from typing import Dict, List, Type, Optional
 
 from pymetadata import log
 from pymetadata.console import console
@@ -83,12 +83,11 @@ def main() -> None:
     output_path = Path(options.output_path)
     if not str(output_path).endswith(".omex"):
         _parser_message(
-            f"--output '{options.model_path}' output path must end in '.omex'"
+            f"--output '{options.input_path}' output path must end in '.omex'"
         )
 
-    if not options.reference_path:
-        reference_path = None
-    else:
+    reference_path: Optional[Path] = None
+    if options.reference_path:
         reference_path = Path(options.reference_path)
         if not reference_path.exists():
             _parser_message(
