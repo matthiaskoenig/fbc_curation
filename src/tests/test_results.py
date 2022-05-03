@@ -4,12 +4,12 @@ from pathlib import Path
 import libsbml
 import pandas as pd
 
-from fbc_curation import EXAMPLE_PATH
+from fbc_curation import EXAMPLE_DIR
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy, Creator
 from fbc_curation.frog import CuratorConstants
 
 
-model_path: Path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
+model_path: Path = EXAMPLE_DIR / "models" / "e_coli_core.xml"
 frog_id: str = "1234"
 curators = [
     Creator(

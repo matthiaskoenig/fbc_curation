@@ -7,7 +7,7 @@ from typing import Generator, Any
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 
-from fbc_curation import EXAMPLE_PATH, runfrog
+from fbc_curation import EXAMPLE_DIR, runfrog
 
 
 @pytest.mark.parametrize("filename", ["e_coli_core.xml", "e_coli_core.omex"])
@@ -24,7 +24,7 @@ def test_runfrog1(
         args = [
             "runfrog",
             "--input",
-            f"{EXAMPLE_PATH / 'models' / filename}",
+            f"{EXAMPLE_DIR / 'models' / filename}",
             "--output",
             output_path,
         ]
@@ -41,18 +41,18 @@ def test_runfrog2(monkeypatch: Any, tmp_path: Path) -> None:
     --output resources/examples/results/e_coli_core.omex
     --reference resources/examples/results/e_coli_core/cobrapy
     """
+    output_path = tmp_path / "test.omex"
     with monkeypatch.context() as m:
         args = [
             "runfrog",
-            "--model",
-            f"{EXAMPLE_PATH / 'models' / 'e_coli_core.xml'}",
-            "--path",
-            str(tmp_path),
+            "--input",
+            f"{EXAMPLE_DIR / 'models' / 'e_coli_core.xml'}",
+            "--output",
+            output_path,
             "--reference",
-            f"{EXAMPLE_PATH / 'results' / 'e_coli_core' / 'cobrapy'}",
+            f"{EXAMPLE_DIR / 'results' / 'e_coli_core' / 'frogs' / 'e_coli_core_FROG.'}",
         ]
         m.setattr(sys, "argv", args)
         runfrog.main()
-        for out_fname in ["frogreport.json"]:
-            assert (tmp_path / "cobrapy" / out_fname).exists()
-            assert (tmp_path / "cameo" / out_fname).exists()
+
+        assert output_path.exists()

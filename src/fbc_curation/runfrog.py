@@ -35,21 +35,21 @@ def main() -> None:
         "--input",
         action="store",
         dest="input_path",
-        help="(required) path to OMEX with SBML model or SBML model with fbc information",
+        help="(required) path to COMBINE archive (OMEX) with SBML model or an SBML model",
     )
     parser.add_option(
         "-o",
         "--output",
         action="store",
         dest="output_path",
-        help="(required) omex output path to write FROG to with file ending '.omex'",
+        help="(required) omex output path to write FROG",
     )
     parser.add_option(
         "-r",
         "--reference",
         action="store",
         dest="reference_path",
-        help="(optional) path to OMEX with FROG results to include in comparison",
+        help="(optional) path to COMBINE archive (OMEX) with FROG results to include in comparison",
     )
 
     console.rule(style="white")

@@ -20,7 +20,7 @@ from pydantic import BaseModel, FilePath
 from pymetadata import log
 from starlette.responses import FileResponse, JSONResponse
 
-from fbc_curation import EXAMPLE_PATH
+from fbc_curation import EXAMPLE_DIR
 from fbc_curation.worker import frog_task
 
 
@@ -209,17 +209,17 @@ class Example(BaseModel):
 _example_items: Dict[str, Example] = {
     "e_coli_core_sbml": Example(
         id="e_coli_core_sbml",
-        file=EXAMPLE_PATH / "models" / "e_coli_core.xml",
+        file=EXAMPLE_DIR / "models" / "e_coli_core.xml",
         description="E.coli core model from BiGG database as SBML.",
     ),
     "e_coli_core_omex": Example(
         id="e_coli_core_omex",
-        file=EXAMPLE_PATH / "models" / "e_coli_core.omex",
+        file=EXAMPLE_DIR / "models" / "e_coli_core.omex",
         description="E.coli core model from BiGG database as OMEX.",
     ),
     "iJR904": Example(
         id="iJR904",
-        file=EXAMPLE_PATH / "models" / "iJR904.omex",
+        file=EXAMPLE_DIR / "models" / "iJR904.omex",
         description="iJR904 model from BiGG database as OMEX.",
     ),
 }

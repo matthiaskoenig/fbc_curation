@@ -10,7 +10,7 @@ from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, Omex
 
-from fbc_curation import EXAMPLE_PATH
+from fbc_curation import EXAMPLE_DIR
 from fbc_curation.frog import CuratorConstants, FrogReport
 
 
@@ -174,7 +174,7 @@ class Comparison:
 
 if __name__ == "__main__":
     # Read results and compare
-    omex_path = EXAMPLE_PATH / "results" / "e_coli_core" / "e_coli_core_FROG.omex"
+    omex_path = EXAMPLE_DIR / "results" / "e_coli_core" / "e_coli_core_FROG.omex"
     model_reports = Comparison.read_reports_from_omex(omex_path=omex_path)
     for model_location, reports in model_reports.items():
         print(model_location)

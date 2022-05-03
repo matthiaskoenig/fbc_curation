@@ -11,9 +11,9 @@ def test_frog_metadata() -> None:
     from cobra import __version__ as cobra_version
     from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
 
-    from fbc_curation import EXAMPLE_PATH, __citation__, __software__, __version__
+    from fbc_curation import EXAMPLE_DIR, __citation__, __software__, __version__
 
-    ecoli_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
+    ecoli_path = EXAMPLE_DIR / "models" / "e_coli_core.xml"
     metadata = FrogMetaData(
         frog_id="8743b52063cd84097a65d1633f5c74f5",
         frog_date=date(year=2021, month=10, day=11),

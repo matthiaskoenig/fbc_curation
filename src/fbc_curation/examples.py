@@ -1,83 +1,54 @@
 """Create curation information for example models."""
 from pathlib import Path
 
+from pymetadata.console import console
+from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 from pymetadata import log
 
-from fbc_curation import EXAMPLE_PATH
+from fbc_curation import EXAMPLE_DIR
 from fbc_curation.compare import Comparison
 from fbc_curation.worker import frog_task
 
 
 logger = log.get_logger(__name__)
 
+example_models = [
+    "e_coli_core.xml",
+    "e_coli_core_no_genes.xml",
+    "e_coli_core.omex",
+    "iJR904.xml",
+    "iJR904.omex",
+    "iCGB21FR.omex"
+]
+
+def create_omex_for_models() -> None:
+    """Create omex files for models."""
+    for example in ["e_coli_core.xml", "iJR904.xml"]:
+        model_path: Path = EXAMPLE_DIR / "models" / example
+        omex = Omex()
+        omex.add_entry(
+            entry_path=model_path,
+            entry=ManifestEntry(
+                location=f"./{example}", format=EntryFormat.SBML, master=True
+            ),
+        )
+        omex_path = model_path.parent / f"{model_path.stem}.omex"
+        console.log(omex_path)
+        omex.to_omex(omex_path=omex_path)
+
 
 def run_examples() -> None:
     """Run all examples."""
-    example_ecoli_core()
-    example_ecoli_core_omex()
-    example_iJR904()
-    example_iJR904_omex()
-    example_iCGB21FR()
+    for model_filename in example_models:
+        _run_example(model_filename)
 
 
-def example_ecoli_core() -> Path:
-    """Create FROG report for ecoli core."""
-    return _run_example(
-        EXAMPLE_PATH / "models" / "e_coli_core.xml",
-        EXAMPLE_PATH / "frogs" / "e_coli_core_FROG.xml",
-    )
-
-
-def example_ecoli_core_no_genes() -> Path:
-    """Create FROG report for ecoli core."""
-    return _run_example(
-        EXAMPLE_PATH / "models" / "e_coli_core_no_genes.xml",
-        EXAMPLE_PATH / "frogs" / "e_coli_core_no_genes_FROG.xml",
-    )
-
-
-def example_ecoli_core_omex() -> Path:
-    """Create FROG report for ecoli core."""
-    return _run_example(
-        EXAMPLE_PATH / "models" / "e_coli_core.omex",
-        EXAMPLE_PATH / "models" / "e_coli_core_omex_FROG.omex",
-    )
-
-
-def example_iJR904() -> Path:
-    """Create FROG report for iJR904."""
-    return _run_example(
-        EXAMPLE_PATH / "models" / "iJR904.xml",
-        EXAMPLE_PATH / "frogs" / "iJR904_FROG.xml",
-    )
-
-
-def example_iJR904_omex() -> Path:
-    """Create FROG report for iJR904."""
-    return _run_example(
-        EXAMPLE_PATH / "models" / "iJR904.omex",
-        EXAMPLE_PATH / "frogs" / "iJR904_omex_FROG.omex",
-    )
-
-
-def example_iCGB21FR() -> Path:
-    """Create FROG report for iCGB21FR."""
-    return _run_example(
-        EXAMPLE_PATH / "models" / "iCGB21FR.omex",
-        EXAMPLE_PATH / "frogs" / "iCGB21FR_FROG.omex",
-    )
-
-
-def example_iAB_AMO1410_SARS_omex() -> Path:
-    """Create FROG report for iAB_AMO1410_SARS."""
-    return _run_example(
-        EXAMPLE_PATH / "models" / "iAB_AMO1410_SARS-CoV-2.omex",
-        EXAMPLE_PATH / "frogs" / "iAB_AMO1410_SARS-CoV-2_omex_FROG.omex",
-    )
-
-
-def _run_example(model_path: Path, omex_path: Path) -> Path:
+def _run_example(filename: str) -> Path:
     """Run single example helper function."""
+
+    model_path = EXAMPLE_DIR / "models" / filename
+    omex_path = EXAMPLE_DIR / "frogs" / f"{filename.split('.')[0]}_FROG.omex"
+
     frog_task(
         source_path_str=str(model_path),
         input_is_temporary=False,
@@ -91,6 +62,6 @@ def _run_example(model_path: Path, omex_path: Path) -> Path:
 
 
 if __name__ == "__main__":
-    # run_examples()
-    example_iCGB21FR()
-    # example_ecoli_core_no_genes()
+    create_omex_for_models()
+    run_examples()
+
