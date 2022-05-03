@@ -103,6 +103,12 @@ To run the tests clone the repository::
     pytest
 
 
+Run FROG
+--------
+To run the FROG analysis use the command line tool::
+
+    runfrog
+
 License
 =======
 
@@ -127,6 +133,7 @@ Matthias König is supported by the Federal Ministry of Education and Research (
 within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054) 
 and by the German Research Foundation (DFG) within the Research Unit Programme FOR 5151 
 "`QuaLiPerF <https://qualiperf.de>`__ (Quantifying Liver Perfusion-Function Relationship in Complex Resection - 
-A Systems Medicine Approach)" by grant number 436883643.
+A Systems Medicine Approach)" by grant number 436883643 and by grant number 465194077 
+(Priority Programme SPP 2311, Subproject SimLivA). 
 
 © 2020-2022 Matthias König

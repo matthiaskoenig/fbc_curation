@@ -15,9 +15,10 @@ def test_frog_metadata() -> None:
 
     ecoli_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
     metadata = FrogMetaData(
+        frog_id="8743b52063cd84097a65d1633f5c74f5",
         frog_date=date(year=2021, month=10, day=11),
         frog_version="1.0",
-        frog_curators=[
+        curators=[
             Creator(
                 givenName="Matthias",
                 familyName="König",
@@ -40,6 +41,7 @@ def test_frog_metadata() -> None:
             name="glpk", version=f"{GLP_MAJOR_VERSION}.{GLP_MINOR_VERSION}", url=None
         ),
         environment=f"{os.name}, {platform.system()}, {platform.release()}",
+        model_location=ecoli_path.name,
         model_filename=ecoli_path.name,
         model_md5=FrogMetaData.md5_for_path(ecoli_path),
     )
