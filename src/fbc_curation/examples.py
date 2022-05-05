@@ -62,6 +62,6 @@ def _run_example(filename: str) -> Path:
 
 
 if __name__ == "__main__":
-    create_omex_for_models()
+    # create_omex_for_models()
     run_examples()
 
