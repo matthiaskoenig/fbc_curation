@@ -1,4 +1,4 @@
-"""Test fbc_curation command line script."""
+"""Test runfrog command line scripts and options."""
 
 import sys
 from pathlib import Path
