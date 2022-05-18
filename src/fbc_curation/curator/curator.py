@@ -1,55 +1,54 @@
 """Base class for all FBC curators."""
-import logging
+import os
+import platform
 from collections import defaultdict, namedtuple
 from pathlib import Path
 from typing import Dict, List
 
 import cobra
 import libsbml
-import pandas as pd
 from cobra.io import read_sbml_model
+from pymetadata import log
+from pymetadata.console import console
 
-from fbc_curation.curator.metadata import create_metadata
-from fbc_curation.curator.results import CuratorResults
+from fbc_curation import __citation__, __software__, __version__
+from fbc_curation.frog import (
+    Creator,
+    FrogFVA,
+    FrogGeneDeletions,
+    FrogMetaData,
+    FrogObjectives,
+    FrogReactionDeletions,
+    FrogReport,
+    Tool,
+)
 
 
 ObjectiveInformation = namedtuple(
     "ObjectiveInformation", "active_objective objective_ids"
 )
 
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 
 class Curator:
     """Base class of all Curator implementations."""
 
-    def __init__(self, model_path: Path, objective_id: str = None):
+    def __init__(self, model_path: Path, frog_id: str, curators: List[Creator]):
         """Create instance."""
         if not model_path.exists():
             raise ValueError(f"model_path does not exist: '{model_path}'")
 
-        self.model_path = model_path
-        self.active_objective, self.objective_ids = Curator.read_objective_information(
+        self.frog_id: str = frog_id
+        self.curators = curators
+        self.model_path: Path = model_path
+        self.model_location: str = f"./{self.model_path.name}"
+        active_objective, objective_ids = Curator._read_objective_information(
             model_path
         )
+        self.objective_id = active_objective
 
-        if objective_id is None:
-            logger.warning(
-                f"No objective id provided, using the active objective: "
-                f"{self.active_objective}"
-            )
-            self.objective_id = self.active_objective
-        else:
-            if objective_id not in self.objective_ids:
-                logger.error(
-                    f"objective id does not exist in model: '{self.objective_id}', "
-                    f"using the active objective: {self.active_objective}"
-                )
-                self.objective_id = self.active_objective
-            else:
-                self.objective_id = objective_id
-
-    def __str__(self):
+    def __str__(self) -> str:
         """Create string representation."""
         lines = [
             f"--- {self.__class__.__name__} ---",
@@ -58,58 +57,68 @@ class Curator:
         ]
         return "\n".join(lines)
 
-    def read_model(self):
+    def read_model(self) -> None:
         raise NotImplementedError
 
-    def metadata(self) -> Dict:
-        return create_metadata(path=self.model_path)
+    def metadata(self, software: Tool, solver: Tool) -> FrogMetaData:
+        md = FrogMetaData(
+            model_location=self.model_location,
+            model_md5=FrogMetaData.md5_for_path(self.model_path),
+            frog_id=self.frog_id,
+            frog_software=Tool(
+                name=__software__,
+                version=__version__,
+                url=__citation__,
+            ),
+            curators=self.curators,
+            software=software,
+            solver=solver,
+            environment=f"{os.name}, {platform.system()}, {platform.release()}",
+        )
 
-    def objective(self) -> pd.DataFrame:
+        return md
+
+    def objectives(self) -> FrogObjectives:
         raise NotImplementedError
 
-    def fva(self) -> pd.DataFrame:
+    def fva(self) -> FrogFVA:
         raise NotImplementedError
 
-    def gene_deletion(self) -> pd.DataFrame:
+    def gene_deletions(self) -> FrogGeneDeletions:
         raise NotImplementedError
 
-    def reaction_deletion(self) -> pd.DataFrame:
+    def reaction_deletions(self) -> FrogReactionDeletions:
         raise NotImplementedError
 
-    def run(self) -> CuratorResults:
+    def run(self) -> FrogReport:
         """Run the curator and stores the results."""
 
-        print("-" * 80)
-        self._print_header(f"{self.__class__.__name__}: metadata")
+        console.rule(f"FROG {self.__class__.__name__}", style="white")
+        logger.info(f"* metadata")
         metadata = self.metadata()
 
-        self._print_header(f"{self.__class__.__name__}: objective")
-        objective = self.objective()
+        logger.info(f"* objectives")
+        objectives = self.objectives()
 
-        self._print_header(f"{self.__class__.__name__}: fva")
+        logger.info(f"* fva")
         fva = self.fva()
 
-        self._print_header(f"{self.__class__.__name__}: gene_deletion")
-        gene_deletion = self.gene_deletion()
+        logger.info(f"* reactiondeletions")
+        reaction_deletions = self.reaction_deletions()
 
-        self._print_header(f"{self.__class__.__name__}: reaction_deletion")
-        reaction_deletion = self.reaction_deletion()
+        logger.info(f"* genedeletions")
+        gene_deletions = self.gene_deletions()
 
-        return CuratorResults(
+        return FrogReport(
             metadata=metadata,
-            objective_id=self.objective_id,
-            objective=objective,
+            objectives=objectives,
             fva=fva,
-            gene_deletion=gene_deletion,
-            reaction_deletion=reaction_deletion,
+            gene_deletions=gene_deletions,
+            reaction_deletions=reaction_deletions,
         )
 
     @staticmethod
-    def _print_header(title):
-        print(f"* {title}")
-
-    @staticmethod
-    def knockout_reactions_for_genes(
+    def _knockout_reactions_for_genes(
         model_path: Path, genes=None
     ) -> Dict[str, List[str]]:
         """Calculate mapping of genes to affected reactions.
@@ -138,17 +147,15 @@ class Curator:
                 if gene_essential:
                     knockout_reactions[gene.id].append(reaction.id)
 
-        # from pprint import pprint
-        # pprint(knockout_reactions)
         return knockout_reactions
 
     @staticmethod
-    def read_objective_information(model_path: Path) -> ObjectiveInformation:
+    def _read_objective_information(model_path: Path) -> ObjectiveInformation:
         """Read objective information from SBML file structure."""
         # read objective information from sbml (multiple objectives)
-        doc = libsbml.readSBMLFromFile(str(model_path))  # type: libsbml.SBMLDocument
-        model = doc.getModel()  # type: libsbml.Model
-        fbc_model = model.getPlugin("fbc")  # type: libsbml.FbcModelPlugin
+        doc = libsbml.SBMLDocument = libsbml.readSBMLFromFile(str(model_path))
+        model: libsbml.Model = doc.getModel()
+        fbc_model: libsbml.FbcModelPlugin = model.getPlugin("fbc")
         if fbc_model is None:
             # model is an old SBML model without fbc information (use cobra default)
             # problems with the automatic up-conversions
@@ -157,7 +164,8 @@ class Curator:
         else:
             active_objective = fbc_model.getActiveObjective().getId()
             objective_ids = []
-            for objective in fbc_model.getListOfObjectives():  # type: libsbml.Objective
+            objective: libsbml.Objective
+            for objective in fbc_model.getListOfObjectives():
                 objective_ids.append(objective.getId())
 
         if len(objective_ids) > 1:
@@ -169,10 +177,3 @@ class Curator:
         return ObjectiveInformation(
             active_objective=active_objective, objective_ids=objective_ids
         )
-
-
-if __name__ == "__main__":
-    from fbc_curation import EXAMPLE_PATH
-
-    model_path = EXAMPLE_PATH / "models" / "e_coli_core.xml"
-    Curator.knockout_reactions_for_genes(model_path=model_path)

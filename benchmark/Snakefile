@@ -1,0 +1,32 @@
+"""
+Snakemake script for execution of models.
+"""
+from snakemake.utils import min_version
+import re
+from pprint import pprint
+
+min_version("6.1.2")
+
+# Collect all models from all collections
+COLLECTIONS, MODELS, = glob_wildcards("models/memote-meta-models/{collection}/models/{model}.xml.gz")
+# pprint(list(zip(COLLECTIONS, MODELS)))
+print(len(COLLECTIONS), len(MODELS))
+
+# pseudo rule collecting the target files
+rule all:
+    input:  [f"results/{collection}/{model}.json" for (collection, model) in zip(COLLECTIONS, MODELS)]
+
+rule fbc_curation:
+    input:
+        "models/memote-meta-models/{collection}/models/{model}.xml.gz"
+        # "models/e_coli_core.xml"
+    output:
+        "results/{collection}/{model}.json",
+        directory("results/{collection}/{model}")
+        # "results/e_coli_core.json",
+        # directory("results")
+    log:
+        "logs/{collection}/{model}.log"
+        # "logs/e_coli_core.log"
+    script:
+        "scripts/run_fbc_curation.py"

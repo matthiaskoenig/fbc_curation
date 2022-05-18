@@ -1,5 +1,10 @@
-fbc_curation
-=============
+.. image:: https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/version-0.2.0/icon/frog_icon_mirrored.svg
+   :align: left
+   :alt: FROG logo
+
+
+fbc_curation (FROG analysis)
+============================
 
 .. image:: https://github.com/matthiaskoenig/sbmlsim/workflows/CI-CD/badge.svg
    :target: https://github.com/matthiaskoenig/fbc_curation/workflows/CI-CD
@@ -38,12 +43,10 @@ fbc_curation
 available from 
 `https://github.com/matthiaskoenig/fbc_curation <https://github.com/matthiaskoenig/fbc_curation>`_.
 
-This repository creates standardized reference files for a given FBC model based on cobrapy and glpk. These files can be used in the model curation process for validating the model behavior. The format of the standardized reference files is described below. 
-Currently two separate implementations of the reference files are included in the package:
+This repository implements the FROG analysis and allows to create standardized reference files for a given FBC model based on cobrapy and glpk. These files can be used in the model curation process for validating the model behavior. The format of the standardized reference files is described below. 
+Currently one implementation of the reference files is included in the package:
 
 * ``cobrapy`` based on COBRApy (Constraint-Based Reconstruction and Analysis in Python) available from `https://github.com/opencobra/cobrapy <https://github.com/opencobra/cobrapy>`_
-* ``cameo`` based on Cameo (Cameo—Computer Aided Metabolic Engineering and Optimization) available from `https://github.com/biosustain/cameo <https://github.com/biosustain/cameo>`_
-
 
 ``fbc_curation`` is a python package which can be included in python applications. In addition a command line tool is provided which allows easy usage outside of python.
 
@@ -100,6 +103,12 @@ To run the tests clone the repository::
     pytest
 
 
+Run FROG
+--------
+To run the FROG analysis use the command line tool::
+
+    runfrog
+
 License
 =======
 
@@ -121,7 +130,10 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 Funding
 =======
 Matthias König is supported by the Federal Ministry of Education and Research (BMBF, Germany)
-within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054).
+within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054) 
+and by the German Research Foundation (DFG) within the Research Unit Programme FOR 5151 
+"`QuaLiPerF <https://qualiperf.de>`__ (Quantifying Liver Perfusion-Function Relationship in Complex Resection - 
+A Systems Medicine Approach)" by grant number 436883643 and by grant number 465194077 
+(Priority Programme SPP 2311, Subproject SimLivA). 
 
-
-© 2020 Matthias König
+© 2020-2022 Matthias König

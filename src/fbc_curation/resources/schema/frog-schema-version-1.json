@@ -1,0 +1,361 @@
+{
+  "title": "FrogReport",
+  "description": "Definition of the FROG standard.",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "$ref": "#/definitions/FrogMetaData"
+    },
+    "objective": {
+      "$ref": "#/definitions/FrogObjective"
+    },
+    "fva": {
+      "$ref": "#/definitions/FrogFVA"
+    },
+    "reaction_deletions": {
+      "$ref": "#/definitions/FrogReactionDeletions"
+    },
+    "gene_deletions": {
+      "$ref": "#/definitions/FrogGeneDeletions"
+    }
+  },
+  "required": [
+    "metadata",
+    "objective",
+    "fva",
+    "reaction_deletions",
+    "gene_deletions"
+  ],
+  "definitions": {
+    "Creator": {
+      "title": "Creator",
+      "description": "Creator/curator in ModelHistory and other COMBINE formats.\n\nExtended by optional orcid.",
+      "type": "object",
+      "properties": {
+        "familyName": {
+          "title": "Familyname",
+          "type": "string"
+        },
+        "givenName": {
+          "title": "Givenname",
+          "type": "string"
+        },
+        "email": {
+          "title": "Email",
+          "type": "string"
+        },
+        "organization": {
+          "title": "Organization",
+          "type": "string"
+        },
+        "site": {
+          "title": "Site",
+          "type": "string"
+        },
+        "orcid": {
+          "title": "Orcid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "familyName",
+        "givenName"
+      ]
+    },
+    "Tool": {
+      "title": "Tool",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "description": "Name of tool/software/library.",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "description": "Version of tool/software/library.",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "description": "URL of tool/software/library.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "FrogMetaData": {
+      "title": "FrogMetaData",
+      "description": "FROG metadata.",
+      "type": "object",
+      "properties": {
+        "frog.date": {
+          "title": "Frog.Date",
+          "description": "Curators which executed the FROG analysis.",
+          "type": "string",
+          "format": "date"
+        },
+        "frog.version": {
+          "title": "FROG version",
+          "description": "Version of FROG according to schema.",
+          "type": "string"
+        },
+        "frog.curators": {
+          "title": "Frog.Curators",
+          "description": "Curators which executed the FROG analysis.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Creator"
+          }
+        },
+        "frog.software": {
+          "title": "Frog.Software",
+          "description": "Software used to run FROG",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Tool"
+            }
+          ]
+        },
+        "software": {
+          "title": "Software",
+          "description": "Software used to run FBC.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Tool"
+            }
+          ]
+        },
+        "solver": {
+          "title": "Solver",
+          "description": "Solver used to solve LP problem (e.g. CPLEX, GUROBI, GLPK).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Tool"
+            }
+          ]
+        },
+        "model.filename": {
+          "title": "Model.Filename",
+          "type": "string"
+        },
+        "model.md5": {
+          "title": "Model.Md5",
+          "type": "string"
+        },
+        "environment": {
+          "title": "Environment",
+          "description": "Execution environment such as Linux.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "frog.date",
+        "frog.version",
+        "frog.curators",
+        "frog.software",
+        "software",
+        "solver",
+        "model.filename",
+        "model.md5"
+      ]
+    },
+    "StatusCode": {
+      "title": "StatusCode",
+      "description": "An enumeration.",
+      "enum": [
+        "optimal",
+        "infeasible"
+      ],
+      "type": "string"
+    },
+    "FrogObjective": {
+      "title": "FrogObjective",
+      "type": "object",
+      "properties": {
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/StatusCode"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "model",
+        "objective",
+        "status",
+        "value"
+      ]
+    },
+    "FrogFVASingle": {
+      "title": "FrogFVASingle",
+      "type": "object",
+      "properties": {
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "reaction": {
+          "title": "Reaction",
+          "type": "string"
+        },
+        "flux": {
+          "title": "Flux",
+          "type": "number"
+        },
+        "status": {
+          "$ref": "#/definitions/StatusCode"
+        },
+        "minimum": {
+          "title": "Minimum",
+          "type": "number"
+        },
+        "maximum": {
+          "title": "Maximum",
+          "type": "number"
+        },
+        "fraction_optimum": {
+          "title": "Fraction Optimum",
+          "type": "number"
+        }
+      },
+      "required": [
+        "model",
+        "objective",
+        "reaction",
+        "flux",
+        "status",
+        "minimum",
+        "maximum",
+        "fraction_optimum"
+      ]
+    },
+    "FrogFVA": {
+      "title": "FrogFVA",
+      "type": "object",
+      "properties": {
+        "fva": {
+          "title": "Fva",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FrogFVASingle"
+          }
+        }
+      },
+      "required": [
+        "fva"
+      ]
+    },
+    "FrogReactionDeletion": {
+      "title": "FrogReactionDeletion",
+      "type": "object",
+      "properties": {
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "reaction": {
+          "title": "Reaction",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/StatusCode"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "model",
+        "objective",
+        "reaction",
+        "status",
+        "value"
+      ]
+    },
+    "FrogReactionDeletions": {
+      "title": "FrogReactionDeletions",
+      "type": "object",
+      "properties": {
+        "deletions": {
+          "title": "Deletions",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FrogReactionDeletion"
+          }
+        }
+      },
+      "required": [
+        "deletions"
+      ]
+    },
+    "FrogGeneDeletion": {
+      "title": "FrogGeneDeletion",
+      "type": "object",
+      "properties": {
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "gene": {
+          "title": "Gene",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/StatusCode"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "model",
+        "objective",
+        "gene",
+        "status",
+        "value"
+      ]
+    },
+    "FrogGeneDeletions": {
+      "title": "FrogGeneDeletions",
+      "type": "object",
+      "properties": {
+        "deletions": {
+          "title": "Deletions",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FrogGeneDeletion"
+          }
+        }
+      },
+      "required": [
+        "deletions"
+      ]
+    }
+  }
+}
