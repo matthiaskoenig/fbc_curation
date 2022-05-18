@@ -2,7 +2,6 @@
    :align: left
    :alt: FROG logo
 
-
 fbc_curation (FROG analysis)
 ============================
 
