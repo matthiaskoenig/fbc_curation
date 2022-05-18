@@ -6,7 +6,7 @@ from pymetadata import log
 from pymetadata.console import console
 
 from fbc_curation import __citation__, __version__
-from fbc_curation.compare import Comparison
+from fbc_curation.compare import FrogComparison
 from fbc_curation.curator import Curator
 from fbc_curation.frog import FrogReport
 from fbc_curation.worker import frog_task
@@ -101,9 +101,9 @@ def main() -> None:
         omex_path_str=str(output_path),
     )
 
-    model_reports = Comparison.read_reports_from_omex(omex_path=output_path)
+    model_reports = FrogComparison.read_reports_from_omex(omex_path=output_path)
     for model_location, reports in model_reports.items():
-        Comparison.compare(location=model_location, reports=reports)
+        FrogComparison.compare_reports(reports=reports)
 
 
 if __name__ == "__main__":

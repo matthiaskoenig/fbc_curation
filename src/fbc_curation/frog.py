@@ -308,6 +308,8 @@ class FrogReport(BaseModel):
     def to_dfs(self) -> Dict[str, pd.DataFrame]:
         """Create report DataFrames."""
 
+        # FIXME: this should be defined on the objects
+
         dfs: Dict[str, pd.DataFrame] = {}
         for key, data in dict(
             zip(
@@ -432,7 +434,7 @@ class FrogReport(BaseModel):
         )
         return report
 
-    def to_omex(self, omex: Omex, location_prefix="./FROG/") -> None:
+    def add_to_omex(self, omex: Omex, location_prefix="./FROG/") -> None:
         """Add report to omex.
 
         :param omex: OMEX archive to add report to.
@@ -482,10 +484,6 @@ class FrogReport(BaseModel):
                         format=format,
                     ),
                 )
-
-    def from_omex(self, omex_path) -> List[FrogReport]:
-        """Read report from OMEX files"""
-        pass
 
 
 if __name__ == "__main__":

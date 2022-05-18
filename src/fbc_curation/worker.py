@@ -80,7 +80,7 @@ def frog_task(
                     )
 
                     # add FROG files to archive
-                    report.to_omex(omex, location_prefix=f"./FROG/{curator}/")
+                    report.add_to_omex(omex, location_prefix=f"./FROG/{curator}/")
 
                     # add JSON to response
                     report_dict[curator] = report.dict()

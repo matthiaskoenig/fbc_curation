@@ -17,37 +17,18 @@ from fbc_curation.frog import CuratorConstants, FrogReport
 logger = log.get_logger(__name__)
 
 
-# Reading reference solution
-# res_dict: Dict[str, FrogReport] = {}
-# if reference_path:
-#     reference_results = FrogReport.read_results(reference_path)
-#     res_dict["reference"] = reference_results
-#
-# for k, curator_class in enumerate(curator_classes):
-#     key = curator_keys[k]
-#     curator = curator_class(model_path=model_path, objective_id=objective_id)
-#     results = curator.run()  # type: FROGResults
-#     results.write_results(output_path / key)
-#     res_dict[key] = FrogReport.read_results(output_path / key)
-#
-# # perform comparison
-# if len(res_dict) > 1:
-#     FrogReport.compare(res_dict)
-
-
-class ComparisonResult:
-    keys: List[str]
-    fva: pd.DataFrame
-
-
-class Comparison:
+class FrogComparison:
 
     absolute_tolerance = 1e-3
     relative_tolerance = 1e-3
 
     @staticmethod
     def read_reports_from_omex(omex_path: Path) -> Dict[str, Dict[str, FrogReport]]:
-        """Read all reports from JSON and TSVs."""
+        """Read all reports from JSON and TSVs.
+
+        Returns dictionary of {model_location: ...}
+
+        """
         reports: List[FrogReport] = []
         omex = Omex.from_omex(omex_path)
         for entry in omex.manifest.entries:
@@ -77,8 +58,10 @@ class Comparison:
 
         return model_reports
 
+    # TODO: implement comparison result and return results
+
     @staticmethod
-    def compare(location: str, reports: Dict[str, FrogReport]) -> None:
+    def compare_reports(reports: Dict[str, FrogReport]) -> bool:
         """Compare results against each other.
 
         Compares all matrices pairwise, i.e., comparison matrix for
@@ -87,7 +70,7 @@ class Comparison:
         - gene deletions
         - reaction deletions
         """
-        console.rule(f"Comparison of FROGReports for '{location}'", style="white")
+        console.rule(f"Comparison of FROGReports", style="white")
 
         num_reports = len(reports)
         all_equal: bool = True
@@ -130,8 +113,8 @@ class Comparison:
                             equal_field = np.allclose(
                                 df1[field].values,
                                 df2[field].values,
-                                atol=Comparison.absolute_tolerance,
-                                rtol=Comparison.relative_tolerance,
+                                atol=FrogComparison.absolute_tolerance,
+                                rtol=FrogComparison.relative_tolerance,
                                 equal_nan=True,
                             )
                             equal = equal and equal_field
@@ -145,8 +128,8 @@ class Comparison:
                         equal_vec = np.isclose(
                             df1[field].values,
                             df2[field].values,
-                            atol=Comparison.absolute_tolerance,
-                            rtol=Comparison.relative_tolerance,
+                            atol=FrogComparison.absolute_tolerance,
+                            rtol=FrogComparison.relative_tolerance,
                             equal_nan=True,
                         )
                         df_diff = pd.concat([df1[~equal_vec], df2[~equal_vec]])
@@ -169,13 +152,13 @@ class Comparison:
         console.rule(style="white")
         console.print(f"Equal: {all_equal}")
         console.rule(style="white")
-        # return bool(all_equal)
+        return bool(all_equal)
 
 
 if __name__ == "__main__":
     # Read results and compare
-    omex_path = EXAMPLE_DIR / "results" / "e_coli_core" / "e_coli_core_FROG.omex"
-    model_reports = Comparison.read_reports_from_omex(omex_path=omex_path)
+    omex_path = EXAMPLE_DIR / "frogs" / "e_coli_core_FROG.omex"
+    model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
     for model_location, reports in model_reports.items():
         print(model_location)
-        Comparison.compare(reports)
+        FrogComparison.compare_reports(reports)

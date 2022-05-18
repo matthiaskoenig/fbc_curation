@@ -58,7 +58,7 @@ def run_fbc_curation(model_path: Path, results_path: Path, json_path: Path):
 
         # comparison
         info["valid"] = [r.validate() for r in all_results.values()]
-        info["equal"] = FROGResults.compare(all_results)
+        info["equal"] = FROGResults.compare_reports(all_results)
 
     except Exception as err:
         info["status"] = "exception"
