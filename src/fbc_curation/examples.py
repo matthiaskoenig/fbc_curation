@@ -1,9 +1,9 @@
 """Create curation information for example models."""
 from pathlib import Path
 
+from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
-from pymetadata import log
 
 from fbc_curation import EXAMPLE_DIR
 from fbc_curation.compare import Comparison
@@ -18,8 +18,9 @@ example_models = [
     "e_coli_core.omex",
     "iJR904.xml",
     "iJR904.omex",
-    "iCGB21FR.omex"
+    "iCGB21FR.omex",
 ]
+
 
 def create_omex_for_models() -> None:
     """Create omex files for models."""
@@ -40,10 +41,10 @@ def create_omex_for_models() -> None:
 def run_examples() -> None:
     """Run all examples."""
     for model_filename in example_models:
-        _run_example(model_filename)
+        run_example(model_filename)
 
 
-def _run_example(filename: str) -> Path:
+def run_example(filename: str) -> Path:
     """Run single example helper function."""
 
     model_path = EXAMPLE_DIR / "models" / filename
@@ -64,4 +65,3 @@ def _run_example(filename: str) -> Path:
 if __name__ == "__main__":
     # create_omex_for_models()
     run_examples()
-

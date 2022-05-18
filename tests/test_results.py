@@ -5,7 +5,7 @@ import libsbml
 import pandas as pd
 
 from fbc_curation import EXAMPLE_DIR
-from fbc_curation.curator.cobrapy_curator import CuratorCobrapy, Creator
+from fbc_curation.curator.cobrapy_curator import Creator, CuratorCobrapy
 from fbc_curation.frog import CuratorConstants
 
 

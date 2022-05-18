@@ -2,7 +2,7 @@
 
 import sys
 from pathlib import Path
-from typing import Generator, Any
+from typing import Any, Generator
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -11,9 +11,7 @@ from fbc_curation import EXAMPLE_DIR, runfrog
 
 
 @pytest.mark.parametrize("filename", ["e_coli_core.xml", "e_coli_core.omex"])
-def test_runfrog1(
-    monkeypatch: Any, tmp_path: Path, filename: str
-) -> None:
+def test_runfrog1(monkeypatch: Any, tmp_path: Path, filename: str) -> None:
     """First example via command line tool.
 
     runfrog --input resources/examples/models/e_coli_core.xml

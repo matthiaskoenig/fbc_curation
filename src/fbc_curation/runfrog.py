@@ -1,6 +1,6 @@
 """Module creates FBC curation files."""
 from pathlib import Path
-from typing import Dict, List, Type, Optional
+from typing import Dict, List, Optional, Type
 
 from pymetadata import log
 from pymetadata.console import console
