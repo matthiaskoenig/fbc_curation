@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/version-0.2.0/icon/frog_icon_mirrored.svg
+.. image:: https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/docs/images/icon/frog_icon_mirrored.svg
    :align: left
    :alt: FROG logo
 
