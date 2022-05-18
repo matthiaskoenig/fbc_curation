@@ -32,6 +32,7 @@ def test_runfrog1(monkeypatch: Any, tmp_path: Path, filename: str) -> None:
         assert output_path.exists()
 
 
+@pytest.mark.skip(reason="Comparison to reference files not implemented.")
 def test_runfrog2(monkeypatch: Any, tmp_path: Path) -> None:
     """Second example via command line tool.
 

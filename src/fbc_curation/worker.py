@@ -13,10 +13,9 @@ from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
-from fbc_curation.curator import Curator
 from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
-from fbc_curation.frog import CuratorConstants, FrogReport
+from fbc_curation.frog import FrogReport
 
 
 logger = log.get_logger(__name__)
