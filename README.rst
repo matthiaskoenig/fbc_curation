@@ -2,8 +2,8 @@
    :align: left
    :alt: FROG logo
 
-fbc_curation (FROG analysis)
-============================
+fbc_curation: FROG analysis in Python
+=====================================
 
 .. image:: https://github.com/matthiaskoenig/sbmlsim/workflows/CI-CD/badge.svg
    :target: https://github.com/matthiaskoenig/fbc_curation/workflows/CI-CD
@@ -38,20 +38,41 @@ fbc_curation (FROG analysis)
    :alt: Black
 
 
-``fbc_curation``: Reproducibility of constraint-based models
-available from 
-`https://github.com/matthiaskoenig/fbc_curation <https://github.com/matthiaskoenig/fbc_curation>`_.
+The project :code:`fbc_curation` implements the FROG analysis for reproducibility of constraint-based models in Python.
+FROG can be run 
 
-This repository implements the FROG analysis and allows to create standardized reference files for a given FBC model based on cobrapy and glpk. These files can be used in the model curation process for validating the model behavior. The format of the standardized reference files is described below. 
-Currently one implementation of the reference files is included in the package:
+* programmatically in python
+* using the :code:`runfrog` command line tool available in this package
+* via the website `https://runfrog.de <https://runfrog.de>`__
+* via the REST API `https://runfrog.de/docs <https://runfrog.de/docs>`__
 
-* ``cobrapy`` based on COBRApy (Constraint-Based Reconstruction and Analysis in Python) available from `https://github.com/opencobra/cobrapy <https://github.com/opencobra/cobrapy>`_
+The FROG analysis creates standardized reference files for a given constraint-based computational model. 
+The FROG files can be used in the model curation process for validating the model behavior, e.g., when
+submitting the model to `BioModels <https://www.ebi.ac.uk/biomodels/curation/fbc>`__.
 
-``fbc_curation`` is a python package which can be included in python applications. In addition a command line tool is provided which allows easy usage outside of python.
 
-The documentation is available on `https://fbc-curation.readthedocs.io <https://fbc-curation.readthedocs.io>`__.
-If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/fbc_curation/issues>`__.
+The FROG format is described `here <https://fbc-curation.readthedocs.io/en/latest/reference_files.html>`__.
+For more information on FROG see `https://www.ebi.ac.uk/biomodels/curation/fbc <https://www.ebi.ac.uk/biomodels/curation/fbc>`__.
 
+:code:`fbc_curation` provideds two implementations of FROG using
+
+* :code:`cobrapy` based on COBRApy (Constraint-Based Reconstruction and Analysis in Python) available from `https://github.com/opencobra/cobrapy <https://github.com/opencobra/cobrapy>`_
+* :code:`cameo` based on Cameo (Computer Aided Metabolic Engineering and Optimization) available from `https://github.com/biosustain/cameo <https://github.com/biosustain/cameo>`_
+
+This package can be used to create FROG reports or compare existing FROG reports. 
+The latest version supports :code:`py3.8`, :code:`py3.9` and :code:`py3.10` 
+
+For more information see
+
+* **Documentation**: `https://fbc-curation.readthedocs.io <https://fbc-curation.readthedocs.io>`__
+* **Website**: `https://runfrog.de <https://runfrog.de>`__
+* **Web service**: `https://runfrog.de <https://runfrog.de>`__
+* **FROG format**: `FROG version 1 <https://fbc-curation.readthedocs.io/en/latest/reference_files.html>`__
+* **FROG JSON schema**: `frog-schema-version-1.json <https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/resources/schema/frog-schema-version-1.json>`__.
+* **Code**: `https://github.com/matthiaskoenig/fbc_curation <https://github.com/matthiaskoenig/fbc_curation>`_
+
+If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/fbc_curation/issues>`__. 
+If you use :code:`fbc_curation` or :code:`runfrog` please cite us.
 
 Documentation
 ==============
@@ -75,31 +96,9 @@ can be installed via::
 
     pip install fbc-curation
 
-
-Develop version
----------------
 The latest develop version can be installed via::
 
     pip install git+https://github.com/matthiaskoenig/fbc-curation.git@develop
-
-Or via cloning the repository and installing via::
-
-    git clone https://github.com/matthiaskoenig/fbc_curation.git
-    cd fbc_curation
-    pip install -e .
-
-To install for development use::
-
-    pip install -e .[development]
-    
-Testing
---------
-To run the tests clone the repository::
-
-    git clone https://github.com/matthiaskoenig/fbc_curation.git
-    cd fbc_curation
-    pip install -e .
-    pytest
 
 
 Run FROG

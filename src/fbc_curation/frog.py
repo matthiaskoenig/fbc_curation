@@ -15,6 +15,7 @@ from pydantic import Field, ValidationError
 from pymetadata import log
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
+from fbc_curation import FROG_PATH_PREFIX
 
 logger = log.get_logger(__name__)
 
@@ -484,13 +485,12 @@ class FrogReport(BaseModel):
         )
         return report
 
-    def add_to_omex(self, omex: Omex, location_prefix: str = "./FROG/") -> None:
+    def add_to_omex(self, omex: Omex, location_prefix: str = f"./" + FROG_PATH_PREFIX + "/") -> None:
         """Add report to omex.
 
         :param omex: OMEX archive to add report to.
         :param location_prefix: prefix to where to write the FROG files in the OMEX
         """
-        # TODO: create new omex with model if not existing
 
         with tempfile.TemporaryDirectory() as f_tmp:
             tmp_path: Path = Path(f_tmp)

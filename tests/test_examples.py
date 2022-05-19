@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from pymetadata.omex import Omex
 
-from fbc_curation import examples
+from fbc_curation import examples, FROG_PATH_PREFIX
 from fbc_curation.frog import CuratorConstants
 
 
@@ -15,8 +15,9 @@ def test_e_coli_core(tmp_path: Path, curator_key: str) -> None:
     omex = Omex.from_omex(omex_path)
     omex.to_directory(tmp_path)
 
-    base_path = tmp_path / "FROG" / curator_key
-    assert Path.exists(base_path / CuratorConstants.OBJECTIVE_FILENAME)
-    assert Path.exists(base_path / CuratorConstants.FVA_FILENAME)
-    assert Path.exists(base_path / CuratorConstants.REACTIONDELETIONS_FILENAME)
-    assert Path.exists(base_path / CuratorConstants.GENEDELETIONS_FILENAME)
+    for curator_key in ["cobrapy", "cameo"]:
+        base_path = tmp_path / FROG_PATH_PREFIX / curator_key
+        assert Path.exists(base_path / CuratorConstants.OBJECTIVE_FILENAME)
+        assert Path.exists(base_path / CuratorConstants.FVA_FILENAME)
+        assert Path.exists(base_path / CuratorConstants.REACTIONDELETIONS_FILENAME)
+        assert Path.exists(base_path / CuratorConstants.GENEDELETIONS_FILENAME)

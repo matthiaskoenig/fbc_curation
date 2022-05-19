@@ -9,10 +9,6 @@ import pytest
 from fbc_curation import EXAMPLE_DIR, runfrog
 
 
-# FIXME: type annotation
-# from _pytest.monkeypatch import MonkeyPatch
-
-
 @pytest.mark.parametrize("filename", ["e_coli_core.xml", "e_coli_core.omex"])
 def test_runfrog1(monkeypatch: Any, tmp_path: Path, filename: str) -> None:
     """First example via command line tool.
