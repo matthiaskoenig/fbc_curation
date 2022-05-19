@@ -1,6 +1,7 @@
 # Release information
 
 * update schema using `schema.py`
+* update documentation
 * make sure all tests run (`tox -p`)
 * update release notes in `release-notes`
 * bump version (`bumpversion [major|minor|patch]`)
@@ -11,5 +12,5 @@
 * test installation in virtualenv from pypi
 ```
 mkvirtualenv test --python=python3.9
-(test) pip install fbc_curation
+(test) pip install fbcgit s_curation
 ```
