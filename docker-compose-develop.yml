@@ -1,0 +1,90 @@
+# -----------------------------------------------------------------------------
+# DOCKER COMPOSE DEVELOPMENT
+# -----------------------------------------------------------------------------
+#
+# build containers
+#   docker-compose -f docker-compose-develop.yml build --no-cache
+#   docker-compose -f docker-compose-develop.yml build
+# serve containers
+#   docker-compose -f docker-compose-develop.yml up --detach
+#   docker-compose -f docker-compose-develop.yml up --build
+# -----------------------------------------------------------------------------
+
+version: '3'
+
+volumes:
+  vue_dist:
+    driver: local
+  node_modules:
+    driver: local
+  frog_data:
+    driver: local
+
+services:
+
+  frontend:
+    container_name: frog_frontend
+    restart: always
+    build:
+      context: ./frog-site
+      dockerfile: Dockerfile-develop
+    ports:
+      - "8085:4567"
+    volumes:
+      - ./frog-site:/app
+      - node_modules:/app/node_modules/
+      - vue_dist:/usr/share/nginx/html
+
+  backend:
+    container_name: frog_backend
+    restart: always
+    build: .
+    volumes:
+      - .:/code
+      - ./frog_data:/frog_data
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    expose:
+      - "1556"
+    ports:
+      - "1556:1556"
+    command: ["/start.sh"]
+    depends_on:
+      - redis
+
+  worker:
+    container_name: frog_worker
+    build: .
+    command: celery --app=src.fbc_curation.worker.celery worker --loglevel=info
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - backend
+      - redis
+    volumes:
+      - ./src/fbc_curation/:/usr/src/app
+      - ./frog_data:/frog_data
+
+  redis:
+    restart: always
+    container_name: frog_redis
+    image: redis:6-alpine
+
+  flower:
+    restart: always
+    container_name: frog_flower
+    build: .
+    command: celery --app=src.fbc_curation.worker.celery --broker=redis://redis:6379/0 flower --port=5555 --url_prefix=flower
+    expose:
+      - 5556
+    ports:
+      - 5556:5555
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - frontend
+      - redis
+      - worker

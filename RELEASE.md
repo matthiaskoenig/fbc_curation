@@ -1,16 +1,16 @@
 # Release information
 
-## make release
-* sort imports (`isort src/sbmlsim`)
-* code formating (`black src/sbmlsim`)
-* make sure all tests run (`tox --`)
+* update schema using `schema.py`
+* update documentation
+* make sure all tests run (`tox -p`)
 * update release notes in `release-notes`
-* bump version (`bumpversion patch` or `bumpversion minor`)
+* bump version (`bumpversion [major|minor|patch]`)
 * `git push --tags` (triggers release)
-* add release-notes for next version
+* `git push`
+* merge `develop` in `main` after release
 
 * test installation in virtualenv from pypi
 ```
-mkvirtualenv test --python=python3.7
-(test) pip install fbc_curation
+mkvirtualenv test --python=python3.9
+(test) pip install fbcgit s_curation
 ```
