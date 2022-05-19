@@ -17,6 +17,7 @@ from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
 from fbc_curation import FROG_PATH_PREFIX
 
+
 logger = log.get_logger(__name__)
 
 
@@ -445,7 +446,6 @@ class FrogReport(BaseModel):
     @classmethod
     def from_tsv(cls, path: Path) -> FrogReport:
         """Read fbc curation files from given directory."""
-        # FIXME: implement
 
         path_metadata = path / CuratorConstants.METADATA_FILENAME
         path_objective = path / CuratorConstants.OBJECTIVE_FILENAME
@@ -485,7 +485,9 @@ class FrogReport(BaseModel):
         )
         return report
 
-    def add_to_omex(self, omex: Omex, location_prefix: str = f"./" + FROG_PATH_PREFIX + "/") -> None:
+    def add_to_omex(
+        self, omex: Omex, location_prefix: str = f"./{FROG_PATH_PREFIX}/"
+    ) -> None:
         """Add report to omex.
 
         :param omex: OMEX archive to add report to.

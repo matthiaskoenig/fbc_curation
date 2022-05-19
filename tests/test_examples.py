@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from pymetadata.omex import Omex
 
-from fbc_curation import examples, FROG_PATH_PREFIX
+from fbc_curation import FROG_PATH_PREFIX, examples
 from fbc_curation.frog import CuratorConstants
 
 

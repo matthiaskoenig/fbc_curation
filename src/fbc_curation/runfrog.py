@@ -1,6 +1,5 @@
 """Command line tool `runfrog` for creating FROG reports."""
 from pathlib import Path
-from typing import Optional
 
 from pymetadata import log
 from pymetadata.console import console
@@ -45,14 +44,14 @@ def main() -> None:
         dest="output_path",
         help="(required) omex output path to write FROG",
     )
-    parser.add_option(
-        "-r",
-        "--reference",
-        action="store",
-        dest="reference_path",
-        help="(optional) path to COMBINE archive (OMEX) with FROG results "
-        "to include in comparison",
-    )
+    # parser.add_option(
+    #     "-r",
+    #     "--reference",
+    #     action="store",
+    #     dest="reference_path",
+    #     help="(optional) path to COMBINE archive (OMEX) with FROG results "
+    #     "to include in comparison",
+    # )
 
     console.rule(style="white")
     console.print(":frog: FBC CURATION FROG ANALYSIS :frog:")
@@ -88,14 +87,14 @@ def main() -> None:
             f"--output '{options.input_path}' output path must end in '.omex'"
         )
 
-    reference_path: Optional[Path] = None
-    if options.reference_path:
-        reference_path = Path(options.reference_path)
-        if not reference_path.exists():
-            _parser_message(
-                f"--reference '{options.reference_path}' does not exist, ensure "
-                f"valid reference path."
-            )
+    # reference_path: Optional[Path] = None
+    # if options.reference_path:
+    #     reference_path = Path(options.reference_path)
+    #     if not reference_path.exists():
+    #         _parser_message(
+    #             f"--reference '{options.reference_path}' does not exist, ensure "
+    #             f"valid reference path."
+    #         )
 
     frog_task(
         source_path_str=str(input_path),
