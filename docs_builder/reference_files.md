@@ -1,4 +1,4 @@
-# Reference files
+# FROG files
 In the following the four created reference files and the metadata file are described and examples provided for the [`e_coli_core.xml`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/models/e_coli_core.xml) model. All output files are tab separated files (TSV) with the first three columns being `model`, `objective`, and `status`. The column `model` encodes the SBML model id. The column `objective` encodes the SBML objective id, which is the objective which was optimized in the respective simulation. The column `status` encodes the status of the simulation. The status can be either `optimal` (optimization worked) or `infeasible` (no solution found or problem in simulation).  
 
 ## Metadata file

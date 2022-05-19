@@ -21,7 +21,7 @@ on_rtd = os.environ.get("READTHEDOCS") == "True"
 # -- Project information -----------------------------------------------------
 
 project = "fbc_curation"
-copyright = "2020, Matthias König"
+copyright = "2020-2022, Matthias König"
 author = "Matthias König"
 
 

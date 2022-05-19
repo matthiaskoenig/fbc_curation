@@ -1,5 +1,9 @@
-Welcome to fbc_curation's documentation!
-=========================================
+.. image:: https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/docs/images/icon/frog_icon_mirror-100x80-300dpi.png
+   :align: left
+   :alt: FROG logo
+
+fbc_curation: FROG analysis in Python
+=====================================
 
 .. image:: https://github.com/matthiaskoenig/sbmlsim/workflows/CI-CD/badge.svg
    :target: https://github.com/matthiaskoenig/fbc_curation/workflows/CI-CD
@@ -30,7 +34,7 @@ Welcome to fbc_curation's documentation!
    :alt: Zenodo DOI
 
 
-``fbc_curation`` python utilties for reproducibility of constraint-based models
+The project :code:`fbc_curation` implements the FROG analysis for reproducibility of constraint-based models in Python with code
 available from `https://github.com/matthiaskoenig/fbc_curation <https://github.com/matthiaskoenig/fbc_curation>`_.
 The documentation is available on `https://fbc-curation.readthedocs.io <https://fbc-curation.readthedocs.io>`__.
 If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/fbc_curation/issues>`__.
@@ -40,9 +44,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   overview
+   introduction
+   schema
    reference_files
-   usage
 
 
 Indices and tables

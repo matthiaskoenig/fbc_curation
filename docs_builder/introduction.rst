@@ -1,42 +1,8 @@
+Introduction
+============
 .. image:: https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/docs/images/icon/frog_icon_mirror-100x80-300dpi.png
    :align: left
    :alt: FROG logo
-
-fbc_curation: FROG analysis in Python
-=====================================
-
-.. image:: https://github.com/matthiaskoenig/sbmlsim/workflows/CI-CD/badge.svg
-   :target: https://github.com/matthiaskoenig/fbc_curation/workflows/CI-CD
-   :alt: GitHub Actions CI/CD Status
-
-.. image:: https://img.shields.io/pypi/v/fbc-curation.svg
-   :target: https://pypi.org/project/fbc_curation/
-   :alt: Current PyPI Version
-
-.. image:: https://img.shields.io/pypi/pyversions/fbc-curation.svg
-   :target: https://pypi.org/project/fbc_curation/
-   :alt: Supported Python Versions
-
-.. image:: https://img.shields.io/pypi/l/fbc-curation.svg
-   :target: http://opensource.org/licenses/LGPL-3.0
-   :alt: GNU Lesser General Public License 3
-
-.. image:: https://readthedocs.org/projects/fbc_curation/badge/?version=latest
-   :target: https://fbc-curation.readthedocs.io/en/latest/?badge=latest
-   :alt: Documentation Status
-
-.. image:: https://codecov.io/gh/matthiaskoenig/fbc_curation/branch/develop/graph/badge.svg
-   :target: https://codecov.io/gh/matthiaskoenig/fbc_curation
-   :alt: Codecov
-
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3708271.svg
-   :target: https://doi.org/10.5281/zenodo.3708271
-   :alt: Zenodo DOI
-
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/ambv/black
-   :alt: Black
-
 
 The project :code:`fbc_curation` implements the FROG analysis for reproducibility of constraint-based models in Python.
 FROG can be run 
@@ -247,5 +213,3 @@ and by the German Research Foundation (DFG) within the Research Unit Programme F
 "`QuaLiPerF <https://qualiperf.de>`__ (Quantifying Liver Perfusion-Function Relationship in Complex Resection - 
 A Systems Medicine Approach)" by grant number 436883643 and by grant number 465194077 
 (Priority Programme SPP 2311, Subproject SimLivA). 
-
-© 2020-2022 Matthias König
