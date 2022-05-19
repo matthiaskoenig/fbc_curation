@@ -13,6 +13,7 @@ from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
+from fbc_curation.curator import Curator
 from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 from fbc_curation.frog import FrogReport
@@ -72,17 +73,17 @@ def frog_task(
                 # TODO: check that SBML model with FBC information
 
                 report_dict = {}
-                for curator in ["cobrapy", "cameo"]:
+                for curator_key in ["cobrapy", "cameo"]:
                     sbml_path: Path = omex.get_path(entry.location)
                     report: FrogReport = frog_for_sbml(
-                        source=sbml_path, curator=curator
+                        source=sbml_path, curator_key=curator_key
                     )
 
                     # add FROG files to archive
-                    report.add_to_omex(omex, location_prefix=f"./FROG/{curator}/")
+                    report.add_to_omex(omex, location_prefix=f"./FROG/{curator_key}/")
 
                     # add JSON to response
-                    report_dict[curator] = report.dict()
+                    report_dict[curator_key] = report.dict()
 
                 # store all reports for SBML entry
                 content["frogs"][entry.location] = report_dict
@@ -105,7 +106,7 @@ def frog_task(
     return content
 
 
-def frog_for_sbml(source: Union[Path, str, bytes], curator: str) -> FrogReport:
+def frog_for_sbml(source: Union[Path, str, bytes], curator_key: str) -> FrogReport:
     """Create FROGReport for given SBML source.
 
     Source is either path to SBML file or SBML string.
@@ -124,16 +125,16 @@ def frog_for_sbml(source: Union[Path, str, bytes], curator: str) -> FrogReport:
             with open(sbml_path, "w") as f_sbml:
                 f_sbml.write(source)
 
-        if curator == "cobrapy":
+        if curator_key == "cobrapy":
             curator_class = CuratorCobrapy
-        elif curator == "cameo":
+        elif curator_key == "cameo":
             curator_class = CuratorCameo
         else:
-            raise ValueError(f"Unsupported curator: {curator}")
+            raise ValueError(f"Unsupported curator: {curator_key}")
 
-        curator = curator_class(
+        curator: Curator = curator_class(
             model_path=sbml_path,
-            frog_id=curator,
+            frog_id=curator_key,
             curators=[],
         )
         report: FrogReport = curator.run()

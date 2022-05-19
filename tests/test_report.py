@@ -25,8 +25,11 @@ doc: libsbml.SBMLDocument = libsbml.readSBMLFromFile(str(model_path))
 model: libsbml.Model = doc.getModel()
 
 
-def _check_objective(df):
-    """Check objective DataFrame."""
+def test_objective_df() -> None:
+    """Check objective."""
+    dfs: Dict[str, pd.DataFrame] = report.to_dfs()
+    df = dfs[CuratorConstants.OBJECTIVE_KEY]
+
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
@@ -38,14 +41,11 @@ def _check_objective(df):
     assert "optimal" in status_codes
 
 
-def test_objective() -> None:
-    """Check objective."""
+def test_fva_df() -> None:
+    """Check FVA DataFrame."""
     dfs: Dict[str, pd.DataFrame] = report.to_dfs()
-    _check_objective(dfs[CuratorConstants.OBJECTIVE_KEY])
+    df = dfs[CuratorConstants.FVA_KEY]
 
-
-def _check_fva(df):
-    """Check FVA."""
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
@@ -56,14 +56,10 @@ def _check_fva(df):
     assert "optimal" in status_codes
 
 
-def test_fva():
-    """Check FVA DataFrame."""
-    dfs: Dict[str, pd.DataFrame] = report.to_dfs()
-    _check_fva(dfs[CuratorConstants.FVA_KEY])
-
-
-def _check_gene_deletion(df):
+def test_gene_deletion_df() -> None:
     """Check gene deletion."""
+    dfs: Dict[str, pd.DataFrame] = report.to_dfs()
+    df = dfs[CuratorConstants.GENEDELETIONS_KEY]
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
@@ -75,14 +71,10 @@ def _check_gene_deletion(df):
     assert "optimal" in status_codes
 
 
-def test_gene_deletion() -> None:
-    """Check gene deletion."""
-    dfs: Dict[str, pd.DataFrame] = report.to_dfs()
-    _check_gene_deletion(dfs[CuratorConstants.GENEDELETIONS_KEY])
-
-
-def _check_reaction_deletion(df: pd.DataFrame) -> None:
+def test_reaction_deletion_df(tmp_path: Path) -> None:
     """Check reaction deletion."""
+    dfs: Dict[str, pd.DataFrame] = report.to_dfs()
+    df: pd.DataFrame = dfs[CuratorConstants.REACTIONDELETIONS_KEY]
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
@@ -91,12 +83,6 @@ def _check_reaction_deletion(df: pd.DataFrame) -> None:
     status_codes = df.status.unique()
     assert len(status_codes) <= 2
     assert "optimal" in status_codes
-
-
-def test_reaction_deletion(tmp_path) -> None:
-    """Check reaction deletion."""
-    dfs: Dict[str, pd.DataFrame] = report.to_dfs()
-    _check_reaction_deletion(dfs[CuratorConstants.REACTIONDELETIONS_KEY])
 
 
 def test_report_write_read_tsv_equal(tmp_path: Path) -> None:

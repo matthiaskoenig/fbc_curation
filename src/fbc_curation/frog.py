@@ -5,7 +5,7 @@ import hashlib
 import tempfile
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 import orjson
@@ -13,7 +13,6 @@ import pandas as pd
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import Field, ValidationError
 from pymetadata import log
-from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
 
@@ -229,6 +228,21 @@ class FrogObjectives(BaseModel):
 
         return FrogObjectives(objectives=objectives)
 
+    def to_df(self) -> pd.DataFrame:
+        """Create objectives DataFrame."""
+
+        d: Dict[str, Any] = self.dict()
+        item = list(d.values())[0]
+        df = pd.DataFrame(item)
+        if len(df) > 0:
+            df.sort_values(by=["objective"], inplace=True)
+            df.index = range(len(df))
+            df.loc[
+                df.status == StatusCode.INFEASIBLE.value, "value"
+            ] = CuratorConstants.VALUE_INFEASIBLE
+
+        return df
+
 
 class FrogFVA(BaseModel):
     """Definition of FROG FVA."""
@@ -243,6 +257,7 @@ class FrogFVA(BaseModel):
     @staticmethod
     def from_df(df: pd.DataFrame) -> FrogFVA:
         """Parse FVA from DataFrame."""
+
         fva = []
         for item in df.to_dict(orient="records"):
             try:
@@ -251,6 +266,22 @@ class FrogFVA(BaseModel):
                 logger.error(item)
                 logger.error(e.json())
         return FrogFVA(fva=fva)
+
+    def to_df(self) -> pd.DataFrame:
+        """Create fva DataFrame."""
+
+        d: Dict[str, Any] = self.dict()
+        item = list(d.values())[0]
+        df = pd.DataFrame(item)
+        if len(df) > 0:
+            df.sort_values(by=["reaction"], inplace=True)
+            df.index = range(len(df))
+            df.loc[
+                df.status == StatusCode.INFEASIBLE.value,
+                ["flux", "minimum", "maximum"],
+            ] = CuratorConstants.VALUE_INFEASIBLE
+
+        return df
 
 
 class FrogReactionDeletions(BaseModel):
@@ -277,6 +308,21 @@ class FrogReactionDeletions(BaseModel):
 
         return FrogReactionDeletions(deletions=deletions)
 
+    def to_df(self) -> pd.DataFrame:
+        """Create reaction deletions DataFrame."""
+
+        d: Dict[str, Any] = self.dict()
+        item = list(d.values())[0]
+        df = pd.DataFrame(item)
+        if len(df) > 0:
+            df.sort_values(by=["reaction"], inplace=True)
+            df.index = range(len(df))
+            df.loc[
+                df.status == StatusCode.INFEASIBLE.value, "value"
+            ] = CuratorConstants.VALUE_INFEASIBLE
+
+        return df
+
 
 class FrogGeneDeletions(BaseModel):
     """Definition of FROG Gene deletions."""
@@ -301,6 +347,21 @@ class FrogGeneDeletions(BaseModel):
                 logger.error(e.json())
 
         return FrogGeneDeletions(deletions=deletions)
+
+    def to_df(self) -> pd.DataFrame:
+        """Create gene deletions DataFrame."""
+
+        d: Dict[str, Any] = self.dict()
+        item = list(d.values())[0]
+        df = pd.DataFrame(item)
+        if len(df) > 0:
+            df.sort_values(by=["gene"], inplace=True)
+            df.index = range(len(df))
+            df.loc[
+                df.status == StatusCode.INFEASIBLE.value, "value"
+            ] = CuratorConstants.VALUE_INFEASIBLE
+
+        return df
 
 
 class FrogReport(BaseModel):
@@ -345,60 +406,12 @@ class FrogReport(BaseModel):
     def to_dfs(self) -> Dict[str, pd.DataFrame]:
         """Create report DataFrames."""
 
-        # FIXME: this should be defined on the objects
-
-        dfs: Dict[str, pd.DataFrame] = {}
-        for key, data in dict(
-            zip(
-                [
-                    CuratorConstants.OBJECTIVE_KEY,
-                    CuratorConstants.FVA_KEY,
-                    CuratorConstants.GENEDELETIONS_KEY,
-                    CuratorConstants.REACTIONDELETIONS_KEY,
-                ],
-                [
-                    self.objectives,
-                    self.fva,
-                    self.gene_deletions,
-                    self.reaction_deletions,
-                ],
-            )
-        ).items():
-
-            d = data.dict()
-
-            item = list(d.values())[0]
-            df = pd.DataFrame(item)
-            if len(df) > 0:
-
-                if key == CuratorConstants.OBJECTIVE_KEY:
-                    df.sort_values(by=["objective"], inplace=True)
-                if key in {
-                    CuratorConstants.FVA_KEY,
-                    CuratorConstants.REACTIONDELETIONS_KEY,
-                }:
-                    df.sort_values(by=["reaction"], inplace=True)
-                elif key == CuratorConstants.GENEDELETIONS_KEY:
-                    df.sort_values(by=["gene"], inplace=True)
-
-                df.index = range(len(df))
-
-                if key in [
-                    CuratorConstants.OBJECTIVE_KEY,
-                    CuratorConstants.REACTIONDELETIONS_KEY,
-                    CuratorConstants.GENEDELETIONS_KEY,
-                ]:
-                    df.loc[
-                        df.status == StatusCode.INFEASIBLE.value, "value"
-                    ] = CuratorConstants.VALUE_INFEASIBLE
-                elif key == CuratorConstants.FVA_KEY:
-                    df.loc[
-                        df.status == StatusCode.INFEASIBLE.value,
-                        ["flux", "minimum", "maximum"],
-                    ] = CuratorConstants.VALUE_INFEASIBLE
-
-            dfs[key] = df
-        return dfs
+        return {
+            CuratorConstants.OBJECTIVE_KEY: self.objectives.to_df(),
+            CuratorConstants.FVA_KEY: self.fva.to_df(),
+            CuratorConstants.GENEDELETIONS_KEY: self.gene_deletions.to_df(),
+            CuratorConstants.REACTIONDELETIONS_KEY: self.reaction_deletions.to_df(),
+        }
 
     def to_tsv(self, output_dir: Path) -> None:
         """Write Report TSV and metadata to directory."""
@@ -471,7 +484,7 @@ class FrogReport(BaseModel):
         )
         return report
 
-    def add_to_omex(self, omex: Omex, location_prefix="./FROG/") -> None:
+    def add_to_omex(self, omex: Omex, location_prefix: str = "./FROG/") -> None:
         """Add report to omex.
 
         :param omex: OMEX archive to add report to.
@@ -521,12 +534,3 @@ class FrogReport(BaseModel):
                         format=format,
                     ),
                 )
-
-
-if __name__ == "__main__":
-
-    console.rule(style="white")
-    console.print(FrogReport.schema_json(indent=2))
-    console.rule(style="white")
-    with open("frog-schema-version1.json", "w") as f_schema:
-        f_schema.write(FrogReport.schema_json(indent=2))

@@ -101,6 +101,7 @@ class FrogComparison:
             for p, df1 in enumerate(dfs):
                 for q, df2 in enumerate(dfs):
 
+                    fields: List[str]
                     equal = True
                     if key in [
                         CuratorConstants.OBJECTIVE_KEY,
