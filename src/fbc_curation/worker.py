@@ -6,7 +6,7 @@ import os
 import tempfile
 import time
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional, Type, Union
 
 from celery import Celery
 from pymetadata import log
@@ -125,6 +125,7 @@ def frog_for_sbml(source: Union[Path, str, bytes], curator_key: str) -> FrogRepo
             with open(sbml_path, "w") as f_sbml:
                 f_sbml.write(source)
 
+        curator_class: Type[Curator]
         if curator_key == "cobrapy":
             curator_class = CuratorCobrapy
         elif curator_key == "cameo":

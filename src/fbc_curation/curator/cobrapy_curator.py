@@ -51,7 +51,7 @@ class CuratorCobrapy(Curator):
         """Read the model."""
         return read_sbml_model(str(self.model_path), f_replace={})
 
-    def metadata(self) -> FrogMetaData:
+    def set_metadata(self) -> FrogMetaData:
         """Create metadata dictionary."""
 
         software = Tool(
@@ -127,7 +127,7 @@ class CuratorCobrapy(Curator):
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
                     "flux": fluxes,
-                    "status": CuratorConstants.STATUS_INFEASIBLE,
+                    "status": StatusCode.INFEASIBLE,
                     "minimum": CuratorConstants.VALUE_INFEASIBLE,
                     "maximum": CuratorConstants.VALUE_INFEASIBLE,
                     "fraction_optimum": 1.0,

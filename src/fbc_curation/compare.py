@@ -67,7 +67,7 @@ class FrogComparison:
     def compare_reports(reports: Dict[str, FrogReport]) -> bool:
         """Compare results against each other.
 
-        Compares all matrices pairwise, i.e., comparison matrix for
+        Compare all matrices pairwise, i.e., comparison matrix for
         - objective
         - FVA
         - gene deletions
@@ -84,10 +84,11 @@ class FrogComparison:
         # DataFrames for report
         report_keys = list(reports.keys())
         for report_key, report in reports.items():
-            dfs = report.to_dfs()
-            data[report_key] = dfs
+            # all DataFrames for single report
+            frog_dfs: Dict[str, pd.DataFrame] = report.to_dfs()
+            data[report_key] = frog_dfs
 
-        # Perform all comparisons
+        # Perform comparisons between all reports
         for key in [
             CuratorConstants.OBJECTIVE_KEY,
             CuratorConstants.FVA_KEY,
@@ -97,7 +98,9 @@ class FrogComparison:
             mat_equal = np.zeros(shape=(num_reports, num_reports))
 
             # do all pairwise comparisons
-            dfs = [data[report_key][key] for report_key in reports.keys()]
+            dfs: List[pd.DataFrame] = [
+                data[report_key][key] for report_key in reports.keys()
+            ]
             for p, df1 in enumerate(dfs):
                 for q, df2 in enumerate(dfs):
 

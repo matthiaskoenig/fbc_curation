@@ -3,7 +3,7 @@ import os
 import platform
 from collections import defaultdict, namedtuple
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import cobra
 import libsbml
@@ -80,6 +80,10 @@ class Curator:
 
         return md
 
+    def set_metadata(self) -> FrogMetaData:
+        """Create metadata for given curator."""
+        pass
+
     def objectives(self) -> FrogObjectives:
         """Perform objectives."""
         raise NotImplementedError
@@ -101,7 +105,7 @@ class Curator:
 
         console.rule(f"FROG {self.__class__.__name__}", style="white")
         logger.info("* metadata")
-        metadata = self.metadata()
+        metadata = self.set_metadata()
 
         logger.info("* objectives")
         objectives = self.objectives()
@@ -125,7 +129,7 @@ class Curator:
 
     @staticmethod
     def _knockout_reactions_for_genes(
-        model_path: Path, genes=None
+        model_path: Path, genes: Optional[List[str]] = None
     ) -> Dict[str, List[str]]:
         """Calculate mapping of genes to affected reactions.
 

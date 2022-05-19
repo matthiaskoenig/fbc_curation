@@ -59,7 +59,7 @@ class CuratorCameo(Curator):
         """Read SBML model."""
         return read_sbml_model(str(self.model_path), f_replace={})
 
-    def metadata(self) -> FrogMetaData:
+    def set_metadata(self) -> FrogMetaData:
         """Create metadata dictionary."""
         software = Tool(
             name="cameo",
