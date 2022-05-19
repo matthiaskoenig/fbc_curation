@@ -1,5 +1,6 @@
 # Release information
 
+* update schema using `schema.py`
 * make sure all tests run (`tox -p`)
 * update release notes in `release-notes`
 * bump version (`bumpversion [major|minor|patch]`)

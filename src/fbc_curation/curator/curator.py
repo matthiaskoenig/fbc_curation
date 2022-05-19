@@ -58,9 +58,11 @@ class Curator:
         return "\n".join(lines)
 
     def read_model(self) -> None:
+        """Read the model."""
         raise NotImplementedError
 
     def metadata(self, software: Tool, solver: Tool) -> FrogMetaData:
+        """Create metadata."""
         md = FrogMetaData(
             model_location=self.model_location,
             model_md5=FrogMetaData.md5_for_path(self.model_path),
@@ -79,34 +81,38 @@ class Curator:
         return md
 
     def objectives(self) -> FrogObjectives:
+        """Perform objectives."""
         raise NotImplementedError
 
     def fva(self) -> FrogFVA:
+        """Perform FVA."""
         raise NotImplementedError
 
     def gene_deletions(self) -> FrogGeneDeletions:
+        """Perform gene deletions."""
         raise NotImplementedError
 
     def reaction_deletions(self) -> FrogReactionDeletions:
+        """Perform reaction deletions."""
         raise NotImplementedError
 
     def run(self) -> FrogReport:
-        """Run the curator and stores the results."""
+        """Run the curator and return the FROG report."""
 
         console.rule(f"FROG {self.__class__.__name__}", style="white")
-        logger.info(f"* metadata")
+        logger.info("* metadata")
         metadata = self.metadata()
 
-        logger.info(f"* objectives")
+        logger.info("* objectives")
         objectives = self.objectives()
 
-        logger.info(f"* fva")
+        logger.info("* fva")
         fva = self.fva()
 
-        logger.info(f"* reactiondeletions")
+        logger.info("* reactiondeletions")
         reaction_deletions = self.reaction_deletions()
 
-        logger.info(f"* genedeletions")
+        logger.info("* genedeletions")
         gene_deletions = self.gene_deletions()
 
         return FrogReport(

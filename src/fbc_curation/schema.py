@@ -1,7 +1,7 @@
-"""
-Schema generation
-https://json-schema.org/
+"""Schema generation.
 
+Code for creating JSON schema using pydantic.
+https://json-schema.org/
 """
 from pymetadata.console import console
 

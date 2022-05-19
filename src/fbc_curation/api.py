@@ -28,9 +28,12 @@ logger = log.get_logger(__name__)
 
 
 class ORJSONResponse(JSONResponse):
+    """JSON response."""
+
     media_type = "application/json"
 
     def render(self, content: typing.Any) -> bytes:
+        """Render function."""
         content_bytes: bytes = orjson.dumps(content)
         return content_bytes
 
@@ -50,7 +53,7 @@ api = FastAPI(
     title="FROG REST API",
     description=description,
     version="0.2.0",
-    terms_of_service="https://github.com/matthiaskoenig/fbc_curation/blob/develop/privacy_notice.md",
+    terms_of_service="https://github.com/matthiaskoenig/fbc_curation/blob/develop/privacy_notice.md",  # noqa: E501
     contact={
         "name": "Matthias König",
         "url": "https://livermetabolism.com",
@@ -93,6 +96,7 @@ api.add_middleware(
 
 @api.get("/api")
 def get_api_information(request: Request) -> Dict[str, Any]:
+    """Get API information."""
     return {
         "title": api.title,
         "description": api.description,

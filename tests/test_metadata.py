@@ -1,13 +1,14 @@
+"""Test metadata."""
+
 import os
 import platform
 from datetime import date
-
-import pytest
 
 from fbc_curation.frog import Creator, FrogMetaData, Tool
 
 
 def test_frog_metadata() -> None:
+    """Test metadata."""
     from cobra import __version__ as cobra_version
     from swiglpk import GLP_MAJOR_VERSION, GLP_MINOR_VERSION
 

@@ -1,14 +1,12 @@
-"""Module creates FBC curation files."""
+"""Command line tool `runfrog` for creating FROG reports."""
 from pathlib import Path
-from typing import Dict, List, Optional, Type
+from typing import Optional
 
 from pymetadata import log
 from pymetadata.console import console
 
 from fbc_curation import __citation__, __version__
 from fbc_curation.compare import FrogComparison
-from fbc_curation.curator import Curator
-from fbc_curation.frog import FrogReport
 from fbc_curation.worker import frog_task
 
 
@@ -18,11 +16,13 @@ logger = log.get_logger(__name__)
 def main() -> None:
     """Entry point which runs FROG report script.
 
-    The script is registered as `runfrog`.
+    The script is registered as `runfrog` command.
 
     Example:
-        runfrog --input resources/examples/models/e_coli_core.xml --output resources/examples/results/e_coli_core.omex
-        python runfrog.py --input resources/examples/models/e_coli_core.xml --path resources/examples/results/e_coli_core.omex
+        runfrog --input resources/examples/models/e_coli_core.xml
+          --output resources/examples/results/e_coli_core.omex
+        python runfrog.py --input resources/examples/models/e_coli_core.xml
+          --path resources/examples/results/e_coli_core.omex
 
     """
 
@@ -35,7 +35,8 @@ def main() -> None:
         "--input",
         action="store",
         dest="input_path",
-        help="(required) path to COMBINE archive (OMEX) with SBML model or an SBML model",
+        help="(required) path to COMBINE archive (OMEX) with SBML model or "
+        "an SBML model",
     )
     parser.add_option(
         "-o",
@@ -49,7 +50,8 @@ def main() -> None:
         "--reference",
         action="store",
         dest="reference_path",
-        help="(optional) path to COMBINE archive (OMEX) with FROG results to include in comparison",
+        help="(optional) path to COMBINE archive (OMEX) with FROG results "
+        "to include in comparison",
     )
 
     console.rule(style="white")
@@ -102,7 +104,7 @@ def main() -> None:
     )
 
     model_reports = FrogComparison.read_reports_from_omex(omex_path=output_path)
-    for model_location, reports in model_reports.items():
+    for _, reports in model_reports.items():
         FrogComparison.compare_reports(reports=reports)
 
 

@@ -2,12 +2,15 @@
 
 import sys
 from pathlib import Path
-from typing import Any, Generator
+from typing import Any
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
 
 from fbc_curation import EXAMPLE_DIR, runfrog
+
+
+# FIXME: type annotation
+# from _pytest.monkeypatch import MonkeyPatch
 
 
 @pytest.mark.parametrize("filename", ["e_coli_core.xml", "e_coli_core.omex"])
@@ -49,7 +52,7 @@ def test_runfrog2(monkeypatch: Any, tmp_path: Path) -> None:
             "--output",
             output_path,
             "--reference",
-            f"{EXAMPLE_DIR / 'results' / 'e_coli_core' / 'frogs' / 'e_coli_core_FROG.'}",
+            f"{EXAMPLE_DIR / 'results' / 'e_coli_core' / 'e_coli_core_FROG'}",
         ]
         m.setattr(sys, "argv", args)
         runfrog.main()

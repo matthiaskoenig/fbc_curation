@@ -1,11 +1,9 @@
 """Comparison of FROG results."""
-import json
 from pathlib import Path
 from typing import Dict, List
 
 import numpy as np
 import pandas as pd
-from pydantic import BaseModel
 from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, Omex
@@ -18,9 +16,14 @@ logger = log.get_logger(__name__)
 
 
 class FrogComparison:
+    """FrogComparison.
 
-    absolute_tolerance = 1e-3
-    relative_tolerance = 1e-3
+    Class for comparing FROG reports. Allows to check if multiple FROGs
+    give the same results.
+    """
+
+    absolute_tolerance: float = 1e-3
+    relative_tolerance: float = 1e-3
 
     @staticmethod
     def read_reports_from_omex(omex_path: Path) -> Dict[str, Dict[str, FrogReport]]:
@@ -70,7 +73,7 @@ class FrogComparison:
         - gene deletions
         - reaction deletions
         """
-        console.rule(f"Comparison of FROGReports", style="white")
+        console.rule("Comparison of FROGReports", style="white")
 
         num_reports = len(reports)
         all_equal: bool = True

@@ -56,7 +56,7 @@ def run_example(filename: str) -> Path:
         omex_path_str=str(omex_path),
     )
     model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
-    for model_location, reports in model_reports.items():
+    for _, reports in model_reports.items():
         FrogComparison.compare_reports(reports=reports)
 
     return omex_path

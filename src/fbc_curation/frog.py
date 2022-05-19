@@ -4,15 +4,14 @@ from __future__ import annotations
 import hashlib
 import tempfile
 from enum import Enum
-from math import isnan
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 import numpy as np
 import orjson
 import pandas as pd
 from pydantic import BaseModel as PydanticBaseModel
-from pydantic import Field, ValidationError, validator
+from pydantic import Field, ValidationError
 from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
@@ -22,6 +21,8 @@ logger = log.get_logger(__name__)
 
 
 class BaseModel(PydanticBaseModel):
+    """Base model."""
+
     pass
     # @validator("*")
     # def change_nan_to_none(cls, v: Any, field: Any) -> Any:
@@ -53,21 +54,29 @@ class CuratorConstants:
 
 
 class StatusCode(str, Enum):
+    """Status code for simulation results."""
+
     OPTIMAL: str = "optimal"
     INFEASIBLE: str = "infeasible"
 
 
 class FrogObjective(BaseModel):
+    """Frog Objective."""
+
     model: str
     objective: str
     status: StatusCode
     value: float
 
     class Config:
+        """Pydantic configuration FrogObjective."""
+
         use_enum_values = True
 
 
 class FrogFVASingle(BaseModel):
+    """Frog FVA."""
+
     model: str
     objective: str
     reaction: str
@@ -78,10 +87,14 @@ class FrogFVASingle(BaseModel):
     fraction_optimum: float
 
     class Config:
+        """Pydantic configuration FrogFVA."""
+
         use_enum_values = True
 
 
 class FrogReactionDeletion(BaseModel):
+    """Frog reaction deletion."""
+
     model: str
     objective: str
     reaction: str
@@ -89,10 +102,14 @@ class FrogReactionDeletion(BaseModel):
     value: Optional[float]
 
     class Config:
+        """Pydantic configuration FrogGeneDeletion."""
+
         use_enum_values = True
 
 
 class FrogGeneDeletion(BaseModel):
+    """Frog gene deletion."""
+
     model: str
     objective: str
     gene: str
@@ -100,6 +117,8 @@ class FrogGeneDeletion(BaseModel):
     value: Optional[float]
 
     class Config:
+        """Pydantic configuration FrogGeneDeletion."""
+
         use_enum_values = True
 
 
@@ -117,15 +136,21 @@ class Creator(BaseModel):
     orcid: Optional[str]
 
     class Config:
+        """Pydantic configuration Creator."""
+
         use_enum_values = True
 
 
 class Tool(BaseModel):
+    """Tool description."""
+
     name: str = Field(description="Name of tool/software/library.")
     version: Optional[str] = Field(description="Version of tool/software/library.")
     url: Optional[str] = Field(description="URL of tool/software/library.")
 
     class Config:
+        """Pydantic configuration FrogFVA."""
+
         use_enum_values = True
 
 
@@ -163,6 +188,8 @@ class FrogMetaData(BaseModel):
     )
 
     class Config:
+        """Pydantic configuration FrogMetaData."""
+
         allow_population_by_field_name = True
         use_enum_values = True
 
@@ -184,6 +211,8 @@ class FrogObjectives(BaseModel):
     objectives: List[FrogObjective]
 
     class Config:
+        """Pydantic configuration FrogObjectives."""
+
         use_enum_values = True
 
     @staticmethod
@@ -207,6 +236,8 @@ class FrogFVA(BaseModel):
     fva: List[FrogFVASingle]
 
     class Config:
+        """Pydantic configuration FrogFVA."""
+
         use_enum_values = True
 
     @staticmethod
@@ -228,6 +259,8 @@ class FrogReactionDeletions(BaseModel):
     deletions: List[FrogReactionDeletion]
 
     class Config:
+        """Pydantic configuration FrogReactionDeletions."""
+
         use_enum_values = True
 
     @staticmethod
@@ -251,6 +284,8 @@ class FrogGeneDeletions(BaseModel):
     deletions: List[FrogGeneDeletion]
 
     class Config:
+        """Pydantic configuration FrogGeneDeletions."""
+
         use_enum_values = True
 
     @staticmethod
@@ -278,6 +313,8 @@ class FrogReport(BaseModel):
     gene_deletions: FrogGeneDeletions
 
     class Config:
+        """Pydantic configuration FrogReport."""
+
         use_enum_values = True
 
     def to_json(self, path: Path) -> None:
@@ -364,7 +401,7 @@ class FrogReport(BaseModel):
         return dfs
 
     def to_tsv(self, output_dir: Path) -> None:
-        """Write Report TSV and metadata to directory"""
+        """Write Report TSV and metadata to directory."""
         if not output_dir.exists():
             logger.warning(f"Creating results path: {output_dir}")
             output_dir.mkdir(parents=True)

@@ -56,6 +56,7 @@ class CuratorCameo(Curator):
         )
 
     def read_model(self) -> Model:
+        """Read SBML model."""
         return read_sbml_model(str(self.model_path), f_replace={})
 
     def metadata(self) -> FrogMetaData:
@@ -71,6 +72,7 @@ class CuratorCameo(Curator):
         return super().metadata(software=software, solver=solver)
 
     def objectives(self) -> FrogObjectives:
+        """Perform objectives."""
         model = self.read_model()
         try:
             result = fba(model)
@@ -97,6 +99,7 @@ class CuratorCameo(Curator):
         return FrogObjectives.from_df(df)
 
     def fva(self) -> FrogFVA:
+        """Perform FVA."""
         model = self.read_model()
         result = fba(model)
         fluxes = result.fluxes
@@ -135,6 +138,7 @@ class CuratorCameo(Curator):
         return FrogFVA.from_df(df_out)
 
     def gene_deletions(self) -> FrogGeneDeletions:
+        """Perform gene deletions."""
         model = self.read_model()
         gene_status = []
         gene_values = []
@@ -191,6 +195,7 @@ class CuratorCameo(Curator):
         return FrogGeneDeletions.from_df(df)
 
     def reaction_deletions(self) -> FrogReactionDeletions:
+        """Perform reaction deletions."""
         model = self.read_model()
         reaction_status = []
         reaction_values = []
@@ -204,7 +209,7 @@ class CuratorCameo(Curator):
                 result = fba(model)
                 value = result.objective_value
                 status = StatusCode.OPTIMAL
-            except Exception as e:
+            except Exception:
                 value = CuratorConstants.VALUE_INFEASIBLE
                 status = StatusCode.INFEASIBLE
 
