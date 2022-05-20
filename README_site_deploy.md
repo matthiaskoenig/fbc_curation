@@ -56,8 +56,8 @@ Login to server `denbi-node-4`.
 ### Initial setup
 ```
 cd /var/git
-git clone https://github.com/matthiaskoenig/sbmlutils.git
-git checkout sbml4humans
+git clone https://github.com/matthiaskoenig/fbc_curation.git
+git checkout develop
 ```
 
 **start containers**

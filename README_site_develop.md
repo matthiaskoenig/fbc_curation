@@ -33,3 +33,6 @@ npm run serve
 ```
 npm run build
 ```
+
+
+docker-compose -f docker-compose-develop.yml build --no-cache
