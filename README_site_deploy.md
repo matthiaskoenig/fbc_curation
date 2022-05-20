@@ -1,12 +1,28 @@
-# Deployment `sbml4humans`
-This document provides instructions to deploy `frog-site` on a server. 
-In many configurations a proxy server is used which proxies the requests 
-to the services running in docker containers. The setup consists normally of 
+# Deployment `runfrog.de`
+This document provides information on how to deploy the `frog-site` on a server
+(https://runfrog.de). For development see [./README_site_develop.md](./README_site_develop.md).
+
+The `runfrog` stack is provided as docker containers managed by `docker-compose`.
+In typical setups a proxy server acceps all requests on a given IP and 
+proxies the requests to the respective services. 
+
+Necessary steps for the setup are
+* test that sites works locally
+* setup the proxy server (register service in nginx under endpoint)
+* create SSH certificates for proxy server
+The setup consists normally of 
 setting up the proxy server (with https certificates) and the server with running 
 the docker containers.
 
+## Test site
+See instructions in 
+
 ## Setup proxy
-- login to proxy server `denbi-head`
+**Setup domain**
+First the domain must be setup to point to the correct IP. 
+
+**Login to server**  
+Login via SSH to the proxy server `denbi-head`
 
 **Activate page**  
 The page must be copied and activated. Make sure to **update the IP** of the server 
@@ -16,7 +32,7 @@ sudo cp <repo>/nginx/runfrog.de /etc/nginx/sites-available/runfrog.de
 sudo ln -s /etc/nginx/sites-available/runfrog.de /etc/nginx/sites-enabled/
 ```
 
-### Certificates
+### SSH Certificates
 #### Initial certificates
 Get certificates for `runfrog.de,www.runfrog.de`
 ```
@@ -25,6 +41,7 @@ sudo certbot certonly
 sudo service nginx start
 sudo service nginx status
 ```
+Setup webroot for renewal (check)
 
 #### Certificate renewal
 ```

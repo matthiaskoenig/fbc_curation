@@ -25,11 +25,11 @@ services:
     environment:
       - API_BASE_URL=https://runfrog.de
     build:
-      context: ./frog-site
+      context: runfrog-site
       dockerfile: Dockerfile-production
     command: tail -f /dev/null
     volumes:
-      - ./frog-site:/app
+      - ./runfrog-site:/app
       - node_modules:/app/node_modules/
       - vue_dist:/vue
 

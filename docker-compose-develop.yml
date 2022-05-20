@@ -26,12 +26,12 @@ services:
     container_name: frog_frontend
     restart: always
     build:
-      context: ./frog-site
+      context: runfrog-site
       dockerfile: Dockerfile-develop
     ports:
       - "8085:4567"
     volumes:
-      - ./frog-site:/app
+      - ./runfrog-site:/app
       - node_modules:/app/node_modules/
       - vue_dist:/usr/share/nginx/html
 
