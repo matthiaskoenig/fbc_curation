@@ -28,7 +28,7 @@ COPY ./LICENSE /code/LICENSE
 
 WORKDIR /code
 
-# Install sbmlutils
+# Install fbc_curation
 RUN --mount=type=cache,target=/root/.cache \
      pip install -e .
 # RUN pip install -e .

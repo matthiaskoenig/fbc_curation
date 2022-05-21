@@ -1,6 +1,7 @@
-FROM node:14.11.0 as build-stage
+FROM node:14.19.3
 WORKDIR /app
-COPY package*.json /app/
+COPY package.json /app/
+RUN
 RUN --mount=type=cache,target=/app/.npm \
     npm set cache /app/.npm && \
     npm install

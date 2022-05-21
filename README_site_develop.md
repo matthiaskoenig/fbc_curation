@@ -20,6 +20,15 @@ For setup download and install the `xpi` package.
 
 ## Run local development server
 
+Development should be run with node version 14. 
+See here for installation instructions
+https://github.com/nodesource/distributions/blob/master/README.md#deb
+```
+curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+
 ### Install all dependencies
 ```
 cd runfrog-site
@@ -39,6 +48,14 @@ In addition, the API must be served locally via
 
 ## Run local docker server
 
+Buildkit must be enabled via
+https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds
+To enable docker BuildKit by default, set daemon configuration in /etc/docker/daemon.json feature to true and restart the daemon:
 ```
-docker-compose -f docker-compose-develop.yml build --no-cache
+{ "features": { "buildkit": true } }
+``
+
+
+```
+docker-compose -f docker-compose-develop.yml up --detach
 ```

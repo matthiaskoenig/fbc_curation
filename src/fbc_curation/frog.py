@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import orjson
 import pandas as pd
-from pydantic import BaseModel as PydanticBaseModel
+from pydantic import BaseModel as PydanticBaseModel, validator
 from pydantic import Field, ValidationError
 from pymetadata import log
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
@@ -24,12 +24,12 @@ logger = log.get_logger(__name__)
 class BaseModel(PydanticBaseModel):
     """Base model."""
 
-    pass
-    # @validator("*")
-    # def change_nan_to_none(cls, v: Any, field: Any) -> Any:
-    #     if field.outer_type_ is float and isnan(v):
-    #         return None
-    #     return v
+    # pass
+    @validator("*")
+    def change_nan_to_none(cls, v: Any, field: Any) -> Any:
+        if (field.outer_type_ is float) and (v is not None) and (np.isnan(v)):
+            return None
+        return v
 
 
 class CuratorConstants:
