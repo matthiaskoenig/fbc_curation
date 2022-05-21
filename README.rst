@@ -130,7 +130,17 @@ FROG can be execute via the REST API `https://runfrog.de/docs <https://runfrog.d
 
 Python
 ------
-To run FROG programmatically via python see the following example
+To run FROG programmatically via python use the `run_frog` function
+
+
+.. code:: python
+
+    from fbc_curation.worker import run_frog
+    
+    run_frog(model_path, omex_path)
+
+
+Here a complete example with comparison of the FROG results
 
 .. code:: python
 
@@ -138,20 +148,19 @@ To run FROG programmatically via python see the following example
     from pathlib import Path
     
     from fbc_curation.compare import FrogComparison
-    from fbc_curation.worker import frog_task
+    from fbc_curation.worker import run_frog
     
     
     def create_frog(model_path: Path, omex_path: Path) -> None:
-        """Creates FROG report and writes OMEX for given model."""
+        """Create FROG report and writes OMEX for given model."""
     
-        # create FROG in OMEX
-        frog_task(
-            source_path_str=str(model_path),
-            input_is_temporary=False,
-            omex_path_str=str(omex_path),
+        # create FROG and write to COMBINE archive
+        run_frog(
+            source_path=model_path,
+            omex_path=omex_path,
         )
     
-        # compare FROG results in OMEX
+        # compare FROG results in created COMBINE archive
         model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
         for _, reports in model_reports.items():
             FrogComparison.compare_reports(reports=reports)
@@ -161,7 +170,7 @@ To run FROG programmatically via python see the following example
         base_path = Path(".")
         create_frog(
             model_path=base_path / "e_coli_core.xml",
-            omex_path=base_path / "e_coli_core_FROG.omex"
+            omex_path=base_path / "e_coli_core_FROG.omex",
         )
 
 The typically output of a FROG analyis is depicted below

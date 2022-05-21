@@ -187,7 +187,7 @@ def frog_from_bytes(content: bytes) -> Dict[str, Any]:
         with open(path, "w+b") as f_tmp:
             f_tmp.write(content)
             f_tmp.close()
-        task = frog_task.delay(str(path), True)
+        task = frog_task.delay(str(path))
         return {"task_id": task.id}
 
     except Exception as e:
