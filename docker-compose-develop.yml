@@ -70,7 +70,7 @@ services:
   redis:
     restart: always
     container_name: frog_redis
-    image: redis:6-alpine
+    image: redis:7-alpine
 
   flower:
     restart: always
