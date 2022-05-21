@@ -53,7 +53,7 @@ https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-bui
 To enable docker BuildKit by default, set daemon configuration in /etc/docker/daemon.json feature to true and restart the daemon:
 ```
 { "features": { "buildkit": true } }
-``
+```
 
 
 ```
