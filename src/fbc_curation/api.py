@@ -121,7 +121,7 @@ def get_status_for_task(task_id: str) -> JSONResponse:
 async def get_combine_archive_for_task(task_id: str) -> FileResponse:
     """Get COMBINE archive (omex) for FROG task with `task_id`."""
 
-    omex_path = Path("/frog_data") / f"{task_id}.omex"
+    omex_path = Path("/frog_data") / f"FROG_{task_id}.omex"
 
     if not omex_path:
         raise HTTPException(
