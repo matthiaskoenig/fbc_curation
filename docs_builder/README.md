@@ -1,5 +1,10 @@
 # Documentation
 
+## readthedocs
+The documentation is hosted on readthedocs
+
+
+## updating documentation
 To create the documentation use
 ```bash
 (frog) cd docs_builder
