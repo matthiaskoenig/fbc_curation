@@ -1,6 +1,6 @@
 # Release information
 
-* update schema using `schema.py`
+* update schema using `src/fbc_curation/schema.py`
 * update documentation
 * make sure all tests run (`tox -p`)
 * update release notes in `release-notes`
