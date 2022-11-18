@@ -11,6 +11,7 @@ from pymetadata.omex import EntryFormat, Omex
 from fbc_curation import EXAMPLE_DIR
 from fbc_curation.frog import CuratorConstants, FrogReport
 
+import sys
 
 logger = log.get_logger(__name__)
 
@@ -60,6 +61,35 @@ class FrogComparison:
         logger.info(f"Reports in omex:\n{info}")
 
         return model_reports
+
+    @staticmethod
+    def read_reports_from_paths(report_path1: Path, report_path2: Path) -> Dict[str, Dict[str, FrogReport]]:
+        """Read all reports from JSON and TSVs.
+
+        Returns dictionary of {model_location: ...}
+
+        """
+        reports: List[FrogReport] = []
+        
+        for directory in [report_path1, report_path2]:
+            reports.append(FrogReport.from_tsv(directory))
+            reports.append(FrogReport.from_tsv(directory))
+        
+
+        # get model reports per model
+        model_reports: Dict[str, Dict[str, FrogReport]] = {}
+        for report in reports:
+            model_location = report.metadata.model_location
+            d = model_reports.get(model_location, {})
+            frog_id = report.metadata.frog_id
+            d[frog_id] = report
+            model_reports[model_location] = d
+
+        info = {loc: list(item.keys()) for loc, item in model_reports.items()}
+        logger.info(f"Reports:\n{info}")
+
+        return model_reports
+
 
     # TODO: implement comparison result and return results
 
@@ -161,11 +191,14 @@ class FrogComparison:
         console.rule(style="white")
         return bool(all_equal)
 
-
+import sys
 if __name__ == "__main__":
     # Read results and compare
-    omex_path = EXAMPLE_DIR / "frogs" / "e_coli_core_FROG.omex"
-    model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
+    #omex_path = EXAMPLE_DIR / "frogs" / "e_coli_core_FROG.omex"
+    #model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
+    model_reports = FrogComparison.read_reports_from_paths(
+        report_path1=Path(sys.argv[1]), 
+        report_path2=Path(sys.argv[2]))
     for model_location, reports in model_reports.items():
         print(model_location)
         FrogComparison.compare_reports(reports)
