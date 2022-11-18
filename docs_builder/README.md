@@ -1,10 +1,12 @@
 # Documentation
+The documentation is hosted on `readthedocs` at https://fbc-curation.readthedocs.io.
+The documentation is build using `sphinx` with the 
+[sphinx-rtd-theme](https://sphinx-rtd-theme.readthedocs.io/en/latest/configuring.html).
 
-## readthedocs
-The documentation is hosted on readthedocs
+## Update documentation
+First update the documentation 
 
 
-## updating documentation
 To create the documentation use
 ```bash
 (frog) cd docs_builder
@@ -13,5 +15,4 @@ To create the documentation use
 (frog) ./make_docs.sh
 ```
 
-The documentation is build using `sphinx` with the 
-[sphinx-rtd-theme](https://sphinx-rtd-theme.readthedocs.io/en/latest/configuring.html) 
+

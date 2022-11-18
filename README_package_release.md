@@ -1,6 +1,6 @@
 # Release information
 
-* update schema using `src/fbc_curation/schema.py`
+* update schema using `src/fbc_curation/schema.py` and update `docs_builder/schema.rst`
 * rerun examples `src/fbc_curation/examples.py`
 * update documentation (`README.rst` and `docs_builder`)
 * make sure all tests run (`tox -p`)
