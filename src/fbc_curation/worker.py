@@ -86,7 +86,7 @@ def frog_task(
             omex.add_entry(
                 entry_path=omex_path,
                 entry=ManifestEntry(
-                    location="./model.xml", format=EntryFormat.SBML, master=True
+                    location=f"./{omex_path.name}", format=EntryFormat.SBML, master=True
                 ),
             )
 
