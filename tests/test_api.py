@@ -1,12 +1,13 @@
 """Test API functionality."""
 from pathlib import Path
 
-from starlette.responses import JSONResponse
 from fastapi.testclient import TestClient
+from starlette.responses import JSONResponse
 
 from fbc_curation.api import api
 from fbc_curation.frog import FrogReport
-from fbc_curation.worker import run_frog, _frog_for_sbml
+from fbc_curation.worker import _frog_for_sbml
+
 
 client = TestClient(api)
 
@@ -40,8 +41,6 @@ def test_get_examples() -> None:
 
 def test_json_for_ecoli_frog(ecoli_sbml_path: Path) -> None:
     """Test JSON serialization of results."""
-    report: FrogReport = _frog_for_sbml(
-        source=ecoli_sbml_path, curator_key="cobrapy"
-    )
+    report: FrogReport = _frog_for_sbml(source=ecoli_sbml_path, curator_key="cobrapy")
     response = JSONResponse(report.dict())
     assert response
