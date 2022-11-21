@@ -98,14 +98,16 @@ class CuratorCameo(Curator):
 
         return FrogObjectives.from_df(df)
 
-    def fva(self) -> FrogFVA:
+    def fva(self, fraction_of_optimum: float = 1.0) -> FrogFVA:
         """Perform FVA."""
         model = self.read_model()
         result = fba(model)
-        fluxes = result.fluxes
+        objective_value = result.objective_value
         try:
             fva_result: FluxVariabilityResult = flux_variability_analysis(
-                model, reactions=model.reactions, fraction_of_optimum=1.0
+                model,
+                reactions=model.reactions,
+                fraction_of_optimum=fraction_of_optimum,
             )
             df = fva_result.data_frame
             df_out = pd.DataFrame(
@@ -113,11 +115,11 @@ class CuratorCameo(Curator):
                     "model": self.model_location,
                     "objective": self.objective_id,
                     "reaction": df.index,
-                    "flux": fluxes,
+                    "flux": objective_value * fraction_of_optimum,
                     "status": StatusCode.OPTIMAL,
                     "minimum": df.lower_bound,
                     "maximum": df.upper_bound,
-                    "fraction_optimum": 1.0,
+                    "fraction_optimum": fraction_of_optimum,
                 }
             )
         except Exception as e:
@@ -127,7 +129,7 @@ class CuratorCameo(Curator):
                     "model": self.model_location,
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
-                    "flux": fluxes,
+                    "flux": CuratorConstants.VALUE_INFEASIBLE,
                     "status": StatusCode.INFEASIBLE,
                     "minimum": CuratorConstants.VALUE_INFEASIBLE,
                     "maximum": CuratorConstants.VALUE_INFEASIBLE,

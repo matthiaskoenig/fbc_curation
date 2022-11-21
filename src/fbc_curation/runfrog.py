@@ -6,7 +6,7 @@ from pymetadata.console import console
 
 from fbc_curation import __citation__, __version__
 from fbc_curation.compare import FrogComparison
-from fbc_curation.worker import frog_task
+from fbc_curation.worker import run_frog
 
 
 logger = log.get_logger(__name__)
@@ -96,10 +96,9 @@ def main() -> None:
     #             f"valid reference path."
     #         )
 
-    frog_task(
-        source_path_str=str(input_path),
-        input_is_temporary=False,
-        omex_path_str=str(output_path),
+    run_frog(
+        source_path=input_path,
+        omex_path=output_path,
     )
 
     model_reports = FrogComparison.read_reports_from_omex(omex_path=output_path)

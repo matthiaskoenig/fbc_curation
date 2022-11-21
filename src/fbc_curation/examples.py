@@ -7,7 +7,7 @@ from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
 from fbc_curation import EXAMPLE_DIR
 from fbc_curation.compare import FrogComparison
-from fbc_curation.worker import frog_task
+from fbc_curation.worker import run_frog
 
 
 logger = log.get_logger(__name__)
@@ -50,10 +50,9 @@ def run_example(filename: str) -> Path:
     model_path = EXAMPLE_DIR / "models" / filename
     omex_path = EXAMPLE_DIR / "frogs" / f"{filename.split('.')[0]}_FROG.omex"
 
-    frog_task(
-        source_path_str=str(model_path),
-        input_is_temporary=False,
-        omex_path_str=str(omex_path),
+    run_frog(
+        source_path=model_path,
+        omex_path=omex_path,
     )
     model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
     for _, reports in model_reports.items():

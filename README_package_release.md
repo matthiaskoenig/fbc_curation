@@ -1,7 +1,8 @@
 # Release information
 
-* update schema using `schema.py`
-* update documentation
+* update schema using `src/fbc_curation/schema.py` and update `docs_builder/schema.rst`
+* rerun examples `src/fbc_curation/examples.py`
+* update documentation (`README.rst` and `docs_builder`)
 * make sure all tests run (`tox -p`)
 * update release notes in `release-notes`
 * bump version (`bumpversion [major|minor|patch]`)
@@ -11,6 +12,6 @@
 
 * test installation in virtualenv from pypi
 ```
-mkvirtualenv test --python=python3.9
-(test) pip install fbcgit s_curation
+mkvirtualenv test --python=python3.10
+(test) pip install fbc_curation
 ```

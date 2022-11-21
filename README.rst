@@ -106,7 +106,7 @@ After installation FROG analysis can be performed using the :code:`runfrog` comm
     
     ──────────────────────────────────────────────────────────────────────────────────
     🐸 FBC CURATION FROG ANALYSIS 🐸
-    Version 0.2.0 (https://github.com/matthiaskoenig/fbc_curation)
+    Version 0.2.1 (https://github.com/matthiaskoenig/fbc_curation)
     Citation https://doi.org/10.5281/zenodo.3708271
     ──────────────────────────────────────────────────────────────────────────────────
     Usage: runfrog [options]
@@ -130,7 +130,17 @@ FROG can be execute via the REST API `https://runfrog.de/docs <https://runfrog.d
 
 Python
 ------
-To run FROG programmatically via python see the following example
+To run FROG programmatically via python use the `run_frog` function
+
+
+.. code:: python
+
+    from fbc_curation.worker import run_frog
+    
+    run_frog(model_path, omex_path)
+
+
+Here a complete example with comparison of the FROG results
 
 .. code:: python
 
@@ -138,20 +148,19 @@ To run FROG programmatically via python see the following example
     from pathlib import Path
     
     from fbc_curation.compare import FrogComparison
-    from fbc_curation.worker import frog_task
+    from fbc_curation.worker import run_frog
     
     
     def create_frog(model_path: Path, omex_path: Path) -> None:
-        """Creates FROG report and writes OMEX for given model."""
+        """Create FROG report and writes OMEX for given model."""
     
-        # create FROG in OMEX
-        frog_task(
-            source_path_str=str(model_path),
-            input_is_temporary=False,
-            omex_path_str=str(omex_path),
+        # create FROG and write to COMBINE archive
+        run_frog(
+            source_path=model_path,
+            omex_path=omex_path,
         )
     
-        # compare FROG results in OMEX
+        # compare FROG results in created COMBINE archive
         model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
         for _, reports in model_reports.items():
             FrogComparison.compare_reports(reports=reports)
@@ -161,38 +170,42 @@ To run FROG programmatically via python see the following example
         base_path = Path(".")
         create_frog(
             model_path=base_path / "e_coli_core.xml",
-            omex_path=base_path / "e_coli_core_FROG.omex"
+            omex_path=base_path / "e_coli_core_FROG.omex",
         )
 
-The typically output of a FROG analyis is depicted below
+The typically output of a FROG analysis is depicted below
 
 .. code:: bash
 
-    INFO     Loading 'e_coli_core.xml'                                    worker.py:44
-    WARNING  Omex path 'e_coli_core.xml' is not a zip archive.             omex.py:487
-    ────────────────────────────── FROG CuratorCobrapy ───────────────────────────────
-    INFO     * metadata                                                 curator.py:107
-    INFO     * objectives                                               curator.py:110
-    Scaling...
-     A: min|aij| =  1.000e+00  max|aij| =  1.000e+00  ratio =  1.000e+00
-    Problem data seem to be well scaled
-    INFO     * fva                                                      curator.py:113
-    INFO     * reactiondeletions                                        curator.py:116
-    INFO     * genedeletions                                            curator.py:119
-    INFO     FROG created in '0.86' [s]                                  worker.py:144
-    ─────────────────────────────── FROG CuratorCameo ────────────────────────────────
-    INFO     * metadata                                                 curator.py:107
-    INFO     * objectives                                               curator.py:110
-    INFO     * fva                                                      curator.py:113
-    INFO     * reactiondeletions                                        curator.py:116
-    INFO     * genedeletions                                            curator.py:119
-    INFO     FROG created in '1.14' [s]                                  worker.py:144
-    ─────────────────────────────────── Write OMEX ───────────────────────────────────
-    WARNING  Existing omex is overwritten: 'e_coli_core_FROG.omex'         omex.py:667
-    INFO     Reports in omex:                                            compare.py:60
-             {'./model.xml': ['cobrapy', 'cobrapy_tsv', 'cameo',                      
-             'cameo_tsv']}                                                            
-    ─────────────────────────── Comparison of FROGReports ────────────────────────────
+    runfrog -i e_coli_core.xml -o e_coli_core.omex
+
+    ───────────────────────────────────────────────────────────────────────────────────────
+    🐸 FBC CURATION FROG ANALYSIS 🐸
+    Version 0.2.3 (https://github.com/matthiaskoenig/fbc_curation)
+    Citation https://doi.org/10.5281/zenodo.3708271
+    ───────────────────────────────────────────────────────────────────────────────────────
+    INFO     Loading 'e_coli_core.xml'                                         worker.py:70
+    WARNING  Omex path 'e_coli_core.xml' is not a zip archive.                  omex.py:500
+    ───────────────────────────────── FROG CuratorCobrapy ─────────────────────────────────
+    INFO     * metadata                                                      curator.py:107
+    INFO     * objectives                                                    curator.py:110
+    INFO     * fva                                                           curator.py:113
+    INFO     * reactiondeletions                                             curator.py:116
+    INFO     * genedeletions                                                 curator.py:119
+    INFO     FROG created in '0.977' [s]                                      worker.py:178
+    ────────────────────────────────── FROG CuratorCameo ──────────────────────────────────
+    INFO     * metadata                                                      curator.py:107
+    INFO     * objectives                                                    curator.py:110
+    INFO     * fva                                                           curator.py:113
+    INFO     * reactiondeletions                                             curator.py:116
+    INFO     * genedeletions                                                 curator.py:119
+    INFO     FROG created in '1.219' [s]                                      worker.py:178
+    ───────────────────────────────────── Write OMEX ──────────────────────────────────────
+    WARNING  Existing omex is overwritten: 'e_coli_core.omex'                   omex.py:680
+    INFO     Reports in omex:                                                 compare.py:60
+             {'./e_coli_core.xml': ['cobrapy', 'cobrapy_tsv', 'cameo',                     
+             'cameo_tsv']}                                                                 
+    ────────────────────────────── Comparison of FROGReports ──────────────────────────────
     --- objective ---
                  cobrapy  cobrapy_tsv  cameo  cameo_tsv
     cobrapy            1            1      1          1
@@ -217,9 +230,10 @@ The typically output of a FROG analyis is depicted below
     cobrapy_tsv        1            1      1          1
     cameo              1            1      1          1
     cameo_tsv          1            1      1          1
-    ──────────────────────────────────────────────────────────────────────────────────
+    ───────────────────────────────────────────────────────────────────────────────────────
     Equal: True
-    ──────────────────────────────────────────────────────────────────────────────────
+    ───────────────────────────────────────────────────────────────────────────────────────
+
 
 License
 =======

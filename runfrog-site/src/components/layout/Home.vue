@@ -1,20 +1,19 @@
 <template>
     <div>
-        <div class="p-grid">
-            <div class="p-col-12 p-lg-6">
+        <div class="grid">
+            <div class="col-12 col-offset-0 md:col-8 md:col-offset-2 ">
                 <div>
-                    <div class="p-m-3">
+                    <div class="m-3">
                         <submit-options />
                     </div>
                 </div>
-            </div>
-            <div class="p-col-12 p-lg-6">
-                <div class="p-m-3">
+                <div class="m-3">
                     <!--<about />-->
                     <examples />
                     <!--<task-queue />-->
                 </div>
             </div>
+
         </div>
     </div>
 </template>

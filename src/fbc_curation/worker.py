@@ -13,6 +13,7 @@ from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
+from fbc_curation import FROG_PATH_PREFIX
 from fbc_curation.curator import Curator
 from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
@@ -28,18 +29,43 @@ celery.conf.result_backend = os.environ.get(
     "CELERY_RESULT_BACKEND", "redis://localhost:6379"
 )
 
-# FIXME: ensure that files are removed from time to time
+# storage of data on server, only relevant for server
+FROG_STORAGE = "/frog_data"
+
+
+def run_frog(source_path: Path, omex_path: Path) -> None:
+    """Create FROG report for given SBML or OMEX source.
+
+    This function creates the FROG report and stores the results with the
+    model in a COMBINE archive.
+
+    :param source_path: Path for SBML model to create FROG for, or a COMBINE archive
+      (omex) which contains an SBML model.
+    :param omex_path: Path for COMBINE archive (omex) with FROG results. The content
+      of the file will be overwritten!
+    """
+    frog_task(
+        source_path_str=str(source_path),
+        omex_path_str=str(omex_path),
+    )
 
 
 @celery.task(name="frog_task")
 def frog_task(
     source_path_str: str,
-    input_is_temporary: bool = True,
+    input_is_temporary: bool = False,
     omex_path_str: Optional[str] = None,
+    frog_storage_path_str: str = FROG_STORAGE,
 ) -> Dict[str, Any]:
     """Run FROG task and create JSON for omex path.
 
-    Path can be either Omex or an SBML file.
+    This function should not be called directly. Use the `run_frog` function
+    instead. Path can be either Omex or an SBML file.
+
+    :param omex_path_str: Path to OMEX for results. In the celery context 'None' should
+        be used and the path is created from the task id.
+    :param input_is_temporary: Boolean flag if the input is temporary and will be
+        deleted after execution of FROG.
     """
     logger.info(f"Loading '{source_path_str}'")
 
@@ -60,7 +86,7 @@ def frog_task(
             omex.add_entry(
                 entry_path=omex_path,
                 entry=ManifestEntry(
-                    location="./model.xml", format=EntryFormat.SBML, master=True
+                    location=f"./{omex_path.name}", format=EntryFormat.SBML, master=True
                 ),
             )
 
@@ -75,12 +101,14 @@ def frog_task(
                 report_dict = {}
                 for curator_key in ["cobrapy", "cameo"]:
                     sbml_path: Path = omex.get_path(entry.location)
-                    report: FrogReport = frog_for_sbml(
+                    report: FrogReport = _frog_for_sbml(
                         source=sbml_path, curator_key=curator_key
                     )
 
                     # add FROG files to archive
-                    report.add_to_omex(omex, location_prefix=f"./FROG/{curator_key}/")
+                    report.add_to_omex(
+                        omex, location_prefix=f"./{FROG_PATH_PREFIX}/{curator_key}/"
+                    )
 
                     # add JSON to response
                     report_dict[curator_key] = report.dict()
@@ -89,10 +117,16 @@ def frog_task(
                 content["frogs"][entry.location] = report_dict
 
         # save archive for download
+        task_id = frog_task.request.id
+        if (not task_id) and (not omex_path_str):
+            raise ValueError(
+                "The 'omex_path_str' argument must be set (if not executed "
+                "within a celery Task)."
+            )
         if omex_path_str is None:
             # executed in task queue
-            task_id = frog_task.request.id
-            omex_path = Path("/frog_data") / f"{task_id}.omex"
+            # FIXME: ensure that files are removed from time to time
+            omex_path = Path(frog_storage_path_str) / f"FROG_{task_id}.omex"
         else:
             omex_path = Path(omex_path_str)
         console.rule("Write OMEX", style="white")
@@ -106,7 +140,7 @@ def frog_task(
     return content
 
 
-def frog_for_sbml(source: Union[Path, str, bytes], curator_key: str) -> FrogReport:
+def _frog_for_sbml(source: Union[Path, str, bytes], curator_key: str) -> FrogReport:
     """Create FROGReport for given SBML source.
 
     Source is either path to SBML file or SBML string.

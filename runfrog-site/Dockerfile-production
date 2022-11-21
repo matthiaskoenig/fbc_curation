@@ -1,5 +1,5 @@
 # build stage
-FROM node:14.11.0 as build-stage
+FROM node:14.19.3 as build-stage
 WORKDIR /app
 COPY package*.json /app/
 RUN --mount=type=cache,target=/app/.npm \
@@ -8,6 +8,9 @@ RUN --mount=type=cache,target=/app/.npm \
 
 COPY . /app/
 RUN npm run build
+
+
+
 
 # production stage
 FROM alpine:3.12 as production-stage

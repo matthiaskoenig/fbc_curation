@@ -12,7 +12,7 @@
                 </router-link>
 
                 <router-link to="/">
-                    <span class="frog p-mx-3" style="color: black">FROG Analysis</span>
+                    <span class="frog p-mx-3" style="color: black">Run FROG</span>
                 </router-link>
             </div>
         </template>
@@ -51,7 +51,12 @@ export default defineComponent({
                     url: "https://github.com/matthiaskoenig/fbc_curation/issues/new/choose",
                 },
                 {
-                    label: "Source",
+                    label: "Documentation",
+                    icon: "pi pi-fw pi-info-circle",
+                    url: "https://fbc-curation.readthedocs.io",
+                },
+                {
+                    label: "Code",
                     icon: "pi pi-fw pi-github",
                     url: "https://github.com/matthiaskoenig/fbc_curation",
                 },
