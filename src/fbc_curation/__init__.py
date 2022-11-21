@@ -1,7 +1,7 @@
 from pathlib import Path
 
 __software__ = "fbc_curation"
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __citation__ = "https://doi.org/10.5281/zenodo.3708271"
 
 
