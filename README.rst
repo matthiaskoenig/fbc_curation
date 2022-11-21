@@ -176,6 +176,7 @@ Here a complete example with comparison of the FROG results
 The typically output of a FROG analysis is depicted below
 
 .. code:: bash
+
     runfrog -i e_coli_core.xml -o e_coli_core.omex
 
     ───────────────────────────────────────────────────────────────────────────────────────
