@@ -1,15 +1,15 @@
 """Helper script for running multiple frog analysis."""
 from pathlib import Path
 
-from fbc_curation.worker import run_frog
 from pymetadata.omex import Omex
+
+from fbc_curation.worker import run_frog
 
 
 def runfrogs(models_dir: Path, extract_omex: bool = True):
-    """Run FROG reports for models.
-    """
+    """Run FROG reports for models."""
     print(models_dir)
-    models = models_dir.glob('*/*.xml')
+    models = models_dir.glob("*/*.xml")
     for model_path in models:
         omex_path = model_path.parent / f"{model_path.stem}_FROG.omex"
         print(f"{model_path} -> {omex_path}")

@@ -20,7 +20,7 @@ A concrete example of the metadata is shown below
   "frog_id": "cobrapy_tsv",
   "frog_software": {
     "name": "fbc_curation",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "url": "https://doi.org/10.5281/zenodo.3708271"
   },
   "curators": [],
@@ -50,23 +50,23 @@ For an example file see [`e_coli_core/01_objective.tsv`](https://raw.githubuserc
 
 ## 02 Flux variability analysis (FVA)
 The FVA file `02_fva.tsv` contains six columns with the headers `model`, `objective`, `reaction`, `flux`, `status`, `minimum` and `maximum`. The `model` column stores the SBML model filename. The `reaction` column stores the SBML reaction id. The `minimum` and `maximum` columns contain the minimum and maximum values of the FVA. The rows are sorted based on the SBML reaction identifier. The `status` contains the status of the optimization (`optimal` or `infeasible`). If the status is `infeasible` the value is empty.
-Flux variability is calculated with `fraction_optimum = 1.0`, i.e. the objective of the model is set to its maximum in secondary optimization (percent of optimum is 100%). The `flux` column stores the reference flux.
+Flux variability is calculated with `fraction_optimum = 1.0`, i.e. the objective of the model is set to its maximum in secondary optimization (percent of optimum is 100%). The `flux` column stores the reference flux through the objective reaction which is `objective_value * fraction_optimum`. In case of `fraction_optimum = 1.0` this is identical to the `value` in `01_objective.tsv
 ```
 model	objective	reaction	flux	status	minimum	maximum	fraction_optimum
-./e_coli_core.xml	obj	R_ACALD	0.0	optimal	1.1348525979450152e-14	0.0	1.0
-./e_coli_core.xml	obj	R_ACALDt	0.0	optimal	3.662182303830574e-15	0.0	1.0
-./e_coli_core.xml	obj	R_ACKr	1.0297466822596379e-15	optimal	0.0	0.0	1.0
-./e_coli_core.xml	obj	R_ACONTa	6.007249575350356	optimal	6.007249575350388	6.007249575350355	1.0
-./e_coli_core.xml	obj	R_ACONTb	6.007249575350356	optimal	6.007249575350388	6.007249575350264	1.0
-./e_coli_core.xml	obj	R_ACt2r	1.0297466822596379e-15	optimal	1.772023695401875e-14	0.0	1.0
-./e_coli_core.xml	obj	R_ADK1	0.0	optimal	0.0	-3.4583850794047745e-14	1.0
-./e_coli_core.xml	obj	R_AKGDH	5.064375661482119	optimal	5.064375661482467	5.0643756614820665	1.0
-./e_coli_core.xml	obj	R_AKGt2r	0.0	optimal	0.0	0.0	1.0
-./e_coli_core.xml	obj	R_ALCD2x	0.0	optimal	9.884200046617872e-15	0.0	1.0
-./e_coli_core.xml	obj	R_ATPM	8.39	optimal	8.39	8.389999999999924	1.0
-./e_coli_core.xml	obj	R_ATPS4r	45.51400977451756	optimal	45.51400977451763	45.514009774517376	1.0
+./e_coli_core.xml	obj	R_ACALD	0.8739215069684295	optimal	1.1348525979450152e-14	0.0	1.0
+./e_coli_core.xml	obj	R_ACALDt	0.8739215069684295	optimal	3.662182303830574e-15	0.0	1.0
+./e_coli_core.xml	obj	R_ACKr	0.8739215069684295	optimal	0.0	0.0	1.0
+./e_coli_core.xml	obj	R_ACONTa	0.8739215069684295	optimal	6.007249575350388	6.007249575350355	1.0
+./e_coli_core.xml	obj	R_ACONTb	0.8739215069684295	optimal	6.007249575350388	6.007249575350264	1.0
+./e_coli_core.xml	obj	R_ACt2r	0.8739215069684295	optimal	1.772023695401875e-14	0.0	1.0
+./e_coli_core.xml	obj	R_ADK1	0.8739215069684295	optimal	0.0	-3.4583850794047745e-14	1.0
+./e_coli_core.xml	obj	R_AKGDH	0.8739215069684295	optimal	5.064375661482467	5.0643756614820665	1.0
+./e_coli_core.xml	obj	R_AKGt2r	0.8739215069684295	optimal	0.0	0.0	1.0
+./e_coli_core.xml	obj	R_ALCD2x	0.8739215069684295	optimal	9.884200046617872e-15	0.0	1.0
+./e_coli_core.xml	obj	R_ATPM	0.8739215069684295	optimal	8.39	8.389999999999924	1.0
+./e_coli_core.xml	obj	R_ATPS4r	0.8739215069684295	optimal	45.51400977451763	45.514009774517376	1.0
 ./e_coli_core.xml	obj	R_BIOMASS_Ecoli_core_w_GAM	0.8739215069684295	optimal	0.873921506968431	0.8739215069684305	1.0
-./e_coli_core.xml	obj	R_CO2t	-22.809833310205004	optimal	-22.80983331020497	-22.80983331020505	1.0
+./e_coli_core.xml	obj	R_CO2t	0.8739215069684295	optimal	-22.80983331020497	-22.80983331020505	1.0
 ...
 ```
 See for instance: [`e_coli_core/02_fva.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/results/e_coli_core/cobrapy/02_fva.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA](https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA)
