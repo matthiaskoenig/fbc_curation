@@ -63,18 +63,16 @@ class FrogComparison:
         return model_reports
 
     @staticmethod
-    def read_reports_from_paths(report_path1: Path, report_path2: Path) -> Dict[str, Dict[str, FrogReport]]:
-        """Read all reports from JSON and TSVs.
+    def read_reports_from_paths(report_paths: List[Path]) -> Dict[str, Dict[str, FrogReport]]:
+        """Read all reports from TSVs.
 
         Returns dictionary of {model_location: ...}
 
         """
         reports: List[FrogReport] = []
         
-        for directory in [report_path1, report_path2]:
-            reports.append(FrogReport.from_tsv(directory))
-            reports.append(FrogReport.from_tsv(directory))
-        
+        for directory in report_paths:
+            reports.append(FrogReport.from_tsv(directory))        
 
         # get model reports per model
         model_reports: Dict[str, Dict[str, FrogReport]] = {}
@@ -194,11 +192,17 @@ class FrogComparison:
 import sys
 if __name__ == "__main__":
     # Read results and compare
-    #omex_path = EXAMPLE_DIR / "frogs" / "e_coli_core_FROG.omex"
-    #model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
-    model_reports = FrogComparison.read_reports_from_paths(
-        report_path1=Path(sys.argv[1]), 
-        report_path2=Path(sys.argv[2]))
+    if len(sys.argv) < 3:
+        # if no arg is given behave as before
+        omex_path = EXAMPLE_DIR / "frogs" / "e_coli_core_FROG.omex"
+        model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
+    else: 
+        # otherwise build reports from given paths
+        model_reports = FrogComparison.read_reports_from_paths(
+            [Path(p) for p in sys.argv[1:]]
+        )
+
+    # then process as before
     for model_location, reports in model_reports.items():
         print(model_location)
         FrogComparison.compare_reports(reports)
