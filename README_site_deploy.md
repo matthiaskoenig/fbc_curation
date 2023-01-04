@@ -42,11 +42,14 @@ sudo service nginx start
 sudo service nginx status
 ```
 Setup webroot for renewal (check)
-
-#### Certificate renewal
 ```
 sudo mkdir -p /usr/share/nginx/letsencrypt
 sudo certbot certonly --webroot
+```
+#### Certificate renewal
+```
+sudo certbot certonly --webroot
+runfrog.de, www.runfrog.de
 ```
 
 ## Setup server
