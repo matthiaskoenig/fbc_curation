@@ -48,8 +48,7 @@ sudo certbot certonly --webroot
 ```
 #### Certificate renewal
 ```
-sudo certbot certonly --webroot
-runfrog.de, www.runfrog.de
+sudo certbot certonly --webroot --webroot-path /usr/share/nginx/letsencrypt -d runfrog.de -d www.runfrog.de
 ```
 
 ## Setup server
