@@ -159,14 +159,8 @@ class Tool(BaseModel):
 class FrogMetaData(BaseModel):
     """FROG metadata."""
 
-    model_location: str = Field(
-        alias="model.location",
-        description="Location of the model in the COMBINE archive for which the FROG "
-        "analysis was performed.",
-    )
-    model_md5: Optional[str] = Field(
-        alias="model.md5",
-        description="MD5 hash of model",
+    frog_date: str = Field(
+        description="Date of FROG report creation."
     )
     frog_id: str = Field(
         description="Id for the FROG analysis. All frog_ids within an archive must be "
@@ -175,6 +169,22 @@ class FrogMetaData(BaseModel):
     frog_software: Tool = Field(
         alias="frog.software",
         description="Software used to run FROG (e.g. 'fbc_curation'",
+    )
+    model_location: str = Field(
+        description="Location of the model in the COMBINE archive for which the FROG "
+        "analysis was performed.",
+    )
+    model_filename: str = Field(
+        description="Filename of the model file as it appears in FROG report datafiles.",
+    )
+    model_md5: str = Field(
+        description="MD5 hash of model",
+    )
+    model_sha256: Optional[str] = Field(
+        description="SHA256 hash of model",
+    )
+    frog_version: str = Field(
+        description="Version of the FROG specification used."
     )
     curators: List[Creator] = Field(
         alias="frog.curators", description="Curators which executed the FROG analysis."
@@ -185,7 +195,7 @@ class FrogMetaData(BaseModel):
     solver: Tool = Field(
         description="Solver used to solve LP problem (e.g. 'CPLEX', 'GUROBI', 'GLPK')."
     )
-    environment: Optional[str] = Field(
+    environment: str = Field(
         description="Execution environment such as Linux."
     )
 
@@ -205,6 +215,15 @@ class FrogMetaData(BaseModel):
             data = f_check.read()
             # pipe contents of the file through
             return hashlib.md5(data).hexdigest()
+
+    @staticmethod
+    def sha256_for_path(path: Path) -> str:
+        """Calculate SHA256 of file content."""
+
+        # same as for MD5
+        with open(path, "rb") as f_check:
+            data = f_check.read()
+            return hashlib.sha256(data).hexdigest()
 
 
 class FrogObjectives(BaseModel):

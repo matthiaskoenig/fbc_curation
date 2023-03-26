@@ -113,7 +113,7 @@ class FrogComparison:
                     ]:
                         fields = ["value"]
                     elif key == CuratorConstants.FVA_KEY:
-                        fields = ["flux", "minimum", "maximum"]
+                        fields = ["minimum", "maximum"]
 
                     for field in fields:
                         if field in df1.columns and field in df2.columns:
@@ -125,6 +125,12 @@ class FrogComparison:
                                 equal_nan=True,
                             )
                             equal = equal and equal_field
+
+                    if key == CuratorConstants.FVA_KEY:
+                        # flux field is checked specially
+                        f = "flux"
+                        if f in df1.columns and f in df2.columns:
+                            pass # TODO
 
                     mat_equal[p, q] = int(equal)
 

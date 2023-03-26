@@ -1,5 +1,6 @@
 """Base class for all FBC curators."""
 import os
+import time
 import platform
 from collections import defaultdict, namedtuple
 from pathlib import Path
@@ -65,8 +66,12 @@ class Curator:
         """Create metadata."""
         md = FrogMetaData(
             model_location=self.model_location,
+            model_filename=os.path.basename(self.model_location),
             model_md5=FrogMetaData.md5_for_path(self.model_path),
+            model_sha256=FrogMetaData.sha256_for_path(self.model_path),
+            frog_version="0.1.3",
             frog_id=self.frog_id,
+            frog_date=time.strftime("%Y-%m-%d"),
             frog_software=Tool(
                 name=__software__,
                 version=__version__,
