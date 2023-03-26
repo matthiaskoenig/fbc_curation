@@ -94,7 +94,7 @@ class CuratorCobrapy(Curator):
             )
         return FrogObjectives.from_df(df)
 
-    def fva(self, fraction_of_optimum: float = 1.0) -> FrogFVA:
+    def fva(self) -> FrogFVA:
         """Create DataFrame file with minimum and maximum value of FVA.
 
         Runs flux variability analysis.
@@ -102,21 +102,21 @@ class CuratorCobrapy(Curator):
         """
         model = self.read_model()
         solution = model.optimize()
-        objective_value = solution.objective_value
+        fluxes = solution.fluxes
         try:
             df = flux_variability_analysis(
-                model, model.reactions, fraction_of_optimum=fraction_of_optimum
+                model, model.reactions, fraction_of_optimum=1.0
             )
             df_out = pd.DataFrame(
                 {
                     "model": self.model_location,
                     "objective": self.objective_id,
                     "reaction": df.index,
-                    "flux": objective_value * fraction_of_optimum,
+                    "flux": fluxes,
                     "status": StatusCode.OPTIMAL,
                     "minimum": df.minimum,
                     "maximum": df.maximum,
-                    "fraction_optimum": fraction_of_optimum,
+                    "fraction_optimum": 1.0,
                 }
             )
         except OptimizationError as e:
@@ -126,7 +126,7 @@ class CuratorCobrapy(Curator):
                     "model": self.model_location,
                     "objective": self.objective_id,
                     "reaction": [r.id for r in model.reactions],
-                    "flux": CuratorConstants.VALUE_INFEASIBLE,
+                    "flux": fluxes,
                     "status": StatusCode.INFEASIBLE,
                     "minimum": CuratorConstants.VALUE_INFEASIBLE,
                     "maximum": CuratorConstants.VALUE_INFEASIBLE,
