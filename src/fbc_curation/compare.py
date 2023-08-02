@@ -11,6 +11,7 @@ from pymetadata.omex import EntryFormat, Omex
 from fbc_curation import EXAMPLE_DIR
 from fbc_curation.frog import CuratorConstants, FrogReport
 
+import sys
 
 logger = log.get_logger(__name__)
 
@@ -60,6 +61,33 @@ class FrogComparison:
         logger.info(f"Reports in omex:\n{info}")
 
         return model_reports
+
+    @staticmethod
+    def read_reports_from_paths(report_paths: List[Path]) -> Dict[str, Dict[str, FrogReport]]:
+        """Read all reports from TSVs.
+
+        Returns dictionary of {model_location: ...}
+
+        """
+        reports: List[FrogReport] = []
+        
+        for directory in report_paths:
+            reports.append(FrogReport.from_tsv(directory))        
+
+        # get model reports per model
+        model_reports: Dict[str, Dict[str, FrogReport]] = {}
+        for report in reports:
+            model_location = report.metadata.model_location
+            d = model_reports.get(model_location, {})
+            frog_id = report.metadata.frog_id
+            d[frog_id] = report
+            model_reports[model_location] = d
+
+        info = {loc: list(item.keys()) for loc, item in model_reports.items()}
+        logger.info(f"Reports:\n{info}")
+
+        return model_reports
+
 
     # TODO: implement comparison result and return results
 
@@ -161,11 +189,20 @@ class FrogComparison:
         console.rule(style="white")
         return bool(all_equal)
 
-
+import sys
 if __name__ == "__main__":
     # Read results and compare
-    omex_path = EXAMPLE_DIR / "frogs" / "e_coli_core_FROG.omex"
-    model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
+    if len(sys.argv) < 3:
+        # if no arg is given behave as before
+        omex_path = EXAMPLE_DIR / "frogs" / "e_coli_core_FROG.omex"
+        model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
+    else: 
+        # otherwise build reports from given paths
+        model_reports = FrogComparison.read_reports_from_paths(
+            [Path(p) for p in sys.argv[1:]]
+        )
+
+    # then process as before
     for model_location, reports in model_reports.items():
         print(model_location)
         FrogComparison.compare_reports(reports)
