@@ -1,17 +1,14 @@
 from pathlib import Path
-from pprint import pprint
 
 import bottle as bottle
 import pandas as pd
 import json
-import re
 
 import altair as alt
 
 alt.renderers.enable("mimetype")
 
 from matplotlib import pyplot as plt
-import seaborn as sns
 from matplotlib.gridspec import GridSpec
 from matplotlib.lines import Line2D
 
@@ -141,7 +138,7 @@ def hello_world():
 # bottle
 
 if __name__ == "__main__":
-    from livereload import Server, shell
+    from livereload import Server
 
     results_dir = Path(__file__).parent.parent / "results1"
     df = process_jsons(results_dir=results_dir)

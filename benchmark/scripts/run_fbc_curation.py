@@ -11,7 +11,6 @@ e.g. you can use snakemake.input[0] to access the first input file of above rule
 
 
 # redirect standard output
-import sys
 import traceback
 
 import json

@@ -38,3 +38,10 @@ Run all tests in parallel
 ```bash
 tox run-parallel
 ```
+
+# Setup pre-commit
+```bash
+uv pip install pre-commit
+pre-commit install
+pre-commit run
+```
