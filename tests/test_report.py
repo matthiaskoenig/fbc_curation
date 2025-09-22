@@ -59,7 +59,7 @@ def test_fva_df() -> None:
 def test_gene_deletion_df() -> None:
     """Check gene deletion."""
     dfs: Dict[str, pd.DataFrame] = report.to_dfs()
-    df = dfs[CuratorConstants.GENEDELETIONS_KEY]
+    df = dfs[CuratorConstants.GENE_DELETION_KEY]
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
@@ -74,7 +74,7 @@ def test_gene_deletion_df() -> None:
 def test_reaction_deletion_df(tmp_path: Path) -> None:
     """Check reaction deletion."""
     dfs: Dict[str, pd.DataFrame] = report.to_dfs()
-    df: pd.DataFrame = dfs[CuratorConstants.REACTIONDELETIONS_KEY]
+    df: pd.DataFrame = dfs[CuratorConstants.REACTION_DELETION_KEY]
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 

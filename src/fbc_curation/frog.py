@@ -11,7 +11,11 @@ import numpy as np
 import orjson
 import pandas as pd
 from pydantic import BaseModel as PydanticBaseModel
-from pydantic import Field, ValidationError, validator
+from pydantic import (
+    Field,
+    ValidationError,
+    model_validator,
+)
 from pymetadata import log
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
@@ -24,8 +28,7 @@ logger = log.get_logger(__name__)
 class BaseModel(PydanticBaseModel):
     """Base model."""
 
-    # pass
-    @validator("*")
+    @model_validator(mode="before")
     def change_nan_to_none(cls, v: Any, field: Any) -> Any:
         """Replace NaN to None values."""
         if (field.outer_type_ is float) and (v is not None) and (np.isnan(v)):
@@ -40,26 +43,26 @@ class CuratorConstants:
     METADATA_KEY = "metadata"
     OBJECTIVE_KEY = "objective"
     FVA_KEY = "fva"
-    GENEDELETIONS_KEY = "gene_deletion"
-    REACTIONDELETIONS_KEY = "reaction_deletion"
+    GENE_DELETION_KEY = "gene_deletion"
+    REACTION_DELETION_KEY = "reaction_deletion"
 
     # output filenames
     FROG_FILENAME = "frog.json"
     METADATA_FILENAME = "metadata.json"
     OBJECTIVE_FILENAME = f"01_{OBJECTIVE_KEY}.tsv"
     FVA_FILENAME = f"02_{FVA_KEY}.tsv"
-    GENEDELETIONS_FILENAME = f"03_{GENEDELETIONS_KEY}.tsv"
-    REACTIONDELETIONS_FILENAME = f"04_{REACTIONDELETIONS_KEY}.tsv"
+    GENE_DELETION_FILENAME = f"03_{GENE_DELETION_KEY}.tsv"
+    REACTION_DELETION_FILENAME = f"04_{REACTION_DELETION_KEY}.tsv"
 
     # special settings for comparison
-    VALUE_INFEASIBLE = np.NaN
+    VALUE_INFEASIBLE = np.nan
 
 
 class StatusCode(str, Enum):
     """Status code for simulation results."""
 
-    OPTIMAL: str = "optimal"
-    INFEASIBLE: str = "infeasible"
+    OPTIMAL = "optimal"
+    INFEASIBLE = "infeasible"
 
 
 class FrogObjective(BaseModel):
@@ -234,7 +237,7 @@ class FrogObjectives(BaseModel):
     def to_df(self) -> pd.DataFrame:
         """Create objectives DataFrame."""
 
-        d: Dict[str, Any] = self.dict()
+        d: Dict[str, Any] = self.model_dump()
         item = list(d.values())[0]
         df = pd.DataFrame(item)
         if len(df) > 0:
@@ -273,7 +276,7 @@ class FrogFVA(BaseModel):
     def to_df(self) -> pd.DataFrame:
         """Create fva DataFrame."""
 
-        d: Dict[str, Any] = self.dict()
+        d: Dict[str, Any] = self.model_dump()
         item = list(d.values())[0]
         df = pd.DataFrame(item)
         if len(df) > 0:
@@ -314,7 +317,7 @@ class FrogReactionDeletions(BaseModel):
     def to_df(self) -> pd.DataFrame:
         """Create reaction deletions DataFrame."""
 
-        d: Dict[str, Any] = self.dict()
+        d: Dict[str, Any] = self.model_dump()
         item = list(d.values())[0]
         df = pd.DataFrame(item)
         if len(df) > 0:
@@ -354,7 +357,7 @@ class FrogGeneDeletions(BaseModel):
     def to_df(self) -> pd.DataFrame:
         """Create gene deletions DataFrame."""
 
-        d: Dict[str, Any] = self.dict()
+        d: Dict[str, Any] = self.model_dump()
         item = list(d.values())[0]
         df = pd.DataFrame(item)
         if len(df) > 0:
@@ -390,7 +393,7 @@ class FrogReport(BaseModel):
         # write FROG
         logger.debug(f"{path}")
         with open(path, "w+b") as f_json:
-            json_bytes = orjson.dumps(self.dict(), option=orjson.OPT_INDENT_2)
+            json_bytes = orjson.dumps(self.model_dump(), option=orjson.OPT_INDENT_2)
             f_json.write(json_bytes)
 
     @staticmethod
@@ -412,8 +415,8 @@ class FrogReport(BaseModel):
         return {
             CuratorConstants.OBJECTIVE_KEY: self.objectives.to_df(),
             CuratorConstants.FVA_KEY: self.fva.to_df(),
-            CuratorConstants.GENEDELETIONS_KEY: self.gene_deletions.to_df(),
-            CuratorConstants.REACTIONDELETIONS_KEY: self.reaction_deletions.to_df(),
+            CuratorConstants.GENE_DELETION_KEY: self.gene_deletions.to_df(),
+            CuratorConstants.REACTION_DELETION_KEY: self.reaction_deletions.to_df(),
         }
 
     def to_tsv(self, output_dir: Path) -> None:
@@ -426,9 +429,9 @@ class FrogReport(BaseModel):
         logger.debug(f"{output_dir / CuratorConstants.METADATA_FILENAME}")
         with open(output_dir / CuratorConstants.METADATA_FILENAME, "w") as f_json:
             # make a copy
-            metadata = FrogMetaData(**self.metadata.dict())
+            metadata = FrogMetaData(**self.metadata.model_dump())
             metadata.frog_id = f"{metadata.frog_id}_tsv"
-            f_json.write(metadata.json(indent=2))
+            f_json.write(metadata.model_dump_json(indent=2))
 
         # write reference files (TSV files)
         dfs_dict = self.to_dfs()
@@ -437,10 +440,12 @@ class FrogReport(BaseModel):
                 filename = CuratorConstants.OBJECTIVE_FILENAME
             elif key == CuratorConstants.FVA_KEY:
                 filename = CuratorConstants.FVA_FILENAME
-            elif key == CuratorConstants.GENEDELETIONS_KEY:
-                filename = CuratorConstants.GENEDELETIONS_FILENAME
-            elif key == CuratorConstants.REACTIONDELETIONS_KEY:
-                filename = CuratorConstants.REACTIONDELETIONS_FILENAME
+            elif key == CuratorConstants.GENE_DELETION_KEY:
+                filename = CuratorConstants.GENE_DELETION_FILENAME
+            elif key == CuratorConstants.REACTION_DELETION_KEY:
+                filename = CuratorConstants.REACTION_DELETION_FILENAME
+            else:
+                raise KeyError(f"Unsupported file: {key}")
 
             df.to_csv(output_dir / filename, sep="\t", index=False, na_rep="NaN")
 
@@ -451,8 +456,8 @@ class FrogReport(BaseModel):
         path_metadata = path / CuratorConstants.METADATA_FILENAME
         path_objective = path / CuratorConstants.OBJECTIVE_FILENAME
         path_fva = path / CuratorConstants.FVA_FILENAME
-        path_reaction_deletion = path / CuratorConstants.REACTIONDELETIONS_FILENAME
-        path_gene_deletion = path / CuratorConstants.GENEDELETIONS_FILENAME
+        path_reaction_deletion = path / CuratorConstants.REACTION_DELETION_FILENAME
+        path_gene_deletion = path / CuratorConstants.GENE_DELETION_FILENAME
         df_dict: Dict[str, pd.DataFrame] = dict()
 
         with open(path_metadata, "r+b") as f_json:
@@ -462,8 +467,8 @@ class FrogReport(BaseModel):
         for key, path in {
             CuratorConstants.OBJECTIVE_KEY: path_objective,
             CuratorConstants.FVA_KEY: path_fva,
-            CuratorConstants.REACTIONDELETIONS_KEY: path_reaction_deletion,
-            CuratorConstants.GENEDELETIONS_KEY: path_gene_deletion,
+            CuratorConstants.REACTION_DELETION_KEY: path_reaction_deletion,
+            CuratorConstants.GENE_DELETION_KEY: path_gene_deletion,
         }.items():
             if not path.exists():
                 logger.error(f"Required file for fbc curation does not exist: '{path}'")
@@ -478,10 +483,10 @@ class FrogReport(BaseModel):
             objectives=FrogObjectives.from_df(df_dict[CuratorConstants.OBJECTIVE_KEY]),
             fva=FrogFVA.from_df(df_dict[CuratorConstants.FVA_KEY]),
             reaction_deletions=FrogReactionDeletions.from_df(
-                df_dict[CuratorConstants.REACTIONDELETIONS_KEY]
+                df_dict[CuratorConstants.REACTION_DELETION_KEY]
             ),
             gene_deletions=FrogGeneDeletions.from_df(
-                df_dict[CuratorConstants.GENEDELETIONS_KEY]
+                df_dict[CuratorConstants.GENE_DELETION_KEY]
             ),
         )
         return report
@@ -522,11 +527,11 @@ class FrogReport(BaseModel):
                 ),
                 (CuratorConstants.FVA_FILENAME, EntryFormat.FROG_FVA_V1),
                 (
-                    CuratorConstants.REACTIONDELETIONS_FILENAME,
+                    CuratorConstants.REACTION_DELETION_FILENAME,
                     EntryFormat.FROG_REACTIONDELETION_V1,
                 ),
                 (
-                    CuratorConstants.GENEDELETIONS_FILENAME,
+                    CuratorConstants.GENE_DELETION_FILENAME,
                     EntryFormat.FROG_GENEDELETION_V1,
                 ),
             ]:

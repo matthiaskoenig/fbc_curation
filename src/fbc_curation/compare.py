@@ -92,8 +92,8 @@ class FrogComparison:
         for key in [
             CuratorConstants.OBJECTIVE_KEY,
             CuratorConstants.FVA_KEY,
-            CuratorConstants.REACTIONDELETIONS_KEY,
-            CuratorConstants.GENEDELETIONS_KEY,
+            CuratorConstants.REACTION_DELETION_KEY,
+            CuratorConstants.GENE_DELETION_KEY,
         ]:
             mat_equal = np.zeros(shape=(num_reports, num_reports))
 
@@ -108,8 +108,8 @@ class FrogComparison:
                     equal = True
                     if key in [
                         CuratorConstants.OBJECTIVE_KEY,
-                        CuratorConstants.REACTIONDELETIONS_KEY,
-                        CuratorConstants.GENEDELETIONS_KEY,
+                        CuratorConstants.REACTION_DELETION_KEY,
+                        CuratorConstants.GENE_DELETION_KEY,
                     ]:
                         fields = ["value"]
                     elif key == CuratorConstants.FVA_KEY:

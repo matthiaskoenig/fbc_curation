@@ -19,5 +19,5 @@ def test_e_coli_core(tmp_path: Path, curator_key: str) -> None:
         base_path = tmp_path / FROG_PATH_PREFIX / curator_key
         assert Path.exists(base_path / CuratorConstants.OBJECTIVE_FILENAME)
         assert Path.exists(base_path / CuratorConstants.FVA_FILENAME)
-        assert Path.exists(base_path / CuratorConstants.REACTIONDELETIONS_FILENAME)
-        assert Path.exists(base_path / CuratorConstants.GENEDELETIONS_FILENAME)
+        assert Path.exists(base_path / CuratorConstants.REACTION_DELETION_FILENAME)
+        assert Path.exists(base_path / CuratorConstants.GENE_DELETION_FILENAME)
