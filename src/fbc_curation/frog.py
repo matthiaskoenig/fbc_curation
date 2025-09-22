@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import orjson
 import pandas as pd
-from pydantic import BaseModel as PydanticBaseModel
+from pydantic import BaseModel as PydanticBaseModel, ConfigDict
 from pydantic import (
     Field,
     ValidationError,
@@ -27,13 +27,20 @@ logger = log.get_logger(__name__)
 
 class BaseModel(PydanticBaseModel):
     """Base model."""
+    model_config = ConfigDict(
+        use_enum_values=True,
+    )
 
-    @model_validator(mode="before")
-    def change_nan_to_none(cls, v: Any, field: Any) -> Any:
-        """Replace NaN to None values."""
-        if (field.outer_type_ is float) and (v is not None) and (np.isnan(v)):
-            return None
-        return v
+    # FIXME: handle NaN for serialization
+    # @model_validator(mode="before")
+    # @classmethod
+    # def change_nan_to_none(cls, values: dict[str, Any]) -> dict[str, Any]:
+    #     """Replace NaN with None for all fields."""
+    #     for k, v in values.items():
+    #         if v is not None and isinstance(v, (float, np.floating)) and np.isnan(v):
+    #             values[k] = None
+    #     return values
+
 
 
 class CuratorConstants:
@@ -73,11 +80,6 @@ class FrogObjective(BaseModel):
     status: StatusCode
     value: float
 
-    class Config:
-        """Pydantic configuration FrogObjective."""
-
-        use_enum_values = True
-
 
 class FrogFVASingle(BaseModel):
     """Frog FVA."""
@@ -91,11 +93,6 @@ class FrogFVASingle(BaseModel):
     maximum: Optional[float]
     fraction_optimum: float
 
-    class Config:
-        """Pydantic configuration FrogFVA."""
-
-        use_enum_values = True
-
 
 class FrogReactionDeletion(BaseModel):
     """Frog reaction deletion."""
@@ -105,11 +102,6 @@ class FrogReactionDeletion(BaseModel):
     reaction: str
     status: StatusCode
     value: Optional[float]
-
-    class Config:
-        """Pydantic configuration FrogGeneDeletion."""
-
-        use_enum_values = True
 
 
 class FrogGeneDeletion(BaseModel):
@@ -121,11 +113,6 @@ class FrogGeneDeletion(BaseModel):
     status: StatusCode
     value: Optional[float]
 
-    class Config:
-        """Pydantic configuration FrogGeneDeletion."""
-
-        use_enum_values = True
-
 
 class Creator(BaseModel):
     """Creator/curator in ModelHistory and other COMBINE formats.
@@ -135,15 +122,10 @@ class Creator(BaseModel):
 
     familyName: str
     givenName: str
-    email: Optional[str]
-    organization: Optional[str]
-    site: Optional[str]
-    orcid: Optional[str]
-
-    class Config:
-        """Pydantic configuration Creator."""
-
-        use_enum_values = True
+    email: Optional[str] = None
+    organization: Optional[str] = None
+    site: Optional[str] = None
+    orcid: Optional[str] = None
 
 
 class Tool(BaseModel):
@@ -153,14 +135,13 @@ class Tool(BaseModel):
     version: Optional[str] = Field(description="Version of tool/software/library.")
     url: Optional[str] = Field(description="URL of tool/software/library.")
 
-    class Config:
-        """Pydantic configuration FrogFVA."""
-
-        use_enum_values = True
-
 
 class FrogMetaData(BaseModel):
     """FROG metadata."""
+    model_config = ConfigDict(
+        use_enum_values=True,
+        validate_by_name=True,
+    )
 
     model_location: str = Field(
         alias="model.location",
@@ -177,13 +158,13 @@ class FrogMetaData(BaseModel):
     )
     frog_software: Tool = Field(
         alias="frog.software",
-        description="Software used to run FROG (e.g. 'fbc_curation'",
+        description="Software used to run FROG (e.g. 'fbc_curation')",
     )
     curators: List[Creator] = Field(
         alias="frog.curators", description="Curators which executed the FROG analysis."
     )
     software: Tool = Field(
-        description="Software used to run FBC (e.g. 'cameo', 'COBRA', 'cobrapy'"
+        description="Software used to run FBC (e.g. 'COBRA', 'cobrapy')."
     )
     solver: Tool = Field(
         description="Solver used to solve LP problem (e.g. 'CPLEX', 'GUROBI', 'GLPK')."
@@ -191,12 +172,6 @@ class FrogMetaData(BaseModel):
     environment: Optional[str] = Field(
         description="Execution environment such as Linux."
     )
-
-    class Config:
-        """Pydantic configuration FrogMetaData."""
-
-        allow_population_by_field_name = True
-        use_enum_values = True
 
     @staticmethod
     def md5_for_path(path: Path) -> str:
@@ -214,11 +189,6 @@ class FrogObjectives(BaseModel):
     """Definition of FROG Objectives."""
 
     objectives: List[FrogObjective]
-
-    class Config:
-        """Pydantic configuration FrogObjectives."""
-
-        use_enum_values = True
 
     @staticmethod
     def from_df(df: pd.DataFrame) -> FrogObjectives:
@@ -255,10 +225,6 @@ class FrogFVA(BaseModel):
 
     fva: List[FrogFVASingle]
 
-    class Config:
-        """Pydantic configuration FrogFVA."""
-
-        use_enum_values = True
 
     @staticmethod
     def from_df(df: pd.DataFrame) -> FrogFVA:
@@ -295,11 +261,6 @@ class FrogReactionDeletions(BaseModel):
 
     deletions: List[FrogReactionDeletion]
 
-    class Config:
-        """Pydantic configuration FrogReactionDeletions."""
-
-        use_enum_values = True
-
     @staticmethod
     def from_df(df: pd.DataFrame) -> FrogReactionDeletions:
         """Parse FVA from DataFrame."""
@@ -335,14 +296,10 @@ class FrogGeneDeletions(BaseModel):
 
     deletions: List[FrogGeneDeletion]
 
-    class Config:
-        """Pydantic configuration FrogGeneDeletions."""
-
-        use_enum_values = True
-
     @staticmethod
     def from_df(df: pd.DataFrame) -> FrogGeneDeletions:
         """Parse GeneDeletions from DataFrame."""
+
         json = df.to_dict(orient="records")
         deletions = []
         for item in json:
@@ -378,11 +335,6 @@ class FrogReport(BaseModel):
     fva: FrogFVA
     reaction_deletions: FrogReactionDeletions
     gene_deletions: FrogGeneDeletions
-
-    class Config:
-        """Pydantic configuration FrogReport."""
-
-        use_enum_values = True
 
     def to_json(self, path: Path) -> None:
         """Write FrogReport to JSON format."""

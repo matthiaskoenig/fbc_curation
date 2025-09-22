@@ -22,7 +22,6 @@ from timeit import default_timer
 #     sys.stderr = sys.stdout = f
 
 from fbc_curation.curator import Curator, FROGResults
-from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 
 

@@ -11,7 +11,30 @@
 * merge `develop` in `main` after release
 
 * test installation in virtualenv from pypi
+* test installation in virtualenv from pypi
+```bash
+uv venv --python 3.13
+uv pip install pymetadata
 ```
-mkvirtualenv test --python=python3.10
-(test) pip install fbc_curation
+
+# Install dev dependencies:
+```bash
+# install core dependencies
+uv sync
+# install dev dependencies
+uv pip install -r pyproject.toml --extra dev
+```
+
+## Setup tox testing
+See information on https://github.com/tox-dev/tox-uv
+```bash
+uv tool install tox --with tox-uv
+```
+Run single tox target
+```bash
+tox r -e py312
+```
+Run all tests in parallel
+```bash
+tox run-parallel
 ```

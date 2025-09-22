@@ -20,7 +20,7 @@ from pydantic import BaseModel, FilePath
 from pymetadata import log
 from starlette.responses import FileResponse, JSONResponse
 
-from fbc_curation import EXAMPLE_DIR
+from fbc_curation import EXAMPLE_DIR, __version__
 from fbc_curation.worker import frog_task
 
 
@@ -48,12 +48,12 @@ model for frog analysis a `task_id` is returned which allows to query the status
 of the FROG task and retrieve the FROG report after the task succeeded.
 """
 
-api = FastAPI(
+api: FastAPI = FastAPI(
     default_response_class=ORJSONResponse,
     title="FROG REST API",
     description=description,
-    version="0.2.0",
-    terms_of_service="https://github.com/matthiaskoenig/fbc_curation/blob/develop/privacy_notice.md",  # noqa: E501
+    version=__version__,
+    terms_of_service="https://github.com/matthiaskoenig/fbc_curation/blob/develop/runfrog-site/privacy_notice.md",  # noqa: E501
     contact={
         "name": "Matthias König",
         "url": "https://livermetabolism.com",
@@ -61,8 +61,8 @@ api = FastAPI(
         "orcid": "0000-0003-1725-179X",
     },
     license_info={
-        "name": "LGPLv3",
-        "url": "http://opensource.org/licenses/LGPL-3.0",
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT",
     },
     openapi_tags=[
         {
@@ -97,6 +97,7 @@ api.add_middleware(
 @api.get("/api")
 def get_api_information(request: Request) -> Dict[str, Any]:
     """Get API information."""
+
     return {
         "title": api.title,
         "description": api.description,

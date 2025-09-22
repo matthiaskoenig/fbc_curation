@@ -20,6 +20,7 @@
               "type": "null"
             }
           ],
+          "default": null,
           "title": "Email"
         },
         "organization": {
@@ -31,6 +32,7 @@
               "type": "null"
             }
           ],
+          "default": null,
           "title": "Organization"
         },
         "site": {
@@ -42,6 +44,7 @@
               "type": "null"
             }
           ],
+          "default": null,
           "title": "Site"
         },
         "orcid": {
@@ -53,16 +56,13 @@
               "type": "null"
             }
           ],
+          "default": null,
           "title": "Orcid"
         }
       },
       "required": [
         "familyName",
-        "givenName",
-        "email",
-        "organization",
-        "site",
-        "orcid"
+        "givenName"
       ],
       "title": "Creator",
       "type": "object"
@@ -237,7 +237,7 @@
         },
         "frog.software": {
           "$ref": "#/$defs/Tool",
-          "description": "Software used to run FROG (e.g. 'fbc_curation'"
+          "description": "Software used to run FROG (e.g. 'fbc_curation')"
         },
         "frog.curators": {
           "description": "Curators which executed the FROG analysis.",
@@ -249,7 +249,7 @@
         },
         "software": {
           "$ref": "#/$defs/Tool",
-          "description": "Software used to run FBC (e.g. 'cameo', 'COBRA', 'cobrapy'"
+          "description": "Software used to run FBC (e.g. 'COBRA', 'cobrapy')."
         },
         "solver": {
           "$ref": "#/$defs/Tool",
