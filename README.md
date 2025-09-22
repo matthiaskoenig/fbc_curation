@@ -20,10 +20,9 @@ The FROG analysis creates standardized reference files for a given constraint-ba
 
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/fbc-curation.svg)](https://pypi.org/project/fbc_curation/)
 
-`fbc_curation` provides two implementations of FROG using
+`fbc_curation` provides one implementations of FROG using
 
 - [`cobrapy`](https://github.com/opencobra/cobrapy) — Constraint-Based Reconstruction and Analysis in Python
-- [`cameo`](https://github.com/biosustain/cameo) — Computer Aided Metabolic Engineering and Optimization
 
 For more information see the following resources:
 
@@ -31,7 +30,7 @@ For more information see the following resources:
 - **Website**: <https://runfrog.de>
 - **REST API**: <https://runfrog.de/docs>
 - **FROG format**: [FROG version 1](https://fbc-curation.readthedocs.io/en/latest/reference_files.html)
-- **FROG JSON schema**: [`frog-schema-version-1.json`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/resources/schema/frog-schema-version-1.json)
+- **FROG JSON schema**: [`frog-schema-version-1.json`](./src/fcb_curation/resources/schema/frog-schema-version-1.json)
 - **Code**: <https://github.com/matthiaskoenig/fbc_curation>
 - **FROG BioModels submission**: <https://www.ebi.ac.uk/biomodels/curation/fbc>
 
