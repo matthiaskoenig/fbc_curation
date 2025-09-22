@@ -15,6 +15,7 @@ from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
 from fbc_curation import FROG_PATH_PREFIX
 from fbc_curation.curator import Curator
+from fbc_curation.curator.cameo_curator import CuratorCameo
 from fbc_curation.curator.cobrapy_curator import CuratorCobrapy
 from fbc_curation.frog import FrogReport
 
@@ -98,7 +99,7 @@ def frog_task(
                 # TODO: check that SBML model with FBC information
 
                 report_dict = {}
-                for curator_key in ["cobrapy"]:
+                for curator_key in ["cobrapy", "cameo"]:
                     sbml_path: Path = omex.get_path(entry.location)
                     report: FrogReport = _frog_for_sbml(
                         source=sbml_path, curator_key=curator_key
@@ -161,6 +162,8 @@ def _frog_for_sbml(source: Union[Path, str, bytes], curator_key: str) -> FrogRep
         curator_class: Type[Curator]
         if curator_key == "cobrapy":
             curator_class = CuratorCobrapy
+        elif curator_key == "cameo":
+            curator_class = CuratorCameo
         else:
             raise ValueError(f"Unsupported curator: {curator_key}")
 

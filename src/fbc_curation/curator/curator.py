@@ -144,7 +144,7 @@ class Curator:
         knockout_reactions = defaultdict(list)
         for reaction in model.reactions:  # type: cobra.core.Reaction
             gpr: str = reaction.gene_reaction_rule
-            tree = cobra.core.gene.GPR(gpr)
+            tree = cobra.core.gene.GPR().from_string(gpr)
             gpr_genes = tree.genes
             gene: cobra.core.Gene
             for gene in genes:
