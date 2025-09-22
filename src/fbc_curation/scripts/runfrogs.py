@@ -6,7 +6,7 @@ from pymetadata.omex import Omex
 from fbc_curation.worker import run_frog
 
 
-def runfrogs(models_dir: Path, extract_omex: bool = True):
+def runfrogs(models_dir: Path, extract_omex: bool = True) -> None:
     """Run FROG reports for models."""
     print(models_dir)
     models = models_dir.glob("*/*.xml")

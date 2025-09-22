@@ -82,7 +82,7 @@ class Curator:
 
     def set_metadata(self) -> FrogMetaData:
         """Create metadata for given curator."""
-        pass
+        raise NotImplementedError
 
     def objectives(self) -> FrogObjectives:
         """Perform objectives."""

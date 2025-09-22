@@ -31,16 +31,13 @@ class BaseModel(PydanticBaseModel):
         use_enum_values=True,
     )
 
-    # FIXME: handle NaN for serialization
-    # @model_validator(mode="before")
-    # @classmethod
-    # def change_nan_to_none(cls, values: dict[str, Any]) -> dict[str, Any]:
-    #     """Replace NaN with None for all fields."""
-    #     for k, v in values.items():
-    #         if v is not None and isinstance(v, (float, np.floating)) and np.isnan(v):
-    #             values[k] = None
-    #     return values
-
+    @model_validator(mode='before')
+    def change_nan_to_none(cls, values: dict[str, Any]) -> dict[str, Any]:
+        """Replace NaN with None for all fields."""
+        for field, value in values.items():
+            if isinstance(value, float) and np.isnan(value):
+                values[field] = None
+        return values
 
 
 class CuratorConstants:

@@ -42,5 +42,5 @@ def test_get_examples() -> None:
 def test_json_for_ecoli_frog(ecoli_sbml_path: Path) -> None:
     """Test JSON serialization of results."""
     report: FrogReport = _frog_for_sbml(source=ecoli_sbml_path, curator_key="cobrapy")
-    response = JSONResponse(report.dict())
+    response = JSONResponse(report.model_dump())
     assert response

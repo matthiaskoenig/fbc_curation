@@ -90,7 +90,7 @@ def frog_task(
                 ),
             )
 
-        content = {"manifest": omex.manifest.dict(), "frogs": {}}
+        content = {"manifest": omex.manifest.model_dump(), "frogs": {}}
 
         # Add FROG JSON for all SBML files
         entry: ManifestEntry
@@ -111,7 +111,7 @@ def frog_task(
                     )
 
                     # add JSON to response
-                    report_dict[curator_key] = report.dict()
+                    report_dict[curator_key] = report.model_dump()
 
                 # store all reports for SBML entry
                 content["frogs"][entry.location] = report_dict

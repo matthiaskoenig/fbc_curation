@@ -32,7 +32,7 @@ uv tool install tox --with tox-uv
 ```
 Run single tox target
 ```bash
-tox r -e py312
+tox r -e py313
 ```
 Run all tests in parallel
 ```bash
