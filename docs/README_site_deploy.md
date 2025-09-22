@@ -1,6 +1,6 @@
 # Deployment `runfrog.de`
 This document provides information on how to deploy the `frog-site` on a server
-(https://runfrog.de). For development see [./README_site_develop.md](./README_site_develop.md).
+(https://runfrog.de). For development see [./README_site_develop.md](README_site_develop.md).
 
 The `runfrog` stack is provided as docker containers managed by `docker-compose`.
 In typical setups a proxy server acceps all requests on a given IP and 

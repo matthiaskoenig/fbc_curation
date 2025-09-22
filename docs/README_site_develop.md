@@ -2,7 +2,7 @@
 This document describes how to setup and run the `runfrog-site` 
 ([https://runfrog.de](https://runfrog.de))site for local development. 
 For information on how to deploy the page see 
-[./README_site_deploy.md](./README_site_deploy.md).
+[./README_site_deploy.md](README_site_deploy.md).
 
 ## Technology
 The following technology is used in the `runfrog-site`:
