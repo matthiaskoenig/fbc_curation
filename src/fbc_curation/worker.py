@@ -2,7 +2,7 @@
 
 Here the tasks are defined.
 """
-import os
+
 import tempfile
 import time
 from pathlib import Path
@@ -20,7 +20,6 @@ from fbc_curation.frog import FrogReport
 
 
 logger = log.get_logger(__name__)
-
 
 
 # storage of data on server, only relevant for server
