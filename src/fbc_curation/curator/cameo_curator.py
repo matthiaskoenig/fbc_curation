@@ -8,9 +8,9 @@ from pathlib import Path
 from typing import List
 
 import pandas as pd
-from cameo import __version__ as cameo_version
-from cameo import fba
-from cameo.flux_analysis.analysis import (
+from fbc_curation.cameo import __version__ as cameo_version
+from fbc_curation.cameo.flux_analysis.simulation import fba
+from fbc_curation.cameo.flux_analysis.analysis import (
     FluxVariabilityResult,
     flux_variability_analysis,
 )

@@ -45,7 +45,8 @@ dependencies = [
     "pydantic>=2.11.9",
     "orjson>=3.11.3",
 	"cobra>=0.29.1",
-	"cameo @ git+https://github.com/matthiaskoenig/cameo.git@fbc_curation",
+    "optlang",
+    "sympy",
 ]
 
 [project.optional-dependencies]
