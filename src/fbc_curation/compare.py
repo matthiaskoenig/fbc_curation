@@ -1,4 +1,5 @@
 """Comparison of FROG results."""
+
 from pathlib import Path
 from typing import Dict, List
 
@@ -63,16 +64,18 @@ class FrogComparison:
         return model_reports
 
     @staticmethod
-    def read_reports_from_paths(report_paths: List[Path]) -> Dict[str, Dict[str, FrogReport]]:
+    def read_reports_from_paths(
+        report_paths: List[Path],
+    ) -> Dict[str, Dict[str, FrogReport]]:
         """Read all reports from TSVs.
 
         Returns dictionary of {model_location: ...}
 
         """
         reports: List[FrogReport] = []
-        
+
         for directory in report_paths:
-            reports.append(FrogReport.from_tsv(directory))        
+            reports.append(FrogReport.from_tsv(directory))
 
         # get model reports per model
         model_reports: Dict[str, Dict[str, FrogReport]] = {}
@@ -87,9 +90,6 @@ class FrogComparison:
         logger.info(f"Reports:\n{info}")
 
         return model_reports
-
-
-    # TODO: implement comparison result and return results
 
     @staticmethod
     def compare_reports(reports: Dict[str, FrogReport]) -> bool:
@@ -131,7 +131,6 @@ class FrogComparison:
             ]
             for p, df1 in enumerate(dfs):
                 for q, df2 in enumerate(dfs):
-
                     fields: List[str]
                     equal = True
                     if key in [
@@ -189,14 +188,14 @@ class FrogComparison:
         console.rule(style="white")
         return bool(all_equal)
 
-import sys
+
 if __name__ == "__main__":
     # Read results and compare
     if len(sys.argv) < 3:
         # if no arg is given behave as before
         omex_path = EXAMPLE_DIR / "frogs" / "e_coli_core_FROG.omex"
         model_reports = FrogComparison.read_reports_from_omex(omex_path=omex_path)
-    else: 
+    else:
         # otherwise build reports from given paths
         model_reports = FrogComparison.read_reports_from_paths(
             [Path(p) for p in sys.argv[1:]]
