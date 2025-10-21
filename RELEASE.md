@@ -2,10 +2,9 @@
 
 * update schema using `src/fbc_curation/schema.py` and update `docs_builder/schema.rst`
 * rerun examples `src/fbc_curation/examples.py`
-* update documentation (`README.md` and `docs_builder`)
+* update documentation with latest results (`README.md`)
 * update release notes in `release-notes`
 * make sure all tests run (`tox -p`)
-
 * check formating and linting (`ruff check`)
 * test bump version (`uvx bump-my-version bump [major|minor|patch] --dry-run -vv`)
 * bump version (`uvx bump-my-version bump [major|minor|patch]`)
