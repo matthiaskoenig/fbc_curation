@@ -6,7 +6,6 @@
 [![PyPI Version](https://img.shields.io/pypi/v/fbc-curation.svg)](https://pypi.org/project/fbc_curation/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/fbc-curation.svg)](https://pypi.org/project/fbc_curation/)
 [![License: MIT](https://img.shields.io/pypi/l/fbc-curation.svg)](http://opensource.org/licenses/MIT)
-[![Docs Status](https://readthedocs.org/projects/fbc_curation/badge/?version=latest)](https://fbc-curation.readthedocs.io/en/latest/?badge=latest)
 [![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3708271.svg)](https://doi.org/10.5281/zenodo.3708271)
 
 The project `fbc_curation` implements the FROG analysis for reproducibility of constraint-based models in Python. FROG can be run
