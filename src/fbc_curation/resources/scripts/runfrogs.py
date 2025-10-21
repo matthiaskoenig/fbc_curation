@@ -1,4 +1,5 @@
 """Helper script for running multiple frog analysis."""
+
 from pathlib import Path
 
 from pymetadata.omex import Omex

@@ -27,7 +27,7 @@ uv sync
 uv pip install -r pyproject.toml --extra dev
 ```
 
-## Setup tox testing
+## Testing
 See information on https://github.com/tox-dev/tox-uv
 ```bash
 uv tool install tox --with tox-uv
@@ -46,4 +46,15 @@ tox run-parallel
 uv pip install pre-commit
 pre-commit install
 pre-commit run
+```
+
+# Documentation
+## Setup docs
+```bash
+uv pip install -r pyproject.toml --extra docs
+```
+
+## Serve docs
+```bash
+mkdocs serve -a localhost:3456
 ```

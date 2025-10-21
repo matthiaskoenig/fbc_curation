@@ -1,0 +1,21 @@
+site_name: fbc_curation
+site_author: Matthias König
+
+theme:
+  name: "material"
+
+nav:
+  - Overview: README.md
+  - FROG files: reference_files.md
+  - Schema: schema.md
+  - API: api.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [src]
+  - mkdocs-jupyter:
+      include_source: True

@@ -1,5 +1,5 @@
 # FROG files
-In the following the four created reference files and the metadata file are described and examples provided for the [`e_coli_core.xml`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/models/e_coli_core.xml) model. All output files are tab separated files (TSV) with the first three columns being `model`, `objective`, and `status`. The column `model` encodes the SBML model id. The column `objective` encodes the SBML objective id, which is the objective which was optimized in the respective simulation. The column `status` encodes the status of the simulation. The status can be either `optimal` (optimization worked) or `infeasible` (no solution found or problem in simulation).  
+In the following the four created reference files and the metadata file are described and examples provided for the [`e_coli_core.xml`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/models/e_coli_core.xml) model. All output files are tab separated files (TSV) with the first three columns being `model`, `objective`, and `status`. The column `model` encodes the SBML model id. The column `objective` encodes the SBML objective id, which is the objective which was optimized in the respective simulation. The column `status` encodes the status of the simulation. The status can be either `optimal` (optimization worked) or `infeasible` (no solution found or problem in simulation).
 
 ## Metadata file
 A required metadata file `metadata.json` encodes information about the curation run and the used software and library. The information is documented at the JSON schema `frog-schema-version-1.json <https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/resources/schema/frog-schema-version-1.json>`__
@@ -40,7 +40,7 @@ A concrete example of the metadata is shown below
 See [`e_coli_core/metadata.json`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/results/e_coli_core/cobrapy/metadata.json).
 
 ## 01 Objective value
-The objective value file `01_objective.tsv` contains the four columns with the headers `model`, `objective`, `status`, and `value`. The `model` column stores the SBML model filename. 
+The objective value file `01_objective.tsv` contains the four columns with the headers `model`, `objective`, `status`, and `value`. The `model` column stores the SBML model filename.
 The `value` is the optimal value of the respective objective function when the model is optimized. If the status is `infeasible`, no value is provided, i.e., the value is empty.
 ```
 model	objective	status	value
@@ -71,7 +71,7 @@ model	objective	reaction	flux	status	minimum	maximum	fraction_optimum
 ```
 See for instance: [`e_coli_core/02_fva.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/results/e_coli_core/cobrapy/02_fva.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA](https://cobrapy.readthedocs.io/en/latest/simulating.html#Running-FVA)
 
-## 03 Gene deletions 
+## 03 Gene deletions
 The gene deletion file `03_gene_deletion.tsv` contains five columns with the headers `model`, `objective`, `gene`, `status` and `value`. The `model` column stores the SBML model filename.
 The `gene` column contains the SBML gene identifiers. The `status` and `value` columns contain the status of the optimization (`optimal` or `infeasible`) and optimal value under the given gene deletion. If the status is `infeasible` the value is empty. The rows are sorted based on gene identifier.
 ```
@@ -90,8 +90,8 @@ model	objective	gene	status	value
 ```
 See for instance: [`e_coli_core/03_gene_deletion.tsv`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/examples/results/e_coli_core/cobrapy/03_gene_deletion.tsv). For more information: [https://cobrapy.readthedocs.io/en/latest/deletions.html](https://cobrapy.readthedocs.io/en/latest/deletions.html)
 
-## 04 Reaction deletions 
-The reaction deletion file `04_reaction_deletion.tsv` contains five columns with the headers `model`, `objective`, `reaction`, `status` and `value`. The `model` column stores the SBML model filename. 
+## 04 Reaction deletions
+The reaction deletion file `04_reaction_deletion.tsv` contains five columns with the headers `model`, `objective`, `reaction`, `status` and `value`. The `model` column stores the SBML model filename.
 The `reaction` column contains the SBML reaction identifiers. The `status` and `value` columns contain the status of the optimization (`optimal` or `infeasible`) and optimal value under the given reaction deletion. If the status is `infeasible` the value is empty. The rows are sorted based on reaction identifier.
 ```
 model	objective	reaction	status	value

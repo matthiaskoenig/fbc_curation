@@ -1,0 +1,471 @@
+# JSON Schema
+
+The JSON schema for FROG version 1 is available from
+[frog-schema-version-1.json](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/resources/schema/frog-schema-version-1.json)
+
+```json
+{
+  "$defs": {
+    "Creator": {
+      "description": "Creator/curator in ModelHistory and other COMBINE formats.\n\nExtended by optional orcid.",
+      "properties": {
+        "familyName": {
+          "title": "Familyname",
+          "type": "string"
+        },
+        "givenName": {
+          "title": "Givenname",
+          "type": "string"
+        },
+        "email": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Email"
+        },
+        "organization": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Organization"
+        },
+        "site": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Site"
+        },
+        "orcid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Orcid"
+        }
+      },
+      "required": [
+        "familyName",
+        "givenName"
+      ],
+      "title": "Creator",
+      "type": "object"
+    },
+    "FrogFVA": {
+      "description": "Definition of FROG FVA.",
+      "properties": {
+        "fva": {
+          "items": {
+            "$ref": "#/$defs/FrogFVASingle"
+          },
+          "title": "Fva",
+          "type": "array"
+        }
+      },
+      "required": [
+        "fva"
+      ],
+      "title": "FrogFVA",
+      "type": "object"
+    },
+    "FrogFVASingle": {
+      "description": "Frog FVA.",
+      "properties": {
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "reaction": {
+          "title": "Reaction",
+          "type": "string"
+        },
+        "flux": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Flux"
+        },
+        "status": {
+          "$ref": "#/$defs/StatusCode"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Minimum"
+        },
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Maximum"
+        },
+        "fraction_optimum": {
+          "title": "Fraction Optimum",
+          "type": "number"
+        }
+      },
+      "required": [
+        "model",
+        "objective",
+        "reaction",
+        "flux",
+        "status",
+        "minimum",
+        "maximum",
+        "fraction_optimum"
+      ],
+      "title": "FrogFVASingle",
+      "type": "object"
+    },
+    "FrogGeneDeletion": {
+      "description": "Frog gene deletion.",
+      "properties": {
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "gene": {
+          "title": "Gene",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/StatusCode"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "model",
+        "objective",
+        "gene",
+        "status",
+        "value"
+      ],
+      "title": "FrogGeneDeletion",
+      "type": "object"
+    },
+    "FrogGeneDeletions": {
+      "description": "Definition of FROG Gene deletions.",
+      "properties": {
+        "deletions": {
+          "items": {
+            "$ref": "#/$defs/FrogGeneDeletion"
+          },
+          "title": "Deletions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "deletions"
+      ],
+      "title": "FrogGeneDeletions",
+      "type": "object"
+    },
+    "FrogMetaData": {
+      "description": "FROG metadata.",
+      "properties": {
+        "model.location": {
+          "description": "Location of the model in the COMBINE archive for which the FROG analysis was performed.",
+          "title": "Model.Location",
+          "type": "string"
+        },
+        "model.md5": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "MD5 hash of model",
+          "title": "Model.Md5"
+        },
+        "frog_id": {
+          "description": "Id for the FROG analysis. All frog_ids within an archive must be unique.",
+          "title": "Frog Id",
+          "type": "string"
+        },
+        "frog.software": {
+          "$ref": "#/$defs/Tool",
+          "description": "Software used to run FROG (e.g. 'fbc_curation')"
+        },
+        "frog.curators": {
+          "description": "Curators which executed the FROG analysis.",
+          "items": {
+            "$ref": "#/$defs/Creator"
+          },
+          "title": "Frog.Curators",
+          "type": "array"
+        },
+        "software": {
+          "$ref": "#/$defs/Tool",
+          "description": "Software used to run FBC (e.g. 'COBRA', 'cobrapy')."
+        },
+        "solver": {
+          "$ref": "#/$defs/Tool",
+          "description": "Solver used to solve LP problem (e.g. 'CPLEX', 'GUROBI', 'GLPK')."
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Execution environment such as Linux.",
+          "title": "Environment"
+        }
+      },
+      "required": [
+        "model.location",
+        "model.md5",
+        "frog_id",
+        "frog.software",
+        "frog.curators",
+        "software",
+        "solver",
+        "environment"
+      ],
+      "title": "FrogMetaData",
+      "type": "object"
+    },
+    "FrogObjective": {
+      "description": "Frog Objective.",
+      "properties": {
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/StatusCode"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "model",
+        "objective",
+        "status",
+        "value"
+      ],
+      "title": "FrogObjective",
+      "type": "object"
+    },
+    "FrogObjectives": {
+      "description": "Definition of FROG Objectives.",
+      "properties": {
+        "objectives": {
+          "items": {
+            "$ref": "#/$defs/FrogObjective"
+          },
+          "title": "Objectives",
+          "type": "array"
+        }
+      },
+      "required": [
+        "objectives"
+      ],
+      "title": "FrogObjectives",
+      "type": "object"
+    },
+    "FrogReactionDeletion": {
+      "description": "Frog reaction deletion.",
+      "properties": {
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "reaction": {
+          "title": "Reaction",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/StatusCode"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "model",
+        "objective",
+        "reaction",
+        "status",
+        "value"
+      ],
+      "title": "FrogReactionDeletion",
+      "type": "object"
+    },
+    "FrogReactionDeletions": {
+      "description": "Definition of FROG Reaction deletions.",
+      "properties": {
+        "deletions": {
+          "items": {
+            "$ref": "#/$defs/FrogReactionDeletion"
+          },
+          "title": "Deletions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "deletions"
+      ],
+      "title": "FrogReactionDeletions",
+      "type": "object"
+    },
+    "StatusCode": {
+      "description": "Status code for simulation results.",
+      "enum": [
+        "optimal",
+        "infeasible"
+      ],
+      "title": "StatusCode",
+      "type": "string"
+    },
+    "Tool": {
+      "description": "Tool description.",
+      "properties": {
+        "name": {
+          "description": "Name of tool/software/library.",
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Version of tool/software/library.",
+          "title": "Version"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "URL of tool/software/library.",
+          "title": "Url"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "url"
+      ],
+      "title": "Tool",
+      "type": "object"
+    }
+  },
+  "description": "Definition of the FROG standard.",
+  "properties": {
+    "metadata": {
+      "$ref": "#/$defs/FrogMetaData"
+    },
+    "objectives": {
+      "$ref": "#/$defs/FrogObjectives"
+    },
+    "fva": {
+      "$ref": "#/$defs/FrogFVA"
+    },
+    "reaction_deletions": {
+      "$ref": "#/$defs/FrogReactionDeletions"
+    },
+    "gene_deletions": {
+      "$ref": "#/$defs/FrogGeneDeletions"
+    }
+  },
+  "required": [
+    "metadata",
+    "objectives",
+    "fva",
+    "reaction_deletions",
+    "gene_deletions"
+  ],
+  "title": "FrogReport",
+  "type": "object"
+}
+```
