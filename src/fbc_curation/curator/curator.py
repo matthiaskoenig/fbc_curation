@@ -1,4 +1,5 @@
 """Base class for all FBC curators."""
+
 import os
 import platform
 from collections import defaultdict, namedtuple
@@ -153,9 +154,8 @@ class Curator:
                 else:
                     # eval_gpr: True if the gene reaction rule is true with
                     # the given knockouts otherwise false
-                    gene_essential = not cobra.core.gene.eval_gpr(
-                        tree, knockouts={gene.id}
-                    )
+                    gene_essential = not cobra.core.gene.GPR().eval(knockouts={gene.id})
+
                 if gene_essential:
                     knockout_reactions[gene.id].append(reaction.id)
 
