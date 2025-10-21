@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/docs/images/icon/frog_icon_mirror-100x80-300dpi.png" alt="FROG logo" align="left" width="100" />
 
-[![CI/CD](https://github.com/matthiaskoenig/sbmlsim/workflows/CI-CD/badge.svg)](https://github.com/matthiaskoenig/fbc_curation/workflows/CI-CD)
+[![GitHub Actions CI/CD Status](https://github.com/matthiaskoenig/fbc_curation/workflows/CI-CD/badge.svg)](https://github.com/matthiaskoenig/fbc_curation/actions/workflows/main.yml)
 [![PyPI Version](https://img.shields.io/pypi/v/fbc-curation.svg)](https://pypi.org/project/fbc_curation/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/fbc-curation.svg)](https://pypi.org/project/fbc_curation/)
 [![License: MIT](https://img.shields.io/pypi/l/fbc-curation.svg)](http://opensource.org/licenses/MIT)
@@ -32,6 +32,7 @@ For more information see the following resources:
 - **FROG format**: [FROG version 1](https://fbc-curation.readthedocs.io/en/latest/reference_files.html)
 - **FROG JSON schema**: [`frog-schema-version-1.json`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/resources/schema/frog-schema-version-1.json)
 - **Code**: <https://github.com/matthiaskoenig/fbc_curation>
+- **Code Website**: <https://github.com/matthiaskoenig/runfrog>
 - **FROG BioModels submission**: <https://www.ebi.ac.uk/biomodels/curation/fbc>
 
 If you have any questions or issues please [open an issue](https://github.com/matthiaskoenig/fbc_curation/issues).
@@ -51,12 +52,6 @@ If you use `fbc_curation` or `runfrog` please cite us via
 pip install fbc-curation
 ```
 
-The latest `develop` version can be installed via:
-
-```bash
-pip install git+https://github.com/matthiaskoenig/fbc-curation.git@develop
-```
-
 ## Run FROG
 
 ### Command line tool
@@ -68,9 +63,10 @@ $ runfrog
 
 ──────────────────────────────────────────────────────────────────────────────────
 🐸 FBC CURATION FROG ANALYSIS 🐸
-Version 0.2.1 (https://github.com/matthiaskoenig/fbc_curation)
+Version 0.3.1 (https://github.com/matthiaskoenig/fbc_curation)
 Citation https://doi.org/10.5281/zenodo.3708271
 ──────────────────────────────────────────────────────────────────────────────────
+Required argument '--input' missing
 Usage: runfrog [options]
 
 Options:
