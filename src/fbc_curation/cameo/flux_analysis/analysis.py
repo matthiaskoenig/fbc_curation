@@ -120,7 +120,10 @@ def flux_variability_analysis(model, reactions=None, fraction_of_optimum=0.0):
                 )
             )
         )
-    df.lower_bound[lb_higher_ub.index] = df.upper_bound[lb_higher_ub.index]
+    # df.lower_bound[lb_higher_ub.index] = df.upper_bound[lb_higher_ub.index]
+    df.loc[lb_higher_ub.index, "lower_bound"] = df.loc[
+        lb_higher_ub.index, "upper_bound"
+    ]
 
     return FluxVariabilityResult(df)
 
