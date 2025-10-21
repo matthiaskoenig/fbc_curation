@@ -18,7 +18,7 @@ jobs:
           python-version: 3.x
 
       - name: Install dependencies
-        run: pip install mkdocs mkdocs-material mkdocstrings-pyt mkdocs-jupyter
+        run: pip install mkdocs mkdocs-material mkdocstrings-python mkdocs-jupyter
 
       - name: Deploy to GitHub Pages
         run: mkdocs gh-deploy --force
