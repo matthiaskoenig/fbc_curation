@@ -26,14 +26,14 @@ e.g., when submitting the model to [BioModels](https://www.ebi.ac.uk/biomodels/c
 
 For more information see the following resources:
 
-- **Documentation**: <https://fbc-curation.readthedocs.io>
-- **Website**: <https://runfrog.de>
-- **REST API**: <https://runfrog.de/docs>
+- **Documentation**: https://matthiaskoenig.github.io/fbc_curation/
+- **Website**: https://runfrog.de
+- **REST API**: https://runfrog.de/docs
 - **FROG format**: [FROG version 1](https://fbc-curation.readthedocs.io/en/latest/reference_files.html)
 - **FROG JSON schema**: [`frog-schema-version-1.json`](https://raw.githubusercontent.com/matthiaskoenig/fbc_curation/develop/src/fbc_curation/resources/schema/frog-schema-version-1.json)
-- **Code**: <https://github.com/matthiaskoenig/fbc_curation>
-- **Code Website**: <https://github.com/matthiaskoenig/runfrog>
-- **FROG BioModels submission**: <https://www.ebi.ac.uk/biomodels/curation/fbc>
+- **Code**: https://github.com/matthiaskoenig/fbc_curation
+- **Code Website**: https://github.com/matthiaskoenig/runfrog
+- **FROG BioModels submission**: https://www.ebi.ac.uk/biomodels/curation/fbc
 
 If you have any questions or issues please [open an issue](https://github.com/matthiaskoenig/fbc_curation/issues).
 
@@ -81,11 +81,11 @@ Options:
 
 ### Website
 
-FROG can be easily executed via the website <https://runfrog.de>.
+FROG can be easily executed via the website https://runfrog.de.
 
 ### REST API
 
-FROG can be executed via the REST API <https://runfrog.de/docs>.
+FROG can be executed via the REST API https://runfrog.de/docs.
 
 ### Python
 
