@@ -154,7 +154,7 @@ class Curator:
                 else:
                     # eval_gpr: True if the gene reaction rule is true with
                     # the given knockouts otherwise false
-                    gene_essential = not cobra.core.gene.GPR().eval(knockouts={gene.id})
+                    gene_essential = not tree.eval(knockouts={gene.id})
 
                 if gene_essential:
                     knockout_reactions[gene.id].append(reaction.id)
